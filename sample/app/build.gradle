@@ -1,0 +1,33 @@
+apply plugin: 'com.android.application'
+
+android {
+    // set to 21, which is the latest Android Hidden API (recommended)
+    compileSdkVersion 21
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.anggrayudi.hiddenapi"
+        minSdkVersion 9
+        // set to 21, which is the latest Android Hidden API (recommended)
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+//    We must not use Support Library 23.x.x dependencies now, because Android Hidden API is still
+//    limited to API level 21. If you have a real Marshmallow device (API level 23), please
+//    check framework.jar in /system/framework/framework.jar. If it is there and the size above 5MB,
+//    please upload it to me. I will make it available for API level 23, so that you can use the latest
+//    version of Support Library.
+
+//    testCompile 'junit:junit:4.12'
+//    compile 'com.android.support:appcompat-v7:23.1.1'
+}
