@@ -20,11 +20,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Anggrayudi on 11/03/2016.<p>
- * An example class for Hidden API.
+ * An example class for Hidden API.<p>
+ * If you plan to use only Android internal resources rather than internal classes or methods,
+ * just add Internal Accessor library in AAR format to your project without need to replace <code>android.jar</code>.
+ * The AAR library was added on <a href="https://github.com/anggrayudi/android-hidden-api">Android Hidden API</a>,
+ * which named <code>library-internal-accessor ver0.0.2.aar</code>. Import it to your project,
+ * go to File > New > New module... > Import .JAR/.AAR package > browse the AAR library.
  */
 public class MainActivity extends AppCompatActivity {
 
-    private Intent intent;
+    private ResourcesHolder holder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +40,11 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ResourcesHolder holder = new ResourcesHolder()
+        holder = new ResourcesHolder()
                 .putString("my_string", InternalAccessor.getString(this, "accept"))
                 .putDimension("my_dimen", InternalAccessor.getDimension(this, "status_bar_height"))
                 .putColor("my_color", InternalAccessor.getColor(this, "config_defaultNotificationColor"))
                 .putInt("my_int", 700);
-
-        intent = new Intent(ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER);
-        intent.putExtra("holder", holder);
 
         ArrayList<Model> items = new ArrayList<>();
 
@@ -83,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
             EthernetManager em;
         }
 
+        // If you want to check whether EthernetManager exists without checking API level, you can call:
+        boolean isClassExists = InternalAccessor.isClassExists("android.net.EthernetManager");
+        Log.d("---", "isClassExists = " + isClassExists);
+
+        // Check whether a method exists
+        boolean isMethodExists = InternalAccessor.isMethodExists("android.content.Intent", "getExtra");
+        Log.d("---", "isMethodExists = "+ isMethodExists);
+
         try {
             // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class
             Log.d("---", "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId("interpolator", "accelerate_cubic"));
@@ -92,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        new MyClass().shit();
     }
 
     @Override
@@ -108,14 +117,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Sending 'holder' object to another class via BroadcastReceiver
         if (item.getItemId() == R.id.send_holder)
-            sendBroadcast(intent);
+//            sendBroadcast(intent);
+            holder.sendBroadcast(this, "holder");
 
         return super.onOptionsItemSelected(item);
     }
 
     void sendViaLocalBroadcastManager(ResourcesHolder holder){
         // Sending 'holder' object to another class via LocalBroadcastManager
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//        Intent intent = new Intent(ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER);
+//        intent.putExtra("holder", holder);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        holder.sendViaLocalBroadcastManager(this, "holder");
     }
 
     void clearHolder(ResourcesHolder holder){

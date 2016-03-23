@@ -1,9 +1,13 @@
 package com.anggrayudi.hiddenapi;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.InputStream;
@@ -34,11 +38,16 @@ import java.util.TreeMap;
  *     Intent intent = new Intent(ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER);
  *     intent.putExtra("holder", holder);
  *
+ *     // send via LocalBroadcastManager
+ *     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+ *
  *     // send via BroadcastReceiver
  *     sendBroadcast(intent);
  *
- *     // send via LocalBroadcastManager
- *     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+ *     // Instead, you can do this in simple way
+ *     holder.sendBroadcast(this, "holder");
+ *     // or with this
+ *     holder.sendViaLocalBroadcastManager(this, "holder");
  * </pre>
  */
 public class ResourcesHolder implements Parcelable {
@@ -62,9 +71,9 @@ public class ResourcesHolder implements Parcelable {
      * Hold or save resource id. This can be id for <code>menu, layout, attr, id, string</code>, etc.
      * @param resId resource id in integer. For example:
      *              <ul>
-     *                  <li>17694844</li>
-     *                  <li>R.attr.colorPrimary</li>
-     *                  <li>InternalAccessor.getResourceId("string", "accept")</li>
+     *                  <li><code>17694844</code></li>
+     *                  <li><code>R.attr.colorPrimary</code></li>
+     *                  <li><code>InternalAccessor.getResourceId("string", "accept")</code></li>
      *              </ul>
      */
     public ResourcesHolder putResourceId(String key, int resId){
@@ -236,7 +245,32 @@ public class ResourcesHolder implements Parcelable {
     }
 
     /**
-     * Clear all values saved in this class.
+     * This method equals with {@link Context#sendBroadcast(Intent)}. Notice that the <code>Intent</code>
+     * uses {@link ResourcesHolder#ACTION_SEND_RESOURCES_HOLDER} action. So that, register your
+     * <code>BroadcastReceiver</code> with that action to make it able to receive the extra from <code>Intent</code>.
+     * <p>See {@link ResourcesHolder#sendViaLocalBroadcastManager(Context, String)}</p>
+     * @param key key for the <code>Intent</code>
+     */
+    public void sendBroadcast(Context context, @NonNull String key){
+        Intent intent = new Intent(ACTION_SEND_RESOURCES_HOLDER);
+        intent.putExtra(key, this);
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * Send <code>ResourcesHolder</code> instance to another class via <code>LocalBroadcastManager</code>.
+     * Make sure that the <code>BroadcastReceiver</code> is registered with
+     * {@link ResourcesHolder#ACTION_SEND_RESOURCES_HOLDER} action.
+     * @param key key for the <code>Intent</code>
+     */
+    public void sendViaLocalBroadcastManager(Context context, @NonNull String key){
+        Intent intent = new Intent(ACTION_SEND_RESOURCES_HOLDER);
+        intent.putExtra(key, this);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * Clear all values that is saved in this class.
      */
     public void clear(){
         ints.clear();

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 /**
  * Created by Anggrayudi on 11/03/2016.<p>
@@ -160,8 +161,7 @@ public final class InternalAccessor {
     public static XmlResourceParser getAnimation(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getAnimation(getResourceId("anim", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -171,8 +171,7 @@ public final class InternalAccessor {
     public static boolean getBoolean(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getBoolean(getResourceId("bool", resName));
-        } catch (ClassNotFoundException e) {}
-        return false;
+        } catch (ClassNotFoundException e) {return false;}
     }
 
     /**
@@ -182,8 +181,7 @@ public final class InternalAccessor {
     public static int getColor(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getColor(getResourceId("color", resName));
-        } catch (ClassNotFoundException e) {}
-        return 0;
+        } catch (ClassNotFoundException e) {return 0;}
     }
 
     /**
@@ -193,8 +191,7 @@ public final class InternalAccessor {
     public static float getDimension(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getDimension(getResourceId("dimen", resName));
-        } catch (ClassNotFoundException e) {}
-        return 0;
+        } catch (ClassNotFoundException e) {return 0;}
     }
 
     /**
@@ -204,8 +201,7 @@ public final class InternalAccessor {
     public static Drawable getDrawable(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return ContextCompat.getDrawable(context, getResourceId("drawable", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -216,8 +212,7 @@ public final class InternalAccessor {
     public static float getFraction(Context context, @NonNull String resName, int base, int pbase) throws ResourceNotFoundException {
         try {
             return context.getResources().getFraction(getResourceId("fraction", resName), base, pbase);
-        } catch (ClassNotFoundException e) {}
-        return 0;
+        } catch (ClassNotFoundException e) {return 0;}
     }
 
     /**
@@ -227,8 +222,7 @@ public final class InternalAccessor {
     public static int getInteger(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getInteger(getResourceId("integer", resName));
-        } catch (ClassNotFoundException e) {}
-        return 0;
+        } catch (ClassNotFoundException e) {return 0;}
     }
 
     /**
@@ -238,8 +232,7 @@ public final class InternalAccessor {
     public static XmlResourceParser getLayout(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getLayout(getResourceId("layout", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -250,8 +243,7 @@ public final class InternalAccessor {
     public static XmlResourceParser getMenu(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getLayout(getResourceId("menu", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -262,8 +254,7 @@ public final class InternalAccessor {
     public static Drawable getMipmap(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getDrawable(getResourceId("mipmap", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -273,8 +264,7 @@ public final class InternalAccessor {
     public static InputStream getRaw(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().openRawResource(getResourceId("raw", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -284,8 +274,7 @@ public final class InternalAccessor {
     public static int[] getIntArray(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getIntArray(getResourceId("array", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -296,8 +285,7 @@ public final class InternalAccessor {
     public static String[] getStringArray(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getStringArray(getResourceId("array", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -308,8 +296,7 @@ public final class InternalAccessor {
     public static String getString(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getString(getResourceId("string", resName));
-        } catch (ClassNotFoundException e) {}
-        return null;
+        } catch (ClassNotFoundException e) {return null;}
     }
 
     /**
@@ -319,8 +306,64 @@ public final class InternalAccessor {
     public static XmlResourceParser getXml(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
             return context.getResources().getXml(getResourceId("xml", resName));
+        } catch (ClassNotFoundException e) {return null;}
+    }
+
+    /**
+     * Check whether a class exists, and do your action when it's return <code>true</code>.
+     * @param className class name with its package, e.g. <code>android.content.Intent</code>
+     * @return true if the class exists
+     */
+    public static boolean isClassExists(String className){
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Check whether a method exists within its class. An example for this method is:
+     * <pre>
+     * boolean methodExists = InternalAccessor.isMethodExists("android.content.Intent", "putExtra", String.class, Integer.class);
+     * if (methodExists){
+     *     ...
+     * }
+     * </pre>
+     * where <code>putExtra()</code> has two types of parameter, i.e. <code>String</code> and <code>Integer</code>.
+     * If you look at the source code, you'll see that the real method is: <code>putExtra(String name, int value)</code>.
+     * <p>See {@link InternalAccessor#isMethodExists(String, String)}</p>
+     * @param className class name with its package, e.g. <code>android.content.Intent</code>
+     * @param methodName method name within its class, e.g. <code>putExtra</code>
+     * @param parameterTypes class of the method's parameter type, e.g. for <code>putExtra(String name, int value)</code>,
+     *                       you should type <code>String.class, Integer.class</code>
+     * @return <code>true</code> if the method exists, <code>false</code> otherwise or the class could not be found
+     */
+    public static boolean isMethodExists(String className, String methodName, Class<?>... parameterTypes){
+        try {
+            Class<?> cls = Class.forName(className);
+            cls.getMethod(methodName, parameterTypes);
+            return true;
+        } catch (ClassNotFoundException e) {} catch (NoSuchMethodException e) {}
+        return false;
+    }
+
+    /**
+     * Check whether a method exists without checking its parameter types. This is similar with
+     * {@link InternalAccessor#isMethodExists(String, String, Class[])}
+     * @param className class name with its package, e.g. <code>android.content.Intent</code>
+     * @param methodName method name within its class, e.g. <code>putExtra</code>
+     * @return <code>true</code> if the method exists, <code>false</code> otherwise or the class could not be found
+     */
+    public static boolean isMethodExists(String className, String methodName){
+        try {
+            Class<?> cls = Class.forName(className);
+            for (Method method : cls.getDeclaredMethods())
+                if (method.getName().equals(methodName))
+                    return true;
         } catch (ClassNotFoundException e) {}
-        return null;
+        return false;
     }
 
     private static String errorMessage(String type, String resIdName){

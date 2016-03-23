@@ -38,7 +38,7 @@ dependencies {
     // Go to menu File > New > New module... > Import .JAR/.AAR package > find file internal-accessor-release.aar
     // in directory sample/internal-accessor/build/outputs/aar/
     // If the file doesn't exist, do Build > Rebuild or use 'library-internal-accessor ver0.0.1.aar' instead.
-//    compile project(':library-internal-accessor')
+//    compile project(':library-internal-accessor ver0.0.2')
 
     // But, if you want to modify this library's source code, compile to internal-accessor module.
     compile project(':internal-accessor')

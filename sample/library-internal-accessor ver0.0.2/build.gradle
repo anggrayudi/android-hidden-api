@@ -1,0 +1,2 @@
+configurations.create("default")
+artifacts.add("default", file('library-internal-accessor ver0.0.2.aar'))
