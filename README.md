@@ -16,9 +16,9 @@ dependencies {
     compile 'com.anggrayudi:android-hidden-api:0.0.2'
 }
 repositories {
-    maven {
-        url 'https://dl.bintray.com/anggrayudi/maven/'
-    }
+    maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
+    // Or, you can use jCenter instead
+    jcenter()
 }
 ````
 
@@ -46,7 +46,7 @@ Here's some example of accessing internal resources:
     holder.sendViaLocalBroadcastManager(context, "holderKey");
     // do not forget to register BroadcastReceiver with ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER
 
-But, if you also want to include the internal classes or methods, do the following:
+If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
 2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-21/android.jar`.
