@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Sending 'holder' object to another class via BroadcastReceiver
         if (item.getItemId() == R.id.send_holder)
-//            sendBroadcast(intent);
+////            sendBroadcast(intent);
             holder.sendBroadcast(this, "holder");
 
         return super.onOptionsItemSelected(item);

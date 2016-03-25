@@ -1,1 +1,1 @@
-include ':app', ':internal-accessor', ':library-internal-accessor ver0.0.2'
+include ':app', ':android-hidden-api'

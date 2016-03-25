@@ -23,7 +23,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
     //    We must not use Support Library 23.x.x dependencies now, because Android Hidden API is still
     //    limited to API level 21. If you have a real Marshmallow device (API level 23), please
     //    check framework.jar in /system/framework/framework.jar. If it is there and the size above 5MB,
@@ -32,14 +31,14 @@ dependencies {
     //    Instead, we use Support Library 22.x.x
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
+    compile 'com.anggrayudi:android-hidden-api:0.0.2'
 
-    // For flexible reason, I recommend you to use 'aar' library. So you don't need to import
-    // the library source code if you have many project.
-    // Go to menu File > New > New module... > Import .JAR/.AAR package > find file internal-accessor-release.aar
-    // in directory sample/internal-accessor/build/outputs/aar/
-    // If the file doesn't exist, do Build > Rebuild or use 'library-internal-accessor ver0.0.1.aar' instead.
-//    compile project(':library-internal-accessor ver0.0.2')
+    // If you want to modify this library's source code, compile to android-hidden-api module.
+//    compile project(':android-hidden-api')
+}
 
-    // But, if you want to modify this library's source code, compile to internal-accessor module.
-    compile project(':internal-accessor')
+repositories {
+    maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
+    // Or, you can use jCenter instead
+    jcenter()
 }
