@@ -46,7 +46,7 @@ Here's some example of accessing internal resources:
     holder.sendViaLocalBroadcastManager(context, "holderKey");
     // do not forget to register BroadcastReceiver with ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER
 
-But, if you want to include the internal classes or methods, do the following:
+But, if you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
 2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-21/android.jar`.
