@@ -9,10 +9,18 @@ You don't need to create new classes, constants, methods or resources which you 
 
 ## Usage
 If you plan to use only Android internal resources rather than internal classes or methods,
-just add Internal Accessor library in AAR format to your project without need to replace <code>android.jar</code>.
-The AAR library was added on <a href="https://github.com/anggrayudi/android-hidden-api">Android Hidden API</a>,
-which named <code>library-internal-accessor ver0.0.2.aar</code>. Import it to your project,
-go to File > New > New module... > Import .JAR/.AAR package > browse the AAR library.
+do:
+
+````gradle
+dependencies {
+    compile 'com.anggrayudi:android-hidden-api:0.0.2'
+}
+repositories {
+    maven {
+        url 'https://dl.bintray.com/anggrayudi/maven/'
+    }
+}
+````
 
 Here's some example of accessing internal resources:
     
