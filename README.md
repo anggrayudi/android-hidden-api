@@ -24,27 +24,29 @@ repositories {
 
 Here's some example of accessing internal resources:
     
-    // put them into 'holder' to avoid re-reflection in the future
-    ResourcesHolder holder = new ResourcesHolder()
-                .putString("my_string", InternalAccessor.getString(context, "accept"))
-                .putDimension("my_dimen", InternalAccessor.getDimension(context, "status_bar_height"))
-                .putColor("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
-                .putInt("my_int", 700);
-    
-    // get the saved String value
-    String str = holder.getString("my_string");
-    // get the saved dimension value
-    float dimen = holder.getDimension("my_dimen");
-    
-    // If you do not plan to retrieve the same value for the second times with InternalAccessor utility class,
-    // or you want to use it once, do like this without saving to 'holder':
-    String accept = InternalAccessor.getString(context, "accept");
-    
-    // sometimes, you want to send all values we just saved in 'holder', you can send them with:
-    holder.sendBroadcast(context, "holderKey");
-    // or via
-    holder.sendViaLocalBroadcastManager(context, "holderKey");
-    // do not forget to register BroadcastReceiver with ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER
+```java
+// put them into 'holder' to avoid re-reflection in the future
+ResourcesHolder holder = new ResourcesHolder()
+            .putString("my_string", InternalAccessor.getString(context, "accept"))
+            .putDimension("my_dimen", InternalAccessor.getDimension(context, "status_bar_height"))
+            .putColor("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
+            .putInt("my_int", 700);
+
+// get the saved String value
+String str = holder.getString("my_string");
+// get the saved dimension value
+float dimen = holder.getDimension("my_dimen");
+
+// If you do not plan to retrieve the same value for the second times with InternalAccessor utility class,
+// or you want to use it once, do like this without saving to 'holder':
+String accept = InternalAccessor.getString(context, "accept");
+
+// sometimes, you want to send all values we just saved in 'holder', you can send them with:
+holder.sendBroadcast(context, "holderKey");
+// or via
+holder.sendViaLocalBroadcastManager(context, "holderKey");
+// do not forget to register BroadcastReceiver with ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER
+```
 
 If you also want to include the internal classes or methods, do the following:
 
