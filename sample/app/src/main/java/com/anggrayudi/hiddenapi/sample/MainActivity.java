@@ -22,10 +22,11 @@ import java.util.ArrayList;
  * Created by Anggrayudi on 11/03/2016.<p>
  * An example class for Hidden API.<p>
  * If you plan to use only Android internal resources rather than internal classes or methods,
- * just add Internal Accessor library in AAR format to your project without need to replace <code>android.jar</code>.
- * The AAR library was added on <a href="https://github.com/anggrayudi/android-hidden-api">Android Hidden API</a>,
- * which named <code>library-internal-accessor ver0.0.2.aar</code>. Import it to your project,
- * go to File > New > New module... > Import .JAR/.AAR package > browse the AAR library.
+ * just add <code>compile 'com.anggrayudi:android-hidden-api:0.0.2'</code> library
+ * to your app's module without need to replace <code>android.jar</code>. There are two versions of this library,
+ * i.e. version <code>0.0.2</code> and <code>0.0.3</code>. Both has different code styling, use which one
+ * is appropriate with your code styling.
+ * See the <a href="https://github.com/anggrayudi/android-hidden-api#usage">Usage</a>.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -41,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         holder = new ResourcesHolder()
-                .putString("my_string", InternalAccessor.getString(this, "accept"))
-                .putDimension("my_dimen", InternalAccessor.getDimension(this, "status_bar_height"))
-                .putColor("my_color", InternalAccessor.getColor(this, "config_defaultNotificationColor"))
-                .putInt("my_int", 700);
+                .put("my_string", InternalAccessor.getString(this, "accept"))
+                .put("my_dimen", InternalAccessor.getDimension(this, "status_bar_height"))
+                .put("my_color", InternalAccessor.getColor(this, "config_defaultNotificationColor"))
+                .put("my_int", 700);
 
         ArrayList<Model> items = new ArrayList<>();
 
@@ -59,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
                         "your app picks wrong resource id. If you want to have the internal resources, " +
                         "copy them to your project or use InternalAccessor utility class. Below are the example."));
 
-        items.add(new Model("InternalAccessor.getString(this, \"accept\")", holder.getString("my_string"),
+        items.add(new Model("InternalAccessor.getString(this, \"accept\")", holder.getAsString("my_string"),
                 "Accessing hidden String resource.\nBecause above method is not working, so we need to use "+
                         "InternalAccessor.getString() method."));
 
-        items.add(new Model("InternalAccessor.getDimension(this, \"status_bar_height\")", holder.getDimension("my_dimen")+"",
+        items.add(new Model("InternalAccessor.getDimension(this, \"status_bar_height\")", holder.getAsFloat("my_dimen")+"",
                 "Accessing hidden dimension resource."));
 
-        items.add(new Model("InternalAccessor.getColor(this, \"config_defaultNotificationColor\")", holder.getColor("my_color")+"",
+        items.add(new Model("InternalAccessor.getColor(this, \"config_defaultNotificationColor\")", holder.getAsInteger("my_color")+"",
                 "Accessing hidden color resource."));
 
         items.add(new Model("Info", "", "For more information, download this app's source code on " +
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("---", "isMethodExists = "+ isMethodExists);
 
         try {
-            // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class
+            // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class.
             Log.d("---", "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId("interpolator", "accelerate_cubic"));
 
             Log.d("---", "plurals.duration_hours = "+ InternalAccessor.getResourceId("plurals", "duration_hours"));
@@ -102,6 +103,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        // Using InternalAccessor with other code styling
+        InternalAccessor.Builder builder = new InternalAccessor.Builder(this, true);
+        boolean b = builder.getBoolean("config_sip_wifi_only");
+        String accept = builder.getString("accept");
+        // Because we set true to 'saveToResourcesHolder' in the Builder constructor, every value we got always
+        // saved to ResourcesHolder automatically. We can retrieve the holder now:
+        ResourcesHolder accessorHolder = builder.getResourcesHolder();
+        b = accessorHolder.getAsBoolean("config_sip_wifi_only");
+        accept = accessorHolder.getAsString("accept");
     }
 
     @Override

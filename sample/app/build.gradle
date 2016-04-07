@@ -31,10 +31,10 @@ dependencies {
     //    Instead, we use Support Library 22.x.x
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
-    compile 'com.anggrayudi:android-hidden-api:0.0.2'
+//    compile 'com.anggrayudi:android-hidden-api:0.0.3'
 
     // If you want to modify this library's source code, compile to android-hidden-api module.
-//    compile project(':android-hidden-api')
+    compile project(':android-hidden-api')
 }
 
 repositories {

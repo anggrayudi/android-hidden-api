@@ -26,9 +26,19 @@ import java.lang.reflect.Method;
  *         <li>{@link com.anggrayudi.hiddenapi.r.R_21} - for API 21</li>
  *         <li>{@link com.anggrayudi.hiddenapi.r.R_22} - for API 22</li>
  *     </ul>
+ *
+ * <p>If you are bored about writing context in every static method of this class, you can do
+ * the following (for example):
+ * <pre>
+ *     InternalAccessor.Builder accessor = new InternalAccessor.Builder(this);
+ *     boolean b = accessor.getBoolean("screen_rotate_0_enter");
+ *     String accept = accessor.getString("accept");
+ * </pre>
  */
 @SuppressWarnings({"TryWithIdenticalCatches", "EmptyCatchBlock", "JavaDoc"})
 public final class InternalAccessor {
+
+    private InternalAccessor(){}
 
     // These are primitive classes which are available since API 7
     private static final Class<?> anim          = com.android.internal.R.anim.class;
@@ -369,5 +379,179 @@ public final class InternalAccessor {
     private static String errorMessage(String type, String resIdName){
         return "Resource '"+type+"' is not found for '"+resIdName+
                 "', or this resource currently is not available for API "+ Build.VERSION.SDK_INT;
+    }
+
+    public static class Builder {
+
+        final Context context;
+        final boolean saveToResourcesHolder;
+        ResourcesHolder holder = new ResourcesHolder();
+
+        /**
+         * @param saveToResourcesHolder determine whether once we get the value also store it to
+         *                              <code>ResourcesHolder</code> automatically. The key for every data stored to
+         *                              <code>ResourcesHolder</code> always uses <code>resName</code> argument of the method.
+         */
+        public Builder(Context context, boolean saveToResourcesHolder){
+            this.context = context;
+            this.saveToResourcesHolder = saveToResourcesHolder;
+        }
+
+        public ResourcesHolder getResourcesHolder(){
+            return holder;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getAnimation(Context, String)}
+         */
+        public XmlResourceParser getAnimation(@NonNull String resName) throws ResourceNotFoundException {
+            XmlResourceParser anim = InternalAccessor.getAnimation(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, anim);
+            return anim;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getBoolean(Context, String)}
+         */
+        public boolean getBoolean(@NonNull String resName) throws ResourceNotFoundException {
+            boolean bol = InternalAccessor.getBoolean(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, bol);
+            return bol;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getColor(Context, String)}
+         */
+        public int getColor(@NonNull String resName) throws ResourceNotFoundException {
+            int color = InternalAccessor.getColor(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, color);
+            return color;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getDimension(Context, String)}
+         */
+        public float getDimension(@NonNull String resName) throws ResourceNotFoundException {
+            float dimens = InternalAccessor.getDimension(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, dimens);
+            return dimens;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getDrawable(Context, String)}
+         */
+        public Drawable getDrawable(@NonNull String resName) throws ResourceNotFoundException {
+            Drawable drawable = InternalAccessor.getDrawable(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, drawable);
+            return drawable;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getFraction(Context, String, int, int)}
+         */
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        public float getFraction(@NonNull String resName, int base, int pbase) throws ResourceNotFoundException {
+            float fract = InternalAccessor.getFraction(context, resName, base, pbase);
+            if (saveToResourcesHolder)
+                holder.put(resName, fract);
+            return fract;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getInteger(Context, String)}
+         */
+        public int getInteger(@NonNull String resName) throws ResourceNotFoundException {
+            int integer = InternalAccessor.getInteger(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, integer);
+            return integer;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getLayout(Context, String)}
+         */
+        public XmlResourceParser getLayout(@NonNull String resName) throws ResourceNotFoundException {
+            XmlResourceParser layout = InternalAccessor.getLayout(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, layout);
+            return layout;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getMenu(Context, String)}
+         */
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        public XmlResourceParser getMenu(@NonNull String resName) throws ResourceNotFoundException {
+            XmlResourceParser menu = InternalAccessor.getMenu(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, menu);
+            return menu;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getMipmap(Context, String)}
+         */
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        public Drawable getMipmap(@NonNull String resName) throws ResourceNotFoundException {
+            Drawable mipmap = InternalAccessor.getMipmap(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, mipmap);
+            return mipmap;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getRaw(Context, String)}
+         */
+        public InputStream getRaw(@NonNull String resName) throws ResourceNotFoundException {
+            InputStream stream = InternalAccessor.getRaw(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, stream);
+            return stream;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getIntArray(Context, String)}
+         */
+        public int[] getIntArray(@NonNull String resName) throws ResourceNotFoundException {
+            int[] ints = InternalAccessor.getIntArray(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, ints);
+            return ints;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getStringArray(Context, String)}
+         */
+        public String[] getStringArray(@NonNull String resName) throws ResourceNotFoundException {
+            String[] strings = InternalAccessor.getStringArray(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, strings);
+            return strings;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getString(Context, String)}
+         */
+        public String getString(@NonNull String resName) throws ResourceNotFoundException {
+            String string = InternalAccessor.getString(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, string);
+            return string;
+        }
+
+        /**
+         * Replacement for {@link InternalAccessor#getXml(Context, String)}
+         */
+        public XmlResourceParser getXml(@NonNull String resName) throws ResourceNotFoundException {
+            XmlResourceParser xml = InternalAccessor.getXml(context, resName);
+            if (saveToResourcesHolder)
+                holder.put(resName, xml);
+            return xml;
+        }
     }
 }

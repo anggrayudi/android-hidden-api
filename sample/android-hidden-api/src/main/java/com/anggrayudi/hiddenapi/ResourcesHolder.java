@@ -2,18 +2,16 @@ package com.anggrayudi.hiddenapi;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.XmlResourceParser;
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -51,197 +49,176 @@ import java.util.TreeMap;
  * </pre>
  */
 public class ResourcesHolder implements Parcelable {
-
-    public static final String ACTION_SEND_RESOURCES_HOLDER = "com.anggrayudi.hiddenapi.ACTION_SEND_RESOURCES_HOLDER";
-
     private static final String TAG = "ResourcesHolder";
+    public static final String ACTION_SEND_RESOURCES_HOLDER = "com.anggrayudi.hiddenapi.ACTION_SEND_RESOURCES_HOLDER";
+    private HashMap<String, Object> mValues = new HashMap<>();
 
-    private HashMap<String, Integer>           ints        = new HashMap<>();
-    private HashMap<String, XmlResourceParser> xpps        = new HashMap<>();
-    private HashMap<String, int[]>             arrayInt    = new HashMap<>();
-    private HashMap<String, String[]>          arrayString = new HashMap<>();
-    private HashMap<String, Boolean>           bools       = new HashMap<>();
-    private HashMap<String, Drawable>          drawables   = new HashMap<>();
-    private HashMap<String, Float>             floats      = new HashMap<>();
-    private HashMap<String, InputStream>       streams     = new HashMap<>();
-    private HashMap<String, String>            strings     = new HashMap<>();
-    private HashMap<String, Object>            objects     = new HashMap<>();
+    public ResourcesHolder(){}
 
-    /**
-     * Hold or save resource id. This can be id for <code>menu, layout, attr, id, string</code>, etc.
-     * @param resId resource id in integer. For example:
-     *              <ul>
-     *                  <li><code>17694844</code></li>
-     *                  <li><code>R.attr.colorPrimary</code></li>
-     *                  <li><code>InternalAccessor.getResourceId("string", "accept")</code></li>
-     *              </ul>
-     */
-    public ResourcesHolder putResourceId(String key, int resId){
-        ints.put("id_" + key, resId);
+    public ResourcesHolder put(String key, short value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putAnim(String key, XmlResourceParser anim){
-        xpps.put("anim_"+key, anim);
+    public ResourcesHolder put(String key, byte value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putIntArray(String key, int[] array){
-        arrayInt.put(key, array);
+    public ResourcesHolder put(String key, char value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putStringArray(String key, String[] array){
-        arrayString.put(key, array);
+    public ResourcesHolder put(String key, boolean value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putBoolean(String key, boolean bool){
-        bools.put(key, bool);
+    public ResourcesHolder put(String key, int value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putColor(String key, int color){
-        ints.put("color_"+key, color);
+    public ResourcesHolder put(String key, long value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putDimension(String key, float dimen){
-        floats.put("dimen_"+key, dimen);
+    public ResourcesHolder put(String key, float value){
+        mValues.put(key, value);
         return this;
     }
 
-    public ResourcesHolder putDrawable(String key, Drawable drawable){
-        drawables.put("drawable_"+key, drawable);
+    public ResourcesHolder put(String key, double value){
+        mValues.put(key, value);
+        return this;
+    }
+
+    public ResourcesHolder put(String key, String value){
+        mValues.put(key, value);
         return this;
     }
 
     /**
-     * An additional method to holds <code>float</code> value, though Android doesn't provide <code>float</code> resource value.
+     * An additional method to holds an <code>Object</code>, for non-primitive data types. For example
+     * <code>Drawable, XmlResourceParser, InputStream, </code> etc. To retrieve it back to the original object,
+     * cast it to its origin class. You also can store an array here. An example of using this method is:
+     * <pre>
+     *  List&lt;String&gt; strs = new ArrayList&lt;&gt;();
+     *  strs.add("FOO");
+     *  strs.add("BXY");
+     *
+     *  Person[] persons = {new Person(), null, new Person()};
+     *
+     *  XmlResourceParser parser = getResources().getXml(R.xml.preferences);
+     *
+     *  ResourcesHolder holder = new ResourcesHolder()
+     *      .put("arrayInt", new int[]{9, 8, 5})
+     *      .put("arrayStringList", strs)
+     *      .put("arrayPerson", persons)
+     *      .put("my_parser", parser);
+     *
+     *  // Then, retrieve them back to the original form
+     *  int[] ints = holder.getAsIntArray("arrayInt");
+     *  //noinspection unchecked
+     *  strs = (List&lt;String&gt;) holder.getAsObject("arrayStringList");
+     *  // cast them to the original class
+     *  persons = (Person[]) holder.getAsObject("arrayPerson");
+     *  parser = (XmlResourceParser) holder.getAsObject("my_parser");
+     * </pre>
      */
-    public ResourcesHolder putFloat(String key, float value){
-        floats.put("float_"+key, value);
+    public ResourcesHolder put(String key, Object object){
+        mValues.put(key, object);
         return this;
     }
 
-    public ResourcesHolder putFraction(String key, float fraction){
-        floats.put("fraction_"+key, fraction);
-        return this;
+    public short getAsShort(String key){
+        return isCompatibleCast(key, Short.class) ? (short) mValues.get(key) : 0;
     }
 
-    public ResourcesHolder putInt(String key, int value){
-        ints.put("int_"+key, value);
-        return this;
+    public byte getAsByte(String key){
+        return isCompatibleCast(key, Byte.class) ? (byte) mValues.get(key) : 0;
     }
 
-    public ResourcesHolder putLayout(String key, XmlResourceParser layout){
-        xpps.put("layout_"+key, layout);
-        return this;
+    public char getAsChar(String key){
+        return isCompatibleCast(key, Character.class) ? (char) mValues.get(key) : '\u0000';
     }
 
-    public ResourcesHolder putMenu(String key, XmlResourceParser menu){
-        xpps.put("menu_"+key, menu);
-        return this;
-    }
-
-    public ResourcesHolder putMipmap(String key, Drawable mipmap){
-        drawables.put("mipmap_"+key, mipmap);
-        return this;
-    }
-
-    public ResourcesHolder putRaw(String key, InputStream raw){
-        streams.put(key, raw);
-        return this;
-    }
-
-    public ResourcesHolder putString(String key, String string){
-        strings.put(key, string);
-        return this;
-    }
-
-    public ResourcesHolder putXml(String key, XmlResourceParser xml){
-        xpps.put("xml_"+key, xml);
-        return this;
+    public boolean getAsBoolean(String key){
+        return isCompatibleCast(key, Boolean.class) && (boolean) mValues.get(key);
     }
 
     /**
-     * An additional method to holds an <code>Object</code>.
+     * Some resources use this data type, they are <code>color, resourceId</code> and <code>integerResource</code>.
+     * You also can get any integer here.
      */
-    public ResourcesHolder putObject(String key, Object object){
-        objects.put(key, object);
-        return this;
+    public int getAsInteger(String key){
+        return isCompatibleCast(key, Integer.class) ? (int) mValues.get(key) : 0;
     }
 
-    public int getResourceId(String key){
-        return ints.get("id_"+key);
+    public long getAsLong(String key){
+        return isCompatibleCast(key, Long.class) ? (long) mValues.get(key) : 0;
     }
 
-    public XmlResourceParser getAnim(String key){
-        return xpps.get("anim_"+key);
+    /**
+     * Some resources use this data type, they are <code>dimension</code> and <code>fraction</code>.
+     * You also can get any <code>float</code> here.
+     */
+    public float getAsFloat(String key){
+        return isCompatibleCast(key, Float.class) ? (float) mValues.get(key) : 0;
     }
 
-    public int[] getIntArray(String key){
-        return arrayInt.get(key);
+    public double getAsDouble(String key){
+        return isCompatibleCast(key, Double.class) ? (double) mValues.get(key) : 0;
     }
 
-    public String[] getStringArray(String key){
-        return arrayString.get(key);
+    public String getAsString(String key){
+        return isCompatibleCast(key, String.class) ? (String) mValues.get(key) : null;
     }
 
-    public boolean getBoolean(String key){
-        return bools.get(key);
+    public short[] getAsShortArray(String key){
+        return isCompatibleCast(key, short[].class) ? (short[]) mValues.get(key) : null;
     }
 
-    public int getColor(String key){
-        return ints.get("color_"+key);
+    public byte[] getAsByteArray(String key){
+        return isCompatibleCast(key, byte[].class) ? (byte[]) mValues.get(key) : null;
     }
 
-    public float getDimension(String key){
-        return floats.get("dimen_"+key);
+    public char[] getAsCharArray(String key){
+        return isCompatibleCast(key, char[].class) ? (char[]) mValues.get(key) : null;
     }
 
-    public Drawable getDrawable(String key){
-        return drawables.get("drawable_"+key);
+    public boolean[] getAsBooleanArray(String key){
+        return isCompatibleCast(key, boolean[].class) ? (boolean[]) mValues.get(key) : null;
     }
 
-    public float getFloat(String key){
-        return floats.get("float_"+key);
+    public int[] getAsIntArray(String key){
+        return isCompatibleCast(key, int[].class) ? (int[]) mValues.get(key) : null;
     }
 
-    public float getFraction(String key){
-        return floats.get("fraction_"+key);
+    public long[] getAsLongArray(String key){
+        return isCompatibleCast(key, long[].class) ? (long[]) mValues.get(key) : null;
     }
 
-    public int getInt(String key){
-        return ints.get("int_"+key);
+    public float[] getAsFloatArray(String key){
+        return isCompatibleCast(key, float[].class) ? (float[]) mValues.get(key) : null;
     }
 
-    public XmlResourceParser getLayout(String key){
-        return xpps.get("layout_"+key);
+    public double[] getAsDoubleArray(String key){
+        return isCompatibleCast(key, double[].class) ? (double[]) mValues.get(key) : null;
     }
 
-    public XmlResourceParser getMenu(String key){
-        return xpps.get("menu_"+key);
+    public String[] getAsStringArray(String key){
+        return isCompatibleCast(key, String[].class) ? (String[]) mValues.get(key) : null;
     }
 
-    public Drawable getMipmap(String key){
-        return drawables.get("mipmap_"+key);
-    }
-
-    public InputStream getRaw(String key){
-        return streams.get(key);
-    }
-
-    public String getString(String key){
-        return strings.get(key);
-    }
-
-    public XmlResourceParser getXml(String key){
-        return xpps.get("xml_"+key);
-    }
-
-    public Object getObject(String key){
-        return objects.get(key);
+    /**
+     * Get any values that is stored as <code>Object</code>, i.e. for non-primitive data types.
+     * They can be an array or an instance from a class.
+     */
+    public Object getAsObject(String key){
+        return mValues.get(key);
     }
 
     /**
@@ -273,90 +250,107 @@ public class ResourcesHolder implements Parcelable {
      * Clear all values that is saved in this class.
      */
     public void clear(){
-        ints.clear();
-        xpps.clear();
-        arrayInt.clear();
-        arrayString.clear();
-        bools.clear();
-        drawables.clear();
-        floats.clear();
-        streams.clear();
-        strings.clear();
-        objects.clear();
+        mValues.clear();
+    }
+
+    public int size(){
+        return mValues.size();
+    }
+
+    public boolean containsKey(String key) {
+        return mValues.containsKey(key);
+    }
+
+    /**
+     * Remove a value by key.
+     */
+    public void remove(String key){
+        mValues.remove(key);
+    }
+
+    /**
+     * Sort <code>ResourcesHolder</code> by keys.
+     * @param sortType must be one of {@link Sort#ASCENDING} or {@link Sort#DESCENDING}
+     */
+    public void sort(Sort sortType){
+        TreeMap<String, Object> treeMap = new TreeMap<>();
+        treeMap.putAll(mValues);
+        if (sortType == Sort.DESCENDING){
+            treeMap.descendingMap();
+        }
+        mValues.clear();
+        mValues.putAll(treeMap);
+    }
+
+    /**
+     * Returns a set of all of the keys and values
+     *
+     * @return a set of all of the keys and values
+     */
+    public Set<Map.Entry<String, Object>> valueSet() {
+        return mValues.entrySet();
+    }
+
+    /**
+     * Returns a set of all of the keys
+     *
+     * @return a set of all of the keys
+     */
+    public Set<String> keySet() {
+        return mValues.keySet();
     }
 
     /**
      * Print all values that is saved via <code>put*(Key, Value)</code> method.
      */
     public void printAll(){
-        // Sort the value we want to print with TreeMap, because HashMap doesn't support sorting value
-        TreeMap<String, Integer>           ints        = new TreeMap<>();
-        TreeMap<String, XmlResourceParser> xpps        = new TreeMap<>();
-        TreeMap<String, int[]>             arrayInt    = new TreeMap<>();
-        TreeMap<String, String[]>          arrayString = new TreeMap<>();
-        TreeMap<String, Boolean>           bools       = new TreeMap<>();
-        TreeMap<String, Drawable>          drawables   = new TreeMap<>();
-        TreeMap<String, Float>             floats      = new TreeMap<>();
-        TreeMap<String, InputStream>       streams     = new TreeMap<>();
-        TreeMap<String, String>            strings     = new TreeMap<>();
-        TreeMap<String, Object>            objects     = new TreeMap<>();
+        for (Map.Entry<String, Object> entry : mValues.entrySet()) {
 
-        ints.putAll(this.ints);
-        xpps.putAll(this.xpps);
-        arrayInt.putAll(this.arrayInt);
-        arrayString.putAll(this.arrayString);
-        bools.putAll(this.bools);
-        drawables.putAll(this.drawables);
-        floats.putAll(this.floats);
-        streams.putAll(this.streams);
-        strings.putAll(this.strings);
-        objects.putAll(this.objects);
+            Object value = entry.getValue();
+            String toPrint = value.toString();
 
-        for (Map.Entry<String, Integer> entry : ints.entrySet()) {
-            switch (getPre(entry.getKey())){
-                case "id"   : Log.d(TAG, "RESOURCE ID, "+ removePre(entry.getKey())+"="+entry.getValue()); break;
-                case "int"  : Log.d(TAG, "INTEGER, "+ removePre(entry.getKey())+"="+entry.getValue()); break;
-                case "color": Log.d(TAG, "COLOR, "+ removePre(entry.getKey())+"="+entry.getValue()); break;
+            if (value.getClass().isArray()){
+                if (value instanceof boolean[])
+                    toPrint = Arrays.toString((boolean[]) value);
+                else if (value instanceof int[])
+                    toPrint = Arrays.toString((int[]) value);
+                else if (value instanceof long[])
+                    toPrint = Arrays.toString((long[]) value);
+                else if (value instanceof float[])
+                    toPrint = Arrays.toString((float[]) value);
+                else if (value instanceof double[])
+                    toPrint = Arrays.toString((double[]) value);
+                else if (value instanceof String[])
+                    toPrint = Arrays.toString((String[]) value);
+                else if (value instanceof short[])
+                    toPrint = Arrays.toString((short[]) value);
+                else if (value instanceof byte[])
+                    toPrint = Arrays.toString((byte[]) value);
+                else if (value instanceof char[])
+                    toPrint = Arrays.toString((char[]) value);
             }
+            Log.d(TAG, "key = " + entry.getKey() + ", value = " + toPrint);
         }
-        for (Map.Entry<String, XmlResourceParser> entry : xpps.entrySet()) {
-            switch (getPre(entry.getKey())){
-                case "anim"  : Log.d(TAG, "ANIM, "+ removePre(entry.getKey()) +"="+entry.getValue()); break;
-                case "menu"  : Log.d(TAG, "MENU, "+ removePre(entry.getKey()) +"="+entry.getValue()); break;
-                case "layout": Log.d(TAG, "LAYOUT, "+ removePre(entry.getKey()) +"="+entry.getValue()); break;
-                case "xml"   : Log.d(TAG, "XML, "+ removePre(entry.getKey()) +"="+entry.getValue()); break;
+    }
+
+    /**
+     * Determine whether an <code>Object</code> is able to be casted to another class.
+     * @return <code>true</code> if the object is able to be casted.
+     */
+    private boolean isCompatibleCast(String key, Class<?> classToCast){
+        Object obj = mValues.get(key);
+        try{
+            if (mValues.get(key) instanceof Number && obj == null) {
+                Log.e(TAG, "Cannot cast null value to a "+classToCast.getSimpleName() +" number format.");
+                return false;
             }
+
+            classToCast.cast(obj);
+            return true;
+        }catch (ClassCastException e){
+            Log.e(TAG, "Cannot cast object value from "+ obj +" to "+classToCast.getSimpleName()+" for key '"+key+"'", e);
+            return false;
         }
-        for (Map.Entry<String, int[]> entry : arrayInt.entrySet())
-            Log.d(TAG, "ARRAY INTEGER, "+ entry.getKey() +"="+ Arrays.toString(entry.getValue()));
-
-        for (Map.Entry<String, String[]> entry : arrayString.entrySet())
-            Log.d(TAG, "ARRAY STRING, "+ entry.getKey() +"="+ Arrays.toString(entry.getValue()));
-
-        for (Map.Entry<String, Boolean> entry : bools.entrySet())
-            Log.d(TAG, "BOOLEAN, "+ entry.getKey() +"="+ entry.getValue());
-
-        for (Map.Entry<String, Drawable> entry : drawables.entrySet()) {
-            switch (getPre(entry.getKey())) {
-                case "drawable" :Log.d(TAG, "DRAWABLE, "+ removePre(entry.getKey()) +"="+ entry.getValue()); break;
-                case "mipmap"   :Log.d(TAG, "MIPMAP, "+ removePre(entry.getKey()) +"="+ entry.getValue()); break;
-            }
-        }
-        for (Map.Entry<String, Float> entry : floats.entrySet()) {
-            switch (getPre(entry.getKey())) {
-                case "dimen"   :Log.d(TAG, "DIMENSION, "+ removePre(entry.getKey()) +"="+ entry.getValue()); break;
-                case "fraction":Log.d(TAG, "FRACTION, "+ removePre(entry.getKey()) +"="+ entry.getValue()); break;
-                case "float"   :Log.d(TAG, "FLOAT, "+ removePre(entry.getKey()) +"="+ entry.getValue()); break;
-            }
-        }
-        for (Map.Entry<String, InputStream> entry : streams.entrySet())
-            Log.d(TAG, "RAW, InputStream, "+ entry.getKey() +"="+ entry.getValue());
-
-        for (Map.Entry<String, String> entry : strings.entrySet())
-            Log.d(TAG, "STRING, "+ entry.getKey() +"="+ entry.getValue());
-
-        for (Map.Entry<String, Object> entry : objects.entrySet())
-            Log.d(TAG, "OBJECT, "+ entry.getKey() +"="+ entry.getValue());
     }
 
     private static String removePre(String key){
@@ -367,20 +361,9 @@ public class ResourcesHolder implements Parcelable {
         return key.substring(0, key.indexOf("_"));
     }
 
-    public ResourcesHolder(){}
-
     @SuppressWarnings("unchecked")
     private ResourcesHolder(Parcel in) {
-        ints = (HashMap<String, Integer>) in.readValue(HashMap.class.getClassLoader());
-        xpps = (HashMap<String, XmlResourceParser>) in.readValue(HashMap.class.getClassLoader());
-        arrayInt = (HashMap<String, int[]>) in.readValue(HashMap.class.getClassLoader());
-        arrayString = (HashMap<String, String[]>) in.readValue(HashMap.class.getClassLoader());
-        bools = (HashMap<String, Boolean>) in.readValue(HashMap.class.getClassLoader());
-        drawables = (HashMap<String, Drawable>) in.readValue(HashMap.class.getClassLoader());
-        floats = (HashMap<String, Float>) in.readValue(HashMap.class.getClassLoader());
-        streams = (HashMap<String, InputStream>) in.readValue(HashMap.class.getClassLoader());
-        strings = (HashMap<String, String>) in.readValue(HashMap.class.getClassLoader());
-        objects = (HashMap<String, Object>) in.readValue(HashMap.class.getClassLoader());
+        mValues = (HashMap<String, Object>) in.readValue(HashMap.class.getClassLoader());
     }
 
     public static final Creator<ResourcesHolder> CREATOR = new Creator<ResourcesHolder>() {
@@ -402,15 +385,6 @@ public class ResourcesHolder implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(ints);
-        dest.writeValue(xpps);
-        dest.writeValue(arrayInt);
-        dest.writeValue(arrayString);
-        dest.writeValue(bools);
-        dest.writeValue(drawables);
-        dest.writeValue(floats);
-        dest.writeValue(streams);
-        dest.writeValue(strings);
-        dest.writeValue(objects);
+        dest.writeValue(mValues);
     }
 }

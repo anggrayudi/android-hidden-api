@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.anggrayudi.hiddenapi.ResourcesHolder;
+import com.anggrayudi.hiddenapi.Sort;
 
 /**
  * Created by Anggrayudi on 12/03/2016.
@@ -16,6 +17,7 @@ public class Receiver extends BroadcastReceiver {
         Toast.makeText(context, "ResourceHolder is received. See detail on LogCat.", Toast.LENGTH_SHORT).show();
 
         ResourcesHolder holder = intent.getParcelableExtra("holder");
+        holder.sort(Sort.DESCENDING);
         holder.printAll();
     }
 }
