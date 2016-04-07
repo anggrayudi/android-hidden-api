@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.2'
+    compile 'com.anggrayudi:android-hidden-api:0.0.3'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
@@ -27,15 +27,15 @@ Here's some example of accessing internal resources:
 ```java
 // put them into 'holder' to avoid re-reflection in the future
 ResourcesHolder holder = new ResourcesHolder()
-            .putString("my_string", InternalAccessor.getString(context, "accept"))
-            .putDimension("my_dimen", InternalAccessor.getDimension(context, "status_bar_height"))
-            .putColor("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
-            .putInt("my_int", 700);
+            .put("my_string", InternalAccessor.getString(context, "accept"))
+            .put("my_dimen", InternalAccessor.getDimension(context, "status_bar_height"))
+            .put("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
+            .put("my_int", 700);
 
 // get the saved String value
-String str = holder.getString("my_string");
+String str = holder.getAsString("my_string");
 // get the saved dimension value
-float dimen = holder.getDimension("my_dimen");
+float dimen = holder.getAsFloat("my_dimen");
 
 // If you do not plan to retrieve the same value for the second times with InternalAccessor utility class,
 // or you want to use it once, do like this without saving to 'holder':
