@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
  *         <li>{@link com.anggrayudi.hiddenapi.r.R_17} - for API 17</li>
  *         <li>{@link com.anggrayudi.hiddenapi.r.R_21} - for API 21</li>
  *         <li>{@link com.anggrayudi.hiddenapi.r.R_22} - for API 22</li>
+ *         <li>{@link com.anggrayudi.hiddenapi.r.R_23} - for API 23</li>
  *     </ul>
  *
  * <p>If you are bored about writing context in every static method of this class, you can do
@@ -190,7 +191,7 @@ public final class InternalAccessor {
      */
     public static int getColor(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getColor(getResourceId("color", resName));
+            return ContextCompat.getColor(context, getResourceId("color", resName));
         } catch (ClassNotFoundException e) {return 0;}
     }
 
@@ -263,7 +264,7 @@ public final class InternalAccessor {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static Drawable getMipmap(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getDrawable(getResourceId("mipmap", resName));
+            return ContextCompat.getDrawable(context, getResourceId("mipmap", resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 

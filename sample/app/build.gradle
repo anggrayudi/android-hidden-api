@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    // set to 21, which is the latest Android Hidden API (recommended)
-    compileSdkVersion 22
-    buildToolsVersion "23.0.2"
+    // set to 23, which is the latest Android Hidden API (recommended)
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.anggrayudi.hiddenapi.sample"
         minSdkVersion 16
-        // set to 21, which is the latest Android Hidden API (recommended)
-        targetSdkVersion 22
+        // set to 23, which is the latest Android Hidden API (recommended)
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -23,14 +23,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    //    We must not use Support Library 23.x.x dependencies now, because Android Hidden API is still
-    //    limited to API level 21. If you have a real Marshmallow device (API level 23), please
-    //    check framework.jar in /system/framework/framework.jar. If it is there and the size above 5MB,
-    //    please upload it to me. I will make it available for API level 23, so that you can use the latest
-    //    version of Support Library.
-    //    Instead, we use Support Library 22.x.x
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
 //    compile 'com.anggrayudi:android-hidden-api:0.0.3'
 
     // If you want to modify this library's source code, compile to android-hidden-api module.
