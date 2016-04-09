@@ -51,15 +51,15 @@ holder.sendViaLocalBroadcastManager(context, "holderKey");
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-21/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 21 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-23/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 23 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## Limitation
 
-Currently, Android Hidden API is not available for Marshmallow 6.0, because of I can't find anyone who has this device. If you have it, please upload `framework.jar` file from real device that located in `/system/framework/framework.jar` to me. I will make a new!
+Currently, there's no limitation. Previous limitation was fixed for Android 6.0. See [issue #9][2].
 
 ## License
 
@@ -78,4 +78,5 @@ Currently, Android Hidden API is not available for Marshmallow 6.0, because of I
     limitations under the License.
 
 
-  [1]: https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction/
+  [1]: https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction
+  [2]: https://github.com/anggrayudi/android-hidden-api/issues/9
