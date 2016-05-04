@@ -27,8 +27,8 @@ Here's some example of accessing internal resources:
 ```java
 // put them into 'holder' to avoid re-reflection in the future
 ResourcesHolder holder = new ResourcesHolder()
-            .put("my_string", InternalAccessor.getString(context, "accept"))
-            .put("my_dimen", InternalAccessor.getDimension(context, "status_bar_height"))
+            .put("my_string", InternalAccessor.getString(context, com.anggrayudi.hiddenapi.r.R.string.accept))
+            .put("my_dimen", InternalAccessor.getDimension(context, com.anggrayudi.hiddenapi.r.R.dimen.status_bar_height))
             .put("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
             .put("my_int", 700);
 
