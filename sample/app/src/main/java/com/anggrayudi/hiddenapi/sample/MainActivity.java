@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         holder = new ResourcesHolder()
-                .put("my_string", InternalAccessor.getString(this, "accept"))
-                .put("my_dimen", InternalAccessor.getDimension(this, "status_bar_height"))
+                .put("my_string", InternalAccessor.getString(this, com.anggrayudi.hiddenapi.r.R.string.accept))
+                .put("my_dimen", InternalAccessor.getDimension(this, com.anggrayudi.hiddenapi.r.R.dimen.status_bar_height))
                 .put("my_color", InternalAccessor.getColor(this, "config_defaultNotificationColor"))
                 .put("my_int", 700);
 
@@ -96,10 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class.
-            Log.d("---", "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId("interpolator", "accelerate_cubic"));
+            Log.d("---", "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId(
+                    InternalAccessor.INTERPOLATOR, "accelerate_cubic"));
 
-            Log.d("---", "plurals.duration_hours = "+ InternalAccessor.getResourceId("plurals", "duration_hours"));
-            Log.d("---", "transition.no_transition = "+ InternalAccessor.getResourceId("transition", "no_transition"));
+            Log.d("---", "plurals.duration_hours = "+ InternalAccessor.getResourceId(InternalAccessor.PLURALS, com.anggrayudi.hiddenapi.r.R.plurals.duration_hours));
+            Log.d("---", "transition.no_transition = "+ InternalAccessor.getResourceId(InternalAccessor.TRANSITION, "no_transition"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

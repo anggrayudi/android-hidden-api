@@ -28,6 +28,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+task copyModifiedAndroidJar(){
+
+}
+
+task restoreOriginalAndroidJar(){
+
+}
+
 ext {
     PUBLISH_GROUP_ID = group
     PUBLISH_ARTIFACT_ID = 'android-hidden-api'

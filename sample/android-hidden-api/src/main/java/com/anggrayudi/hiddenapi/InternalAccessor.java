@@ -8,6 +8,13 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
+import com.anggrayudi.hiddenapi.r.versions.R_10;
+import com.anggrayudi.hiddenapi.r.versions.R_16;
+import com.anggrayudi.hiddenapi.r.versions.R_17;
+import com.anggrayudi.hiddenapi.r.versions.R_21;
+import com.anggrayudi.hiddenapi.r.versions.R_22;
+import com.anggrayudi.hiddenapi.r.versions.R_23;
+
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
@@ -20,12 +27,12 @@ import java.lang.reflect.Method;
  *
  *     You can find which resources are available for current API level. See:
  *     <ul>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_10} - for API 10</li>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_16} - for API 16</li>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_17} - for API 17</li>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_21} - for API 21</li>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_22} - for API 22</li>
- *         <li>{@link com.anggrayudi.hiddenapi.r.R_23} - for API 23</li>
+ *         <li>{@link R_10} - for API 10</li>
+ *         <li>{@link R_16} - for API 16</li>
+ *         <li>{@link R_17} - for API 17</li>
+ *         <li>{@link R_21} - for API 21</li>
+ *         <li>{@link R_22} - for API 22</li>
+ *         <li>{@link R_23} - for API 23</li>
  *     </ul>
  *
  * <p>If you are bored about writing context in every static method of this class, you can do
@@ -66,6 +73,28 @@ public final class InternalAccessor {
 //    private static final Class<?> mipmap        = com.android.internal.R.mipmap.class;
 //    private static final Class<?> transition    = com.android.internal.R.transition.class;
 
+    public static final String ANIM = "anim";
+    public static final String ARRAY = "array";
+    public static final String ATTR = "attr";
+    public static final String BOOL = "bool";
+    public static final String COLOR = "color";
+    public static final String DIMEN = "dimen";
+    public static final String DRAWABLE = "drawable";
+    public static final String ID = "id";
+    public static final String INTEGER = "integer";
+    public static final String LAYOUT = "layout";
+    public static final String PLURALS = "plurals";
+    public static final String RAW = "raw";
+    public static final String STRING = "string";
+    public static final String STYLE = "style";
+    public static final String STYLEABLE = "styleable";
+    public static final String XML = "xml";
+    public static final String FRACTION = "fraction";
+    public static final String INTERPOLATOR = "interpolator";
+    public static final String MENU = "menu";
+    public static final String MIPMAP = "mipmap";
+    public static final String TRANSITION = "transition";
+
     /**
      * Pick resource id from <code>com.android.internal.R</code> via reflection.
      * @param clas for example = <code>string, drawable, color, style, id, attr</code>.
@@ -75,93 +104,63 @@ public final class InternalAccessor {
      * returns <code>17891329</code> in integer.
      */
     public static int getResourceId(@NonNull String clas, @NonNull String resName) throws ClassNotFoundException, ResourceNotFoundException {
-        int id = 0;
         try {
             clas = clas.trim().toLowerCase();
             switch (clas){
-                case "anim":
-                    id = anim.getField(resName).getInt(null);
-                    break;
-                case "array":
-                    id = array.getField(resName).getInt(null);
-                    break;
-                case "attr":
-                    id = attr.getField(resName).getInt(null);
-                    break;
-                case "bool":
-                    id = bool.getField(resName).getInt(null);
-                    break;
-                case "color":
-                    id = color.getField(resName).getInt(null);
-                    break;
-                case "dimen":
-                    id = dimen.getField(resName).getInt(null);
-                    break;
-                case "drawable":
-                    id = drawable.getField(resName).getInt(null);
-                    break;
-                case "fraction":
+                case ANIM: return anim.getField(resName).getInt(null);
+                case ARRAY: return array.getField(resName).getInt(null);
+                case ATTR: return attr.getField(resName).getInt(null);
+                case BOOL: return bool.getField(resName).getInt(null);
+                case COLOR: return color.getField(resName).getInt(null);
+                case DIMEN: return dimen.getField(resName).getInt(null);
+                case DRAWABLE: return drawable.getField(resName).getInt(null);
+
+                case FRACTION:
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
                         throw new ClassNotFoundException("Class com.android.internal.R.fraction only available for API 11 and higher.");
 
-                    id = com.android.internal.R.fraction.class.getField(resName).getInt(null);
-                    break;
-                case "id":
-                    id = InternalAccessor.id.getField(resName).getInt(null);
-                    break;
-                case "integer":
-                    id = integer.getField(resName).getInt(null);
-                    break;
-                case "interpolator":
+                    return com.android.internal.R.fraction.class.getField(resName).getInt(null);
+
+                case ID: return InternalAccessor.id.getField(resName).getInt(null);
+                case INTEGER:  return integer.getField(resName).getInt(null);
+                case INTERPOLATOR:
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                         throw new ClassNotFoundException("Class com.android.internal.R.interpolator only available for API 21 and higher.");
 
-                    id = com.android.internal.R.interpolator.class.getField(resName).getInt(null);
-                    break;
-                case "layout":
-                    id = layout.getField(resName).getInt(null);
-                    break;
-                case "menu":
+                    return com.android.internal.R.interpolator.class.getField(resName).getInt(null);
+
+                case LAYOUT: return layout.getField(resName).getInt(null);
+
+                case MENU:
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
                         throw new ClassNotFoundException("Class com.android.internal.R.menu only available for API 11 and higher.");
 
-                    id = com.android.internal.R.menu.class.getField(resName).getInt(null);
-                    break;
-                case "mipmap":
+                    return com.android.internal.R.menu.class.getField(resName).getInt(null);
+
+                case MIPMAP:
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
                         throw new ClassNotFoundException("Class com.android.internal.R.mipmap only available for API 11 and higher.");
 
-                    id = com.android.internal.R.mipmap.class.getField(resName).getInt(null);
-                    break;
-                case "plurals":
-                    id = plurals.getField(resName).getInt(null);
-                    break;
-                case "raw":
-                    id = raw.getField(resName).getInt(null);
-                    break;
-                case "string":
-                    id = string.getField(resName).getInt(null);
-                    break;
-                case "style":
-                    id = style.getField(resName).getInt(null);
-                    break;
-                case "styleable":
-                    id = styleable.getField(resName).getInt(null);
-                    break;
-                case "transition":
+                    return com.android.internal.R.mipmap.class.getField(resName).getInt(null);
+
+                case PLURALS: return plurals.getField(resName).getInt(null);
+                case RAW: return raw.getField(resName).getInt(null);
+                case STRING: return string.getField(resName).getInt(null);
+                case STYLE: return style.getField(resName).getInt(null);
+                case STYLEABLE: return styleable.getField(resName).getInt(null);
+
+                case TRANSITION:
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                         throw new ClassNotFoundException("Class com.android.internal.R.transition only available for API 21 and higher.");
 
-                    id = com.android.internal.R.transition.class.getField(resName).getInt(null);
-                    break;
-                case "xml":
-                    id = xml.getField(resName).getInt(null);
-                    break;
+                    return com.android.internal.R.transition.class.getField(resName).getInt(null);
+
+                case XML: return xml.getField(resName).getInt(null);
             }
         } catch (NoSuchFieldException e) {
             throw new ResourceNotFoundException(errorMessage(clas, resName));
         } catch (NoClassDefFoundError e){} catch (IllegalAccessException e) {}
-        return id;
+        return 0;
     }
 
     /**
@@ -171,7 +170,7 @@ public final class InternalAccessor {
      */
     public static XmlResourceParser getAnimation(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getAnimation(getResourceId("anim", resName));
+            return context.getResources().getAnimation(getResourceId(ANIM, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -191,7 +190,7 @@ public final class InternalAccessor {
      */
     public static int getColor(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return ContextCompat.getColor(context, getResourceId("color", resName));
+            return ContextCompat.getColor(context, getResourceId(COLOR, resName));
         } catch (ClassNotFoundException e) {return 0;}
     }
 
@@ -201,7 +200,7 @@ public final class InternalAccessor {
      */
     public static float getDimension(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getDimension(getResourceId("dimen", resName));
+            return context.getResources().getDimension(getResourceId(DIMEN, resName));
         } catch (ClassNotFoundException e) {return 0;}
     }
 
@@ -211,7 +210,7 @@ public final class InternalAccessor {
      */
     public static Drawable getDrawable(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return ContextCompat.getDrawable(context, getResourceId("drawable", resName));
+            return ContextCompat.getDrawable(context, getResourceId(DRAWABLE, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -222,7 +221,7 @@ public final class InternalAccessor {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static float getFraction(Context context, @NonNull String resName, int base, int pbase) throws ResourceNotFoundException {
         try {
-            return context.getResources().getFraction(getResourceId("fraction", resName), base, pbase);
+            return context.getResources().getFraction(getResourceId(FRACTION, resName), base, pbase);
         } catch (ClassNotFoundException e) {return 0;}
     }
 
@@ -232,7 +231,7 @@ public final class InternalAccessor {
      */
     public static int getInteger(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getInteger(getResourceId("integer", resName));
+            return context.getResources().getInteger(getResourceId(INTEGER, resName));
         } catch (ClassNotFoundException e) {return 0;}
     }
 
@@ -242,7 +241,7 @@ public final class InternalAccessor {
      */
     public static XmlResourceParser getLayout(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getLayout(getResourceId("layout", resName));
+            return context.getResources().getLayout(getResourceId(LAYOUT, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -253,7 +252,7 @@ public final class InternalAccessor {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static XmlResourceParser getMenu(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getLayout(getResourceId("menu", resName));
+            return context.getResources().getLayout(getResourceId(MENU, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -264,7 +263,7 @@ public final class InternalAccessor {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static Drawable getMipmap(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return ContextCompat.getDrawable(context, getResourceId("mipmap", resName));
+            return ContextCompat.getDrawable(context, getResourceId(MIPMAP, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -274,7 +273,7 @@ public final class InternalAccessor {
      */
     public static InputStream getRaw(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().openRawResource(getResourceId("raw", resName));
+            return context.getResources().openRawResource(getResourceId(RAW, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -306,7 +305,7 @@ public final class InternalAccessor {
      */
     public static String getString(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getString(getResourceId("string", resName));
+            return context.getString(getResourceId(STRING, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 
@@ -316,7 +315,7 @@ public final class InternalAccessor {
      */
     public static XmlResourceParser getXml(Context context, @NonNull String resName) throws ResourceNotFoundException {
         try {
-            return context.getResources().getXml(getResourceId("xml", resName));
+            return context.getResources().getXml(getResourceId(XML, resName));
         } catch (ClassNotFoundException e) {return null;}
     }
 

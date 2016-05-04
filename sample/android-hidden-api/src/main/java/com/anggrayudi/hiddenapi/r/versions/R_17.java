@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0_114.
  */
-package com.anggrayudi.hiddenapi.r;
+package com.anggrayudi.hiddenapi.r.versions;
 /**
  * Created by Anggrayudi on 13/03/2016.<p>
  * You can find which resources are available for internal <code>com.android.internal.R</code> class in API 17.
