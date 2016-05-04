@@ -8,6 +8,6 @@ This jar was sent by @wasdennnoch, see https://github.com/anggrayudi/android-hid
 ========== BACKUP ==========
 
 Original android.jar can be downloaded here
-https://dl-ssl.google.com/Android/repository/android-23_r03.zip
+https://dl-ssl.google.com/Android/repository/android-23_r02.zip
 
 Extract the archive and find android.jar
