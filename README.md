@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.3'
+    compile 'com.anggrayudi:android-hidden-api:0.0.4'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
@@ -25,10 +25,13 @@ repositories {
 Here's some example of accessing internal resources:
     
 ```java
+import com.anggrayudi.hiddenapi.r.Rc;
+
+
 // put them into 'holder' to avoid re-reflection in the future
 ResourcesHolder holder = new ResourcesHolder()
-            .put("my_string", InternalAccessor.getString(context, com.anggrayudi.hiddenapi.r.R.string.accept))
-            .put("my_dimen", InternalAccessor.getDimension(context, com.anggrayudi.hiddenapi.r.R.dimen.status_bar_height))
+            .put("my_string", InternalAccessor.getString(context, Rc.string.accept))
+            .put("my_dimen", InternalAccessor.getDimension(context, Rc.dimen.status_bar_height))
             .put("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
             .put("my_int", 700);
 
