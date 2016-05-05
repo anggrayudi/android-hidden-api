@@ -28,15 +28,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def modifiedJar = project.rootProject.file('../'+ android.compileSdkVersion +'/android.jar')
+def originalJar = file("${android.getSdkDirectory().getAbsolutePath()}/platforms/"+ android.compileSdkVersion +'/original/android.jar')
 
-task copyModifiedAndroidJar(){
-
+task copyModifiedAndroidJar(type: Copy){
+    from modifiedJar
+    into originalJar.parentFile.parent
 }
 
-task restoreOriginalAndroidJar(){
-
+task copyOriginalAndroidJar(type: Copy){
+    from originalJar
+    into originalJar.parentFile.parent
 }
 
 ext {

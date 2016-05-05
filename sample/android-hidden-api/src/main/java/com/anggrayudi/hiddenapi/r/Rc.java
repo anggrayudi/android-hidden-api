@@ -7,10 +7,15 @@ package com.anggrayudi.hiddenapi.r;
 
 /**
  * Created by Anggrayudi on 09/04/2016.<p>
- * You can find which resources are available for internal <code>com.android.internal.R</code> class in API 23.
+ * Rc is <i>R custom</i>, which is a replacement for <code>com.android.internal.R</code> class.
+ * Here's an example on how to use this class:
+ * <pre>
+ *     String accept = InternalAccessor.getString(this, Rc.string.accept);
+ *     float dimension = InternalAccessor.getDimension(this, Rc.dimen.status_bar_height);
+ * </pre>
  */
 @SuppressWarnings("ALL")
-public final class R {
+public final class Rc {
     /*
     DO NOT MODIFY THIS CLASS!!!
      */
