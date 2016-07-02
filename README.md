@@ -62,7 +62,7 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## Limitation
 
-Currently, there's no limitation. Previous limitation was fixed for Android 6.0. See [issue #9][2].
+Currently, Android Hidden API doesn't support for API 24. We are waiting the final version of Android N.
 
 ## License
 
