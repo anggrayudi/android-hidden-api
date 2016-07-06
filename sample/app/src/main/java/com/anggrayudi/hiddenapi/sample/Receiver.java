@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.anggrayudi.hiddenapi.ResourcesHolder;
-import com.anggrayudi.hiddenapi.Sort;
 
 /**
  * Created by Anggrayudi on 12/03/2016.

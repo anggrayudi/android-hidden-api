@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = 'com.anggrayudi'
-version = '0.0.4'
+version = '0.0.5'
 
 android {
     compileSdkVersion 23

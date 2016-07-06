@@ -16,6 +16,12 @@ import java.util.TreeMap;
 
 /**
  * Created by Anggrayudi on 11/03/2016.<p>
+ * Since version 0.0.5 the uses of this class is diverted. You don't need to avoid Java reflection by storing
+ * the internal resources you just retrieved and send them via Broadcast, because this version
+ * does not use Java reflection anymore. Instead, you can use this class to store any objects you
+ * might need in other classes (like passing objects from activity to service) and send them via Broadcast.
+ * <hr>
+ * <h2>Obsolete documentation (v0.0.4 and lower)</h2>
  * A class that holds internal resources which is retrieved by {@link InternalAccessor}.
  * We need to hold the resources we just retrieved, because of <code>InternalAccessor</code> uses reflection,
  * and Java reflection may slow down user's machine performance. Using reflection every time you reflect the
@@ -25,7 +31,7 @@ import java.util.TreeMap;
  * <p>An example to use this class is:
  * <pre>
  *     ResourcesHolder holder = new ResourcesHolder()
- *              .putString("my_string_key", InternalAccessor.getString(this, "accept"))
+ *              .putString("my_string_key", InternalAccessor.getString("accept"))
  *              .putResourceId("my_res_id_key", InternalAccessor.getResourceId("drawable", "loading_tile_android");
  *
  *     // Retrieve the values from another place
@@ -270,12 +276,12 @@ public class ResourcesHolder implements Parcelable {
 
     /**
      * Sort <code>ResourcesHolder</code> by keys.
-     * @param sortType must be one of {@link Sort#ASCENDING} or {@link Sort#DESCENDING}
+     * @param descending or set to <code>false</code> to make it ascending
      */
-    public void sort(Sort sortType){
+    public void sort(boolean descending){
         TreeMap<String, Object> treeMap = new TreeMap<>();
         treeMap.putAll(mValues);
-        if (sortType == Sort.DESCENDING){
+        if (descending){
             treeMap.descendingMap();
         }
         mValues.clear();

@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.net.EthernetManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.anggrayudi.hiddenapi.InternalAccessor;
-import com.anggrayudi.hiddenapi.ResourcesHolder;
 import com.anggrayudi.hiddenapi.r.Rc;
 
 import java.util.ArrayList;
@@ -23,15 +20,12 @@ import java.util.ArrayList;
  * Created by Anggrayudi on 11/03/2016.<p>
  * An example class for Hidden API.<p>
  * If you plan to use only Android internal resources rather than internal classes or methods,
- * just add <code>compile 'com.anggrayudi:android-hidden-api:0.0.2'</code> library
- * to your app's module without need to replace <code>android.jar</code>. There are two versions of this library,
- * i.e. version <code>0.0.2</code> and <code>0.0.3</code>. Both has different code styling, use which one
- * is appropriate with your code styling.
+ * just add <br><code>compile 'com.anggrayudi:android-hidden-api:0.0.5'</code><br> library
+ * to your app's module without need to replace <code>android.jar</code>. This version does not use
+ * Java reflection anymore, and certainly safe.
  * See the <a href="https://github.com/anggrayudi/android-hidden-api#usage">Usage</a>.
  */
 public class MainActivity extends AppCompatActivity {
-
-    private ResourcesHolder holder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        holder = new ResourcesHolder()
-                .put("my_string", InternalAccessor.getString(this, Rc.string.accept))
-                .put("my_dimen", InternalAccessor.getDimension(this, Rc.dimen.status_bar_height))
-                .put("my_color", InternalAccessor.getColor(this, "config_defaultNotificationColor"))
-                .put("my_int", 700);
 
         ArrayList<Model> items = new ArrayList<>();
 
@@ -61,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
                         "your app picks wrong resource id. If you want to have the internal resources, " +
                         "copy them to your project or use InternalAccessor utility class. Below are the example."));
 
-        items.add(new Model("InternalAccessor.getString(this, \"accept\")", holder.getAsString("my_string"),
+        items.add(new Model("InternalAccessor.getString(this, \"accept\")", InternalAccessor.getString(Rc.string.accept),
                 "Accessing hidden String resource.\nBecause above method is not working, so we need to use "+
                         "InternalAccessor.getString() method."));
 
-        items.add(new Model("InternalAccessor.getDimension(this, \"status_bar_height\")", holder.getAsFloat("my_dimen")+"",
+        items.add(new Model("InternalAccessor.getDimension(this, \"status_bar_height\")", InternalAccessor.getDimension(Rc.dimen.status_bar_height)+"",
                 "Accessing hidden dimension resource."));
 
-        items.add(new Model("InternalAccessor.getColor(this, \"config_defaultNotificationColor\")", holder.getAsInteger("my_color")+"",
+        items.add(new Model("InternalAccessor.getColor(this, \"config_defaultNotificationColor\")", InternalAccessor.getColor("config_defaultNotificationColor")+"",
                 "Accessing hidden color resource."));
 
         items.add(new Model("Info", "", "For more information, download this app's source code on " +
@@ -106,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        /* DEPRECATED EXAMPLE OF InternalAccessor.Builder
         // Using InternalAccessor with other code styling
-        InternalAccessor.Builder builder = new InternalAccessor.Builder(this, true);
+        InternalAccessor.Builder builder = new InternalAccessor.Builder(true);
         boolean b = builder.getBoolean("config_sip_wifi_only");
         String accept = builder.getString("accept");
         // Because we set true to 'saveToResourcesHolder' in the Builder constructor, every value we got always
@@ -115,38 +104,13 @@ public class MainActivity extends AppCompatActivity {
         ResourcesHolder accessorHolder = builder.getResourcesHolder();
         b = accessorHolder.getAsBoolean("config_sip_wifi_only");
         accept = accessorHolder.getAsString("accept");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        */
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
             finish();
-
-        // Sending 'holder' object to another class via BroadcastReceiver
-        if (item.getItemId() == R.id.send_holder)
-////            sendBroadcast(intent);
-            holder.sendBroadcast(this, "holder");
-
         return super.onOptionsItemSelected(item);
-    }
-
-    void sendViaLocalBroadcastManager(ResourcesHolder holder){
-        // Sending 'holder' object to another class via LocalBroadcastManager
-//        Intent intent = new Intent(ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER);
-//        intent.putExtra("holder", holder);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        holder.sendViaLocalBroadcastManager(this, "holder");
-    }
-
-    void clearHolder(ResourcesHolder holder){
-        // If you want to clear everything from 'holder', call clear()
-        // This method will returns empty 'holder'
-        holder.clear();
     }
 }
