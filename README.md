@@ -5,7 +5,7 @@
 Internal API is located in `com.android.internal` package which available in the `framework.jar` file from real Android device, while hidden API is located in `android.jar` file with *@hide* javadoc attribute. Although the classes & methods are `public`, but you cannot access it directly. There are pretty methods and resources you can use from this package. I will assume this is one API and will refer to it as to hidden API. Learn more about hidden API [here][1].
 
 **What's the advantage?**
-You don't need to create new classes, constants, methods or resources which you want to use the similar function in your project. For example, if you want to create a new `String` resource that contains 'accept' word. Then you want create a new translation to other language, e.g. Arabic, Indonesian, even with all languages in this world. This is too exhausting and waste your time. Why don't use `com.android.internal.R.string.accept` which is retrieved via `InternalAccessor.getString(context, "accept")`?
+You don't need to create new classes, constants, methods or resources which you want to use the similar function in your project. For example, if you want to create a new `String` resource that contains 'accept' word. Then you want create a new translation to other language, e.g. Arabic, Indonesian, even with all languages in this world. This is too exhausting and waste your time. Why don't use `com.android.internal.R.string.accept` which is retrieved via `InternalAccessor.getString("accept")`?
 
 ## Usage
 If you plan to use only Android internal resources rather than internal classes or methods,
@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.4'
+    compile 'com.anggrayudi:android-hidden-api:0.0.5'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
@@ -27,28 +27,9 @@ Here's some example of accessing internal resources:
 ```java
 import com.anggrayudi.hiddenapi.r.Rc;
 
-
-// put them into 'holder' to avoid re-reflection in the future
-ResourcesHolder holder = new ResourcesHolder()
-            .put("my_string", InternalAccessor.getString(context, Rc.string.accept))
-            .put("my_dimen", InternalAccessor.getDimension(context, Rc.dimen.status_bar_height))
-            .put("my_color", InternalAccessor.getColor(context, "config_defaultNotificationColor"))
-            .put("my_int", 700);
-
-// get the saved String value
-String str = holder.getAsString("my_string");
-// get the saved dimension value
-float dimen = holder.getAsFloat("my_dimen");
-
-// If you do not plan to retrieve the same value for the second times with InternalAccessor utility class,
-// or you want to use it once, do like this without saving to 'holder':
-String accept = InternalAccessor.getString(context, "accept");
-
-// sometimes, you want to send all values we just saved in 'holder', you can send them with:
-holder.sendBroadcast(context, "holderKey");
-// or via
-holder.sendViaLocalBroadcastManager(context, "holderKey");
-// do not forget to register BroadcastReceiver with ResourcesHolder.ACTION_SEND_RESOURCES_HOLDER
+    String accept = InternalAccessor.getString(Rc.string.accept);
+    float sbar_height = InternalAccessor.getDimension(Rc.dimen.status_bar_height);
+    int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 ```
 
 If you also want to include the internal classes or methods, do the following:
