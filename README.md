@@ -43,7 +43,7 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## Limitation
 
-Currently, Android Hidden API doesn't support for API 24. We are waiting the final version of Android N.
+Currently, Android Hidden API doesn't support for API 24. If you have a device with Android 7.0, then please upload the framework.jar and I will make it available for API 24.
 
 ## License
 
