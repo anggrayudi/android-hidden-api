@@ -2,6 +2,7 @@ package com.anggrayudi.hiddenapi.sample;
 
 import android.content.Intent;
 import android.net.EthernetManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.anggrayudi.hiddenapi.InternalAccessor;
@@ -20,7 +23,7 @@ import java.util.ArrayList;
  * Created by Anggrayudi on 11/03/2016.<p>
  * An example class for Hidden API.<p>
  * If you plan to use only Android internal resources rather than internal classes or methods,
- * just add <br><code>compile 'com.anggrayudi:android-hidden-api:0.0.5'</code><br> library
+ * just add <br><code>compile 'com.anggrayudi:android-hidden-api:0.0.6'</code><br> library
  * to your app's module without need to replace <code>android.jar</code>. This version does not use
  * Java reflection anymore, and certainly safe.
  * See the <a href="https://github.com/anggrayudi/android-hidden-api#usage">Usage</a>.
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ArrayList<Model> items = new ArrayList<>();
+        final ArrayList<Model> items = new ArrayList<>();
 
         items.add(new Model("Formatter.formatShortElapsedTime(this, 100000000)", Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 ? Formatter.formatShortElapsedTime(this, 100000000) : "",
@@ -49,22 +52,29 @@ public class MainActivity extends AppCompatActivity {
                         "your app picks wrong resource id. If you want to have the internal resources, " +
                         "copy them to your project or use InternalAccessor utility class. Below are the example."));
 
-        items.add(new Model("InternalAccessor.getString(this, \"accept\")", InternalAccessor.getString(Rc.string.accept),
+        items.add(new Model("InternalAccessor.getString(\"accept\")", InternalAccessor.getString(Rc.string.accept),
                 "Accessing hidden String resource.\nBecause above method is not working, so we need to use "+
                         "InternalAccessor.getString() method."));
 
-        items.add(new Model("InternalAccessor.getDimension(this, \"status_bar_height\")", InternalAccessor.getDimension(Rc.dimen.status_bar_height)+"",
+        items.add(new Model("InternalAccessor.getDimension(\"status_bar_height\")", InternalAccessor.getDimension(Rc.dimen.status_bar_height)+"",
                 "Accessing hidden dimension resource."));
 
-        items.add(new Model("InternalAccessor.getColor(this, \"config_defaultNotificationColor\")", InternalAccessor.getColor("config_defaultNotificationColor")+"",
+        items.add(new Model("InternalAccessor.getColor(\"config_defaultNotificationColor\")", InternalAccessor.getColor("config_defaultNotificationColor")+"",
                 "Accessing hidden color resource."));
 
         items.add(new Model("Info", "", "For more information, download this app's source code on " +
                 "https://github.com/anggrayudi/android-hidden-api"));
 
-        Adapter adapter = new Adapter(this, items);
         ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(adapter);
+        listView.setAdapter(new Adapter(items));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == items.size() - 1)
+                    parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW)
+                            .setData(Uri.parse("https://github.com/anggrayudi/android-hidden-api")));
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= 22){
         /*   Accessing EthernetManager that is a hidden class and only available for API 22+.

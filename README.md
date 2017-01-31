@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.5'
+    compile 'com.anggrayudi:android-hidden-api:0.0.6'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
@@ -35,19 +35,19 @@ import com.anggrayudi.hiddenapi.r.Rc;
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-23/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 23 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-24/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 24 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## Limitation
 
-Currently, Android Hidden API doesn't support for API 24. We are waiting the final version of Android N.
+Currently, Android Hidden API doesn't support for API 25. We are waiting someone to upload `framework.jar` from Android Nougat 7.1 physical device.
 
 ## License
 
-    Copyright 2015-2016 Anggrayudi Hardiannicko A.
+    Copyright 2015-2017 Anggrayudi Hardiannicko A.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

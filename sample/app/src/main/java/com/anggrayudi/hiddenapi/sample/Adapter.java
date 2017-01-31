@@ -1,6 +1,8 @@
 package com.anggrayudi.hiddenapi.sample;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +15,15 @@ import java.util.ArrayList;
 /**
  * Created by Anggrayudi on 11/03/2016.
  */
-public class Adapter extends BaseAdapter {
+class Adapter extends BaseAdapter {
 
     private static class ViewHolder {
         TextView source, result, desc;
     }
 
-    private Context context;
     private ArrayList<Model> models;
 
-    public Adapter(Context context, ArrayList<Model> models){
-        this.context = context;
+    Adapter(ArrayList<Model> models){
         this.models = models;
     }
 
@@ -46,7 +46,7 @@ public class Adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)
-                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_layout, parent, false);
 
             ViewHolder viewHolder = new ViewHolder();

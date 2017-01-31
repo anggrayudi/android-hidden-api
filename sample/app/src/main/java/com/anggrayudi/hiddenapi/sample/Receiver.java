@@ -16,7 +16,7 @@ public class Receiver extends BroadcastReceiver {
         Toast.makeText(context, "ResourceHolder is received. See detail on LogCat.", Toast.LENGTH_SHORT).show();
 
         ResourcesHolder holder = intent.getParcelableExtra("holder");
-        holder.sort(Sort.DESCENDING);
+        holder.sort(true);
         holder.printAll();
     }
 }

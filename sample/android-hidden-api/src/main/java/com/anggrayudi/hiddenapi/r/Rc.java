@@ -2,16 +2,15 @@
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by Fernflower decompiler)
 //
-
 package com.anggrayudi.hiddenapi.r;
 
 /**
  * Created by Anggrayudi on 09/04/2016.<p>
- * Rc is <i>R custom</i>, which is a replacement for <code>com.android.internal.R</code> class.
+ * Rc is <i>R custom</i>, which is a replacement for API 24 <code>com.android.internal.R</code> class.
  * Here's an example on how to use this class:
  * <pre>
- *     String accept = InternalAccessor.getString(this, Rc.string.accept);
- *     float dimension = InternalAccessor.getDimension(this, Rc.dimen.status_bar_height);
+ *     String accept = InternalAccessor.getString(Rc.string.accept);
+ *     float dimension = InternalAccessor.getDimension(Rc.dimen.status_bar_height);
  * </pre>
  */
 @SuppressWarnings("ALL")
@@ -39,20 +38,12 @@ public final class Rc {
         public static final String dock_top_exit = "dock_top_exit";
         public static final String fade_in = "fade_in";
         public static final String fade_out = "fade_out";
-        public static final String grow_fade_in_center_ribbon = "grow_fade_in_center_ribbon";
-        public static final String grow_fade_in_from_bottom_ribbon = "grow_fade_in_from_bottom_ribbon";
-        public static final String grow_fade_in_left_ribbon = "grow_fade_in_left_ribbon";
-        public static final String grow_fade_in_ribbon = "grow_fade_in_ribbon";
-        public static final String grow_fade_in_right_ribbon = "grow_fade_in_right_ribbon";
-        public static final String last_app_in = "last_app_in";
-        public static final String last_app_out = "last_app_out";
         public static final String launch_task_behind_source = "launch_task_behind_source";
         public static final String linear_interpolator = "linear_interpolator";
         public static final String lock_screen_behind_enter = "lock_screen_behind_enter";
         public static final String lock_screen_behind_enter_fade_in = "lock_screen_behind_enter_fade_in";
         public static final String lock_screen_behind_enter_wallpaper = "lock_screen_behind_enter_wallpaper";
         public static final String lock_screen_wallpaper_exit = "lock_screen_wallpaper_exit";
-        public static final String lock_screen_wallpaper_exit_noop = "lock_screen_wallpaper_exit_noop";
         public static final String overshoot_interpolator = "overshoot_interpolator";
         public static final String push_down_in = "push_down_in";
         public static final String push_down_out = "push_down_out";
@@ -81,55 +72,26 @@ public final class Rc {
         public static final String screen_rotate_start_frame = "screen_rotate_start_frame";
         public static final String screen_user_enter = "screen_user_enter";
         public static final String screen_user_exit = "screen_user_exit";
-        public static final String shrink_fade_out_center_ribbon = "shrink_fade_out_center_ribbon";
-        public static final String shrink_fade_out_from_bottom_ribbon = "shrink_fade_out_from_bottom_ribbon";
-        public static final String shrink_fade_out_left_ribbon = "shrink_fade_out_left_ribbon";
-        public static final String shrink_fade_out_ribbon = "shrink_fade_out_ribbon";
-        public static final String shrink_fade_out_right_ribbon = "shrink_fade_out_right_ribbon";
         public static final String slide_in_child_bottom = "slide_in_child_bottom";
-        public static final String slide_in_down = "slide_in_down";
         public static final String slide_in_left = "slide_in_left";
-        public static final String slide_in_left_no_fade = "slide_in_left_no_fade";
-        public static final String slide_in_left_ribbon = "slide_in_left_ribbon";
         public static final String slide_in_right = "slide_in_right";
-        public static final String slide_in_right_no_fade = "slide_in_right_no_fade";
-        public static final String slide_in_right_ribbon = "slide_in_right_ribbon";
-        public static final String slide_in_up_ribbon = "slide_in_up_ribbon";
-        public static final String slide_out_down_ribbon = "slide_out_down_ribbon";
         public static final String slide_out_left = "slide_out_left";
-        public static final String slide_out_left_no_fade = "slide_out_left_no_fade";
-        public static final String slide_out_left_ribbon = "slide_out_left_ribbon";
         public static final String slide_out_right = "slide_out_right";
-        public static final String slide_out_right_no_fade = "slide_out_right_no_fade";
-        public static final String slide_out_right_ribbon = "slide_out_right_ribbon";
-        public static final String slide_out_up = "slide_out_up";
-        public static final String slow_fade_in = "slow_fade_in";
-        public static final String slow_fade_out = "slow_fade_out";
-        public static final String translucent_enter_ribbon = "translucent_enter_ribbon";
-        public static final String translucent_exit_ribbon = "translucent_exit_ribbon";
         public static final String voice_activity_close_enter = "voice_activity_close_enter";
         public static final String voice_activity_close_exit = "voice_activity_close_exit";
         public static final String voice_activity_open_enter = "voice_activity_open_enter";
         public static final String voice_activity_open_exit = "voice_activity_open_exit";
         public static final String window_move_from_decor = "window_move_from_decor";
-
-        public anim() {
-        }
     }
 
     public static final class animator {
         public static final String fade_in = "fade_in";
         public static final String fade_out = "fade_out";
-
-        public animator() {
-        }
     }
 
     public static final class array {
-        public static final String app_ops_labels = "app_ops_labels";
         public static final String carrier_properties = "carrier_properties";
         public static final String common_nicknames = "common_nicknames";
-        public static final String config_LTE_RSRP_custom_levels = "config_LTE_RSRP_custom_levels";
         public static final String config_autoBrightnessButtonBacklightValues = "config_autoBrightnessButtonBacklightValues";
         public static final String config_autoBrightnessKeyboardBacklightValues = "config_autoBrightnessKeyboardBacklightValues";
         public static final String config_autoBrightnessLcdBacklightValues = "config_autoBrightnessLcdBacklightValues";
@@ -144,13 +106,13 @@ public final class Rc {
         public static final String config_clockTickVibePattern = "config_clockTickVibePattern";
         public static final String config_colorTransforms = "config_colorTransforms";
         public static final String config_contextClickVibePattern = "config_contextClickVibePattern";
-        public static final String config_data_usage_network_types = "config_data_usage_network_types";
         public static final String config_defaultNotificationVibePattern = "config_defaultNotificationVibePattern";
+        public static final String config_defaultPinnerServiceFiles = "config_defaultPinnerServiceFiles";
         public static final String config_default_vm_number = "config_default_vm_number";
         public static final String config_disabledComponents = "config_disabledComponents";
         public static final String config_disabledUntilUsedPreinstalledCarrierApps = "config_disabledUntilUsedPreinstalledCarrierApps";
         public static final String config_disabledUntilUsedPreinstalledImes = "config_disabledUntilUsedPreinstalledImes";
-        public static final String config_enabledPreinstalledCarrierApps = "config_enabledPreinstalledCarrierApps";
+        public static final String config_ephemeralResolverPackage = "config_ephemeralResolverPackage";
         public static final String config_forceEnabledComponents = "config_forceEnabledComponents";
         public static final String config_globalActionsList = "config_globalActionsList";
         public static final String config_gpsParameters = "config_gpsParameters";
@@ -161,14 +123,11 @@ public final class Rc {
         public static final String config_mobile_hotspot_provision_app = "config_mobile_hotspot_provision_app";
         public static final String config_mobile_tcp_buffers = "config_mobile_tcp_buffers";
         public static final String config_notificationFallbackVibePattern = "config_notificationFallbackVibePattern";
-        public static final String config_notificationNoAlertsVibePattern = "config_notificationNoAlertsVibePattern";
         public static final String config_notificationSignalExtractors = "config_notificationSignalExtractors";
         public static final String config_oemUsbModeOverride = "config_oemUsbModeOverride";
         public static final String config_onlySingleDcAllowed = "config_onlySingleDcAllowed";
         public static final String config_operatorConsideredNonRoaming = "config_operatorConsideredNonRoaming";
         public static final String config_protectedNetworks = "config_protectedNetworks";
-        public static final String config_region_locked_packages = "config_region_locked_packages";
-        public static final String config_restrict_to_region_locked_devices = "config_restrict_to_region_locked_devices";
         public static final String config_safeModeDisabledVibePattern = "config_safeModeDisabledVibePattern";
         public static final String config_safeModeEnabledVibePattern = "config_safeModeEnabledVibePattern";
         public static final String config_sameNamedOperatorConsideredRoaming = "config_sameNamedOperatorConsideredRoaming";
@@ -194,33 +153,29 @@ public final class Rc {
         public static final String fingerprint_acquired_vendor = "fingerprint_acquired_vendor";
         public static final String fingerprint_error_vendor = "fingerprint_error_vendor";
         public static final String imProtocols = "imProtocols";
-        public static final String live_display_entries = "live_display_entries";
-        public static final String live_display_summaries = "live_display_summaries";
-        public static final String live_display_values = "live_display_values";
         public static final String maps_starting_lat_lng = "maps_starting_lat_lng";
         public static final String maps_starting_zoom = "maps_starting_zoom";
         public static final String networkAttributes = "networkAttributes";
         public static final String networks_not_clear_data = "networks_not_clear_data";
         public static final String no_ems_support_sim_operators = "no_ems_support_sim_operators";
-        public static final String non_themeable_packages = "non_themeable_packages";
-        public static final String notification_light_package_mapping = "notification_light_package_mapping";
         public static final String organizationTypes = "organizationTypes";
         public static final String phoneTypes = "phoneTypes";
         public static final String postalAddressTypes = "postalAddressTypes";
         public static final String preloaded_color_state_lists = "preloaded_color_state_lists";
         public static final String preloaded_drawables = "preloaded_drawables";
+        public static final String preloaded_freeform_multi_window_drawables = "preloaded_freeform_multi_window_drawables";
         public static final String radioAttributes = "radioAttributes";
+        public static final String resolver_target_actions_pin = "resolver_target_actions_pin";
+        public static final String resolver_target_actions_unpin = "resolver_target_actions_unpin";
         public static final String shutdown_reboot_actions = "shutdown_reboot_actions";
         public static final String shutdown_reboot_options = "shutdown_reboot_options";
         public static final String sim_colors = "sim_colors";
         public static final String special_locale_codes = "special_locale_codes";
         public static final String special_locale_names = "special_locale_names";
+        public static final String supported_locales = "supported_locales";
         public static final String wfcOperatorErrorAlertMessages = "wfcOperatorErrorAlertMessages";
-        public static final String wfcOperatorErrorCodes = "wfcOperatorErrorCodes";
         public static final String wfcOperatorErrorNotificationMessages = "wfcOperatorErrorNotificationMessages";
-
-        public array() {
-        }
+        public static final String wfcSpnFormats = "wfcSpnFormats";
     }
 
     public static final class attr {
@@ -333,11 +288,13 @@ public final class Rc {
         public static final String backgroundT = "backgroundT";
         public static final String backgroundTintMode = "backgroundTintMode";
         public static final String backupAgent = "backupAgent";
+        public static final String backupInForeground = "backupInForeground";
         public static final String banner = "banner";
         public static final String baseline = "baseline";
         public static final String baselineAlignBottom = "baselineAlignBottom";
         public static final String baselineAligned = "baselineAligned";
         public static final String baselineAlignedChildIndex = "baselineAlignedChildIndex";
+        public static final String bitmap = "bitmap";
         public static final String borderlessButtonStyle = "borderlessButtonStyle";
         public static final String bottom = "bottom";
         public static final String bottomBright = "bottomBright";
@@ -356,6 +313,7 @@ public final class Rc {
         public static final String buttonBarNeutralButtonStyle = "buttonBarNeutralButtonStyle";
         public static final String buttonBarPositiveButtonStyle = "buttonBarPositiveButtonStyle";
         public static final String buttonBarStyle = "buttonBarStyle";
+        public static final String buttonGravity = "buttonGravity";
         public static final String buttonStyle = "buttonStyle";
         public static final String buttonStyleInset = "buttonStyleInset";
         public static final String buttonStyleSmall = "buttonStyleSmall";
@@ -366,6 +324,9 @@ public final class Rc {
         public static final String calendarTextColor = "calendarTextColor";
         public static final String calendarViewShown = "calendarViewShown";
         public static final String calendarViewStyle = "calendarViewStyle";
+        public static final String canControlMagnification = "canControlMagnification";
+        public static final String canPerformGestures = "canPerformGestures";
+        public static final String canRecord = "canRecord";
         public static final String canRequestEnhancedWebAccessibility = "canRequestEnhancedWebAccessibility";
         public static final String canRequestFilterKeyEvents = "canRequestFilterKeyEvents";
         public static final String canRequestTouchExplorationMode = "canRequestTouchExplorationMode";
@@ -408,6 +369,7 @@ public final class Rc {
         public static final String codes = "codes";
         public static final String collapseColumns = "collapseColumns";
         public static final String collapseContentDescription = "collapseContentDescription";
+        public static final String collapseIcon = "collapseIcon";
         public static final String color = "color";
         public static final String colorAccent = "colorAccent";
         public static final String colorActivatedHighlight = "colorActivatedHighlight";
@@ -444,14 +406,18 @@ public final class Rc {
         public static final String contentAuthority = "contentAuthority";
         public static final String contentDescription = "contentDescription";
         public static final String contentInsetEnd = "contentInsetEnd";
+        public static final String contentInsetEndWithActions = "contentInsetEndWithActions";
         public static final String contentInsetLeft = "contentInsetLeft";
         public static final String contentInsetRight = "contentInsetRight";
         public static final String contentInsetStart = "contentInsetStart";
+        public static final String contentInsetStartWithNavigation = "contentInsetStartWithNavigation";
         public static final String contextClickable = "contextClickable";
+        public static final String contextPopupMenuStyle = "contextPopupMenuStyle";
         public static final String controlX1 = "controlX1";
         public static final String controlX2 = "controlX2";
         public static final String controlY1 = "controlY1";
         public static final String controlY2 = "controlY2";
+        public static final String countDown = "countDown";
         public static final String country = "country";
         public static final String cropToPadding = "cropToPadding";
         public static final String cursorVisible = "cursorVisible";
@@ -470,7 +436,10 @@ public final class Rc {
         @Deprecated
         public static final String dayOfWeekTextAppearance = "dayOfWeekTextAppearance";
         public static final String debuggable = "debuggable";
+        public static final String defaultHeight = "defaultHeight";
+        public static final String defaultToDeviceProtectedStorage = "defaultToDeviceProtectedStorage";
         public static final String defaultValue = "defaultValue";
+        public static final String defaultWidth = "defaultWidth";
         public static final String delay = "delay";
         public static final String dependency = "dependency";
         public static final String descendantFocusability = "descendantFocusability";
@@ -491,6 +460,7 @@ public final class Rc {
         public static final String dialogTitleDecorLayout = "dialogTitleDecorLayout";
         public static final String dialogTitleIconsDecorLayout = "dialogTitleIconsDecorLayout";
         public static final String digits = "digits";
+        public static final String directBootAware = "directBootAware";
         public static final String direction = "direction";
         @Deprecated
         public static final String directionDescriptions = "directionDescriptions";
@@ -540,9 +510,12 @@ public final class Rc {
         public static final String elevation = "elevation";
         public static final String ellipsize = "ellipsize";
         public static final String ems = "ems";
+        public static final String enableVrMode = "enableVrMode";
         public static final String enabled = "enabled";
         public static final String end = "end";
         public static final String endColor = "endColor";
+        public static final String endX = "endX";
+        public static final String endY = "endY";
         @Deprecated
         public static final String endYear = "endYear";
         public static final String enterFadeDuration = "enterFadeDuration";
@@ -564,6 +537,7 @@ public final class Rc {
         public static final String expandableListViewWhiteStyle = "expandableListViewWhiteStyle";
         public static final String exported = "exported";
         public static final String externalRouteEnabledDrawable = "externalRouteEnabledDrawable";
+        public static final String externalService = "externalService";
         public static final String extraTension = "extraTension";
         public static final String extractNativeLibs = "extractNativeLibs";
         public static final String factor = "factor";
@@ -588,6 +562,7 @@ public final class Rc {
         public static final String fillBefore = "fillBefore";
         public static final String fillColor = "fillColor";
         public static final String fillEnabled = "fillEnabled";
+        public static final String fillType = "fillType";
         public static final String fillViewport = "fillViewport";
         public static final String filter = "filter";
         public static final String filterTouchesWhenObscured = "filterTouchesWhenObscured";
@@ -604,6 +579,7 @@ public final class Rc {
         public static final String fontFamily = "fontFamily";
         public static final String fontFeatureSettings = "fontFeatureSettings";
         public static final String footerDividersEnabled = "footerDividersEnabled";
+        public static final String forceHasOverlappingRendering = "forceHasOverlappingRendering";
         public static final String foreground = "foreground";
         public static final String foregroundGravity = "foregroundGravity";
         public static final String foregroundT = "foregroundT";
@@ -665,6 +641,7 @@ public final class Rc {
         public static final String hapticFeedbackEnabled = "hapticFeedbackEnabled";
         public static final String hardwareAccelerated = "hardwareAccelerated";
         public static final String hasCode = "hasCode";
+        public static final String hash = "hash";
         @Deprecated
         public static final String headerAmPmTextAppearance = "headerAmPmTextAppearance";
         public static final String headerBackground = "headerBackground";
@@ -687,6 +664,8 @@ public final class Rc {
         public static final String horizontalScrollViewStyle = "horizontalScrollViewStyle";
         public static final String horizontalSpacing = "horizontalSpacing";
         public static final String host = "host";
+        public static final String hotSpotX = "hotSpotX";
+        public static final String hotSpotY = "hotSpotY";
         public static final String hyphenationFrequency = "hyphenationFrequency";
         public static final String icon = "icon";
         public static final String iconPreview = "iconPreview";
@@ -776,6 +755,7 @@ public final class Rc {
         public static final String label = "label";
         public static final String labelFor = "labelFor";
         public static final String labelTextSize = "labelTextSize";
+        public static final String languageTag = "languageTag";
         public static final String largeHeap = "largeHeap";
         public static final String largeScreens = "largeScreens";
         public static final String largestWidthLimitDp = "largestWidthLimitDp";
@@ -833,6 +813,7 @@ public final class Rc {
         public static final String layout_y = "layout_y";
         public static final String left = "left";
         public static final String letterSpacing = "letterSpacing";
+        public static final String level = "level";
         public static final String lightRadius = "lightRadius";
         public static final String lightY = "lightY";
         public static final String lightZ = "lightZ";
@@ -845,6 +826,7 @@ public final class Rc {
         public static final String listChoiceIndicatorSingle = "listChoiceIndicatorSingle";
         public static final String listDivider = "listDivider";
         public static final String listDividerAlertDialog = "listDividerAlertDialog";
+        public static final String listMenuViewStyle = "listMenuViewStyle";
         public static final String listPopupWindowStyle = "listPopupWindowStyle";
         public static final String listPreferredItemHeight = "listPreferredItemHeight";
         public static final String listPreferredItemHeightLarge = "listPreferredItemHeightLarge";
@@ -867,6 +849,7 @@ public final class Rc {
         public static final String marqueeRepeatLimit = "marqueeRepeatLimit";
         public static final String matchOrder = "matchOrder";
         public static final String max = "max";
+        public static final String maxButtonHeight = "maxButtonHeight";
         public static final String maxDate = "maxDate";
         public static final String maxEms = "maxEms";
         public static final String maxHeight = "maxHeight";
@@ -909,6 +892,7 @@ public final class Rc {
         public static final String navigationMode = "navigationMode";
         public static final String negativeButtonText = "negativeButtonText";
         public static final String nestedScrollingEnabled = "nestedScrollingEnabled";
+        public static final String networkSecurityConfig = "networkSecurityConfig";
         public static final String nextFocusDown = "nextFocusDown";
         public static final String nextFocusForward = "nextFocusForward";
         public static final String nextFocusLeft = "nextFocusLeft";
@@ -927,6 +911,7 @@ public final class Rc {
         @Deprecated
         public static final String numeric = "numeric";
         public static final String numericShortcut = "numericShortcut";
+        public static final String offset = "offset";
         public static final String onClick = "onClick";
         public static final String oneshot = "oneshot";
         public static final String opacity = "opacity";
@@ -975,11 +960,13 @@ public final class Rc {
         public static final String phoneNumber = "phoneNumber";
         public static final String pivotX = "pivotX";
         public static final String pivotY = "pivotY";
-        public static final String pointerStyle = "pointerStyle";
+        public static final String pointerIcon = "pointerIcon";
         public static final String popupAnimationStyle = "popupAnimationStyle";
         public static final String popupBackground = "popupBackground";
         public static final String popupCharacters = "popupCharacters";
         public static final String popupElevation = "popupElevation";
+        public static final String popupEnterTransition = "popupEnterTransition";
+        public static final String popupExitTransition = "popupExitTransition";
         public static final String popupKeyboard = "popupKeyboard";
         public static final String popupLayout = "popupLayout";
         public static final String popupMenuStyle = "popupMenuStyle";
@@ -1058,6 +1045,7 @@ public final class Rc {
         public static final String resizeClip = "resizeClip";
         public static final String resizeMode = "resizeMode";
         public static final String resizeable = "resizeable";
+        public static final String resizeableActivity = "resizeableActivity";
         public static final String resource = "resource";
         public static final String restoreAnyVersion = "restoreAnyVersion";
         @Deprecated
@@ -1193,6 +1181,8 @@ public final class Rc {
         public static final String startColor = "startColor";
         public static final String startDelay = "startDelay";
         public static final String startOffset = "startOffset";
+        public static final String startX = "startX";
+        public static final String startY = "startY";
         @Deprecated
         public static final String startYear = "startYear";
         public static final String stateListAnimator = "stateListAnimator";
@@ -1232,6 +1222,7 @@ public final class Rc {
         public static final String strokeLineJoin = "strokeLineJoin";
         public static final String strokeMiterLimit = "strokeMiterLimit";
         public static final String strokeWidth = "strokeWidth";
+        public static final String subMenuArrow = "subMenuArrow";
         public static final String submitBackground = "submitBackground";
         public static final String subtitle = "subtitle";
         public static final String subtitleTextAppearance = "subtitleTextAppearance";
@@ -1249,6 +1240,8 @@ public final class Rc {
         public static final String summaryOn = "summaryOn";
         public static final String supportsAssist = "supportsAssist";
         public static final String supportsLaunchVoiceAssistFromKeyguard = "supportsLaunchVoiceAssistFromKeyguard";
+        public static final String supportsLocalInteraction = "supportsLocalInteraction";
+        public static final String supportsPictureInPicture = "supportsPictureInPicture";
         public static final String supportsRtl = "supportsRtl";
         public static final String supportsSwitchingToNextInputMethod = "supportsSwitchingToNextInputMethod";
         public static final String supportsUploading = "supportsUploading";
@@ -1301,6 +1294,7 @@ public final class Rc {
         public static final String textAppearanceMedium = "textAppearanceMedium";
         public static final String textAppearanceMediumInverse = "textAppearanceMediumInverse";
         public static final String textAppearanceMisspelledSuggestion = "textAppearanceMisspelledSuggestion";
+        public static final String textAppearancePopupMenuHeader = "textAppearancePopupMenuHeader";
         public static final String textAppearanceSearchResultSubtitle = "textAppearanceSearchResultSubtitle";
         public static final String textAppearanceSearchResultTitle = "textAppearanceSearchResultTitle";
         public static final String textAppearanceSmall = "textAppearanceSmall";
@@ -1359,6 +1353,9 @@ public final class Rc {
         public static final String thumbT = "thumbT";
         public static final String thumbTintMode = "thumbTintMode";
         public static final String thumbnail = "thumbnail";
+        public static final String tickMark = "tickMark";
+        public static final String tickMarkT = "tickMarkT";
+        public static final String tickMarkTintMode = "tickMarkTintMode";
         public static final String tileMode = "tileMode";
         public static final String tileModeX = "tileModeX";
         public static final String tileModeY = "tileModeY";
@@ -1370,6 +1367,11 @@ public final class Rc {
         public static final String tintMode = "tintMode";
         public static final String title = "title";
         public static final String titleCondensed = "titleCondensed";
+        public static final String titleMargin = "titleMargin";
+        public static final String titleMarginBottom = "titleMarginBottom";
+        public static final String titleMarginEnd = "titleMarginEnd";
+        public static final String titleMarginStart = "titleMarginStart";
+        public static final String titleMarginTop = "titleMarginTop";
         public static final String titleTextAppearance = "titleTextAppearance";
         public static final String titleTextColor = "titleTextColor";
         public static final String titleTextStyle = "titleTextStyle";
@@ -1408,6 +1410,7 @@ public final class Rc {
         public static final String trimPathEnd = "trimPathEnd";
         public static final String trimPathOffset = "trimPathOffset";
         public static final String trimPathStart = "trimPathStart";
+        public static final String tunerCount = "tunerCount";
         public static final String type = "type";
         public static final String typeface = "typeface";
         public static final String uiOptions = "uiOptions";
@@ -1416,6 +1419,7 @@ public final class Rc {
         public static final String unfocusedMonthDateColor = "unfocusedMonthDateColor";
         public static final String unselectedAlpha = "unselectedAlpha";
         public static final String updatePeriodMillis = "updatePeriodMillis";
+        public static final String use32bitAbi = "use32bitAbi";
         public static final String useDefaultMargins = "useDefaultMargins";
         public static final String useIntrinsicSizeAsMinimum = "useIntrinsicSizeAsMinimum";
         public static final String useLevel = "useLevel";
@@ -1427,6 +1431,7 @@ public final class Rc {
         public static final String valueType = "valueType";
         public static final String variablePadding = "variablePadding";
         public static final String vendor = "vendor";
+        public static final String version = "version";
         public static final String versionCode = "versionCode";
         public static final String versionName = "versionName";
         public static final String verticalCorrection = "verticalCorrection";
@@ -1529,18 +1534,13 @@ public final class Rc {
         public static final String yearListSelectorColor = "yearListSelectorColor";
         public static final String yesNoPreferenceStyle = "yesNoPreferenceStyle";
         public static final String zAdjustment = "zAdjustment";
-
-        public attr() {
-        }
     }
 
     public static final class bool {
         public static final String action_bar_embed_tabs = "action_bar_embed_tabs";
-        public static final String action_bar_embed_tabs_pre_jb = "action_bar_embed_tabs_pre_jb";
         public static final String action_bar_expanded_action_views_exclusive = "action_bar_expanded_action_views_exclusive";
-        public static final String allow_stacked_button_bar = "allow_stacked_button_bar";
         public static final String config_LTE_eri_for_network_name = "config_LTE_eri_for_network_name";
-        public static final String config_allowActionMenuItemTextWithIcon = "config_allowActionMenuItemTextWithIcon";
+        public static final String config_advanced_reboot = "config_advanced_reboot";
         public static final String config_allowAllRotations = "config_allowAllRotations";
         public static final String config_allowAnimationsInLowPowerMode = "config_allowAnimationsInLowPowerMode";
         public static final String config_allowAutoBrightnessWhileDozing = "config_allowAutoBrightnessWhileDozing";
@@ -1558,12 +1558,15 @@ public final class Rc {
         public static final String config_animateScreenLights = "config_animateScreenLights";
         public static final String config_annoy_dianne = "config_annoy_dianne";
         public static final String config_autoBrightnessResetAmbientLuxAfterWarmUp = "config_autoBrightnessResetAmbientLuxAfterWarmUp";
+        public static final String config_autoPowerModePreferWristTilt = "config_autoPowerModePreferWristTilt";
+        public static final String config_autoPowerModePrefetchLocation = "config_autoPowerModePrefetchLocation";
         public static final String config_auto_attach_data_on_creation = "config_auto_attach_data_on_creation";
         public static final String config_automatic_brightness_available = "config_automatic_brightness_available";
         public static final String config_avoidGfxAccel = "config_avoidGfxAccel";
         public static final String config_bluetooth_address_validation = "config_bluetooth_address_validation";
         public static final String config_bluetooth_default_profiles = "config_bluetooth_default_profiles";
         public static final String config_bluetooth_le_peripheral_mode_supported = "config_bluetooth_le_peripheral_mode_supported";
+        public static final String config_bluetooth_reload_supported_profiles_when_enabled = "config_bluetooth_reload_supported_profiles_when_enabled";
         public static final String config_bluetooth_sco_off_call = "config_bluetooth_sco_off_call";
         public static final String config_built_in_sip_phone = "config_built_in_sip_phone";
         public static final String config_cameraDoubleTapPowerGestureEnabled = "config_cameraDoubleTapPowerGestureEnabled";
@@ -1579,7 +1582,6 @@ public final class Rc {
         public static final String config_defaultWindowFeatureContextMenu = "config_defaultWindowFeatureContextMenu";
         public static final String config_defaultWindowFeatureOptionsPanel = "config_defaultWindowFeatureOptionsPanel";
         public static final String config_deskDockEnablesAccelerometer = "config_deskDockEnablesAccelerometer";
-        public static final String config_deviceHasVariableButtonBrightness = "config_deviceHasVariableButtonBrightness";
         public static final String config_device_volte_available = "config_device_volte_available";
         public static final String config_device_vt_available = "config_device_vt_available";
         public static final String config_device_wfc_ims_available = "config_device_wfc_ims_available";
@@ -1595,12 +1597,13 @@ public final class Rc {
         public static final String config_duplicate_port_omadm_wappush = "config_duplicate_port_omadm_wappush";
         public static final String config_eap_sim_based_auth_supported = "config_eap_sim_based_auth_supported";
         public static final String config_enableActivityRecognitionHardwareOverlay = "config_enableActivityRecognitionHardwareOverlay";
+        public static final String config_enableAppWidgetService = "config_enableAppWidgetService";
         public static final String config_enableAutoPowerModes = "config_enableAutoPowerModes";
         public static final String config_enableBurnInProtection = "config_enableBurnInProtection";
+        public static final String config_enableCarDockHomeLaunch = "config_enableCarDockHomeLaunch";
         public static final String config_enableFusedLocationOverlay = "config_enableFusedLocationOverlay";
         public static final String config_enableGeocoderOverlay = "config_enableGeocoderOverlay";
         public static final String config_enableGeofenceOverlay = "config_enableGeofenceOverlay";
-        public static final String config_enableGestureService = "config_enableGestureService";
         public static final String config_enableHardwareFlpOverlay = "config_enableHardwareFlpOverlay";
         public static final String config_enableLockBeforeUnlockScreen = "config_enableLockBeforeUnlockScreen";
         public static final String config_enableLockScreenRotation = "config_enableLockScreenRotation";
@@ -1613,71 +1616,65 @@ public final class Rc {
         public static final String config_enableWifiDisplay = "config_enableWifiDisplay";
         public static final String config_enable_emergency_call_while_sim_locked = "config_enable_emergency_call_while_sim_locked";
         public static final String config_enable_puk_unlock_screen = "config_enable_puk_unlock_screen";
-        public static final String config_fetch_apn_from_omh_card = "config_fetch_apn_from_omh_card";
-        public static final String config_fingerprintRestrictedToSystemAndOwner = "config_fingerprintRestrictedToSystemAndOwner";
-        public static final String config_forceAnalogCarDock = "config_forceAnalogCarDock";
-        public static final String config_forceAnalogDeskDock = "config_forceAnalogDeskDock";
         public static final String config_forceDefaultOrientation = "config_forceDefaultOrientation";
+        public static final String config_forceWindowDrawsStatusBarBackground = "config_forceWindowDrawsStatusBarBackground";
+        public static final String config_freeformWindowManagement = "config_freeformWindowManagement";
         public static final String config_goToSleepOnButtonPressTheaterMode = "config_goToSleepOnButtonPressTheaterMode";
+        public static final String config_guestUserEphemeral = "config_guestUserEphemeral";
         public static final String config_hasPermanentDpad = "config_hasPermanentDpad";
         public static final String config_hasRecents = "config_hasRecents";
-        public static final String config_hasRemovableLid = "config_hasRemovableLid";
         public static final String config_hotswapCapable = "config_hotswapCapable";
-        public static final String config_intrusiveBatteryLed = "config_intrusiveBatteryLed";
         public static final String config_intrusiveNotificationLed = "config_intrusiveNotificationLed";
-        public static final String config_ledCanPulse = "config_ledCanPulse";
+        public static final String config_lidControlsScreenLock = "config_lidControlsScreenLock";
         public static final String config_lidControlsSleep = "config_lidControlsSleep";
+        public static final String config_localDisplaysMirrorContent = "config_localDisplaysMirrorContent";
+        public static final String config_lockDayNightMode = "config_lockDayNightMode";
+        public static final String config_lockUiMode = "config_lockUiMode";
         public static final String config_mainBuiltInDisplayIsRound = "config_mainBuiltInDisplayIsRound";
         public static final String config_mms_content_disposition_support = "config_mms_content_disposition_support";
-        public static final String config_multiColorBatteryLed = "config_multiColorBatteryLed";
-        public static final String config_multiColorNotificationLed = "config_multiColorNotificationLed";
         public static final String config_networkSamplingWakesDevice = "config_networkSamplingWakesDevice";
+        public static final String config_overrideRemoteViewsActivityTransition = "config_overrideRemoteViewsActivityTransition";
         public static final String config_powerDecoupleAutoSuspendModeFromDisplay = "config_powerDecoupleAutoSuspendModeFromDisplay";
         public static final String config_powerDecoupleInteractiveModeFromDisplay = "config_powerDecoupleInteractiveModeFromDisplay";
-        public static final String config_protocol_errors_perm_failure = "config_protocol_errors_perm_failure";
-        public static final String config_reject_ggsn_perm_failure = "config_reject_ggsn_perm_failure";
+        public static final String config_requireCallCapableAccountForHandle = "config_requireCallCapableAccountForHandle";
         public static final String config_requireRadioPowerOffOnSimRefreshReset = "config_requireRadioPowerOffOnSimRefreshReset";
         public static final String config_restartRadioAfterProvisioning = "config_restartRadioAfterProvisioning";
         public static final String config_restart_radio_on_pdp_fail_regular_deactivation = "config_restart_radio_on_pdp_fail_regular_deactivation";
         public static final String config_reverseDefaultRotation = "config_reverseDefaultRotation";
         public static final String config_safe_media_volume_enabled = "config_safe_media_volume_enabled";
-        public static final String config_samsung_stk = "config_samsung_stk";
         public static final String config_sendAudioBecomingNoisy = "config_sendAudioBecomingNoisy";
-        public static final String config_send_sms1x_on_voice_call = "config_send_sms1x_on_voice_call";
         public static final String config_sf_limitedAlpha = "config_sf_limitedAlpha";
         public static final String config_sf_slowBlur = "config_sf_slowBlur";
-        public static final String config_showBatteryFullyChargedNotification = "config_showBatteryFullyChargedNotification";
         public static final String config_showMenuShortcutsWhenKeyboardPresent = "config_showMenuShortcutsWhenKeyboardPresent";
         public static final String config_showNavigationBar = "config_showNavigationBar";
-        public static final String config_show_cmIMESwitcher = "config_show_cmIMESwitcher";
-        public static final String config_singleStageCameraKey = "config_singleStageCameraKey";
         public static final String config_sip_wifi_only = "config_sip_wifi_only";
         public static final String config_sms_capable = "config_sms_capable";
         public static final String config_sms_decode_gsm_8bit_data = "config_sms_decode_gsm_8bit_data";
         public static final String config_sms_force_7bit_encoding = "config_sms_force_7bit_encoding";
-        public static final String config_sms_ringtone_incall = "config_sms_ringtone_incall";
         public static final String config_sms_utf8_support = "config_sms_utf8_support";
-        public static final String config_softap_extention = "config_softap_extention";
         public static final String config_speed_up_audio_on_mt_calls = "config_speed_up_audio_on_mt_calls";
         public static final String config_stkNoAlphaUsrCnf = "config_stkNoAlphaUsrCnf";
-        public static final String config_stylusGestures = "config_stylusGestures";
+        public static final String config_strongAuthRequiredOnBoot = "config_strongAuthRequiredOnBoot";
+        public static final String config_supportAudioSourceUnprocessed = "config_supportAudioSourceUnprocessed";
         public static final String config_supportAutoRotation = "config_supportAutoRotation";
         public static final String config_supportDoubleTapWake = "config_supportDoubleTapWake";
         public static final String config_supportLongPressPowerWhenNonInteractive = "config_supportLongPressPowerWhenNonInteractive";
         public static final String config_supportMicNearUltrasound = "config_supportMicNearUltrasound";
+        public static final String config_supportPreRebootSecurityLogs = "config_supportPreRebootSecurityLogs";
         public static final String config_supportSpeakerNearUltrasound = "config_supportSpeakerNearUltrasound";
+        public static final String config_supportsMultiWindow = "config_supportsMultiWindow";
         public static final String config_suspendWhenScreenOffDueToProximity = "config_suspendWhenScreenOffDueToProximity";
+        public static final String config_sustainedPerformanceModeSupported = "config_sustainedPerformanceModeSupported";
         public static final String config_swipeDisambiguation = "config_swipeDisambiguation";
         public static final String config_switch_phone_on_voice_reg_state_change = "config_switch_phone_on_voice_reg_state_change";
         public static final String config_syncstorageengine_masterSyncAutomatically = "config_syncstorageengine_masterSyncAutomatically";
         public static final String config_telephony_use_own_number_for_voicemail = "config_telephony_use_own_number_for_voicemail";
-        public static final String config_ui_blur_enabled = "config_ui_blur_enabled";
         public static final String config_ui_enableFadingMarquee = "config_ui_enableFadingMarquee";
         public static final String config_unplugTurnsOnScreen = "config_unplugTurnsOnScreen";
+        public static final String config_usbChargingMessage = "config_usbChargingMessage";
         public static final String config_useAttentionLight = "config_useAttentionLight";
         public static final String config_useDevInputEventForAudioJack = "config_useDevInputEventForAudioJack";
         public static final String config_useFixedVolume = "config_useFixedVolume";
-        public static final String config_useSystemClockforRotationSensor = "config_useSystemClockforRotationSensor";
         public static final String config_useVolumeKeySounds = "config_useVolumeKeySounds";
         public static final String config_use_sim_language_file = "config_use_sim_language_file";
         public static final String config_use_strict_phone_number_comparation = "config_use_strict_phone_number_comparation";
@@ -1687,22 +1684,17 @@ public final class Rc {
         public static final String config_wifi_background_scan_support = "config_wifi_background_scan_support";
         public static final String config_wifi_batched_scan_supported = "config_wifi_batched_scan_supported";
         public static final String config_wifi_dual_band_support = "config_wifi_dual_band_support";
-        public static final String config_wifi_ecbm_mode_change = "config_wifi_ecbm_mode_change";
-        public static final String config_wifi_enable_5GHz_preference = "config_wifi_enable_5GHz_preference";
         public static final String config_wifi_enable_disconnection_debounce = "config_wifi_enable_disconnection_debounce";
         public static final String config_wifi_enable_wifi_firmware_debugging = "config_wifi_enable_wifi_firmware_debugging";
         public static final String config_wifi_framework_cellular_handover_enable_user_triggered_adjustment = "config_wifi_framework_cellular_handover_enable_user_triggered_adjustment";
         public static final String config_wifi_framework_enable_associated_network_selection = "config_wifi_framework_enable_associated_network_selection";
-        public static final String config_wifi_hal_pno_enable = "config_wifi_hal_pno_enable";
         public static final String config_wifi_hotspot2_enabled = "config_wifi_hotspot2_enabled";
-        public static final String config_wifi_ipreachability_monitor = "config_wifi_ipreachability_monitor";
         public static final String config_wifi_only_link_same_credential_configurations = "config_wifi_only_link_same_credential_configurations";
         public static final String config_wifi_revert_country_code_on_cellular_loss = "config_wifi_revert_country_code_on_cellular_loss";
-        public static final String config_wifi_ssid_white_list_enable = "config_wifi_ssid_white_list_enable";
+        public static final String config_wifi_turn_off_during_emergency_call = "config_wifi_turn_off_during_emergency_call";
         public static final String config_wimaxEnabled = "config_wimaxEnabled";
         public static final String config_windowEnableCircularEmulatorDisplayOverlay = "config_windowEnableCircularEmulatorDisplayOverlay";
         public static final String config_windowShowCircularMask = "config_windowShowCircularMask";
-        public static final String def_custom_dateformat = "def_custom_dateformat";
         public static final String editable_voicemailnumber = "editable_voicemailnumber";
         public static final String imsServiceAllowTurnOff = "imsServiceAllowTurnOff";
         public static final String preferences_prefer_dual_pane = "preferences_prefer_dual_pane";
@@ -1711,11 +1703,6 @@ public final class Rc {
         public static final String skip_restoring_network_selection = "skip_restoring_network_selection";
         public static final String split_action_bar_is_narrow = "split_action_bar_is_narrow";
         public static final String target_honeycomb_needs_options_menu = "target_honeycomb_needs_options_menu";
-        public static final String useImsAlwaysForEmergencyCall = "useImsAlwaysForEmergencyCall";
-        public static final String wifi_autocon = "wifi_autocon";
-
-        public bool() {
-        }
     }
 
     public static final class color {
@@ -1726,6 +1713,8 @@ public final class Rc {
         public static final String chooser_service_row_background_color = "chooser_service_row_background_color";
         public static final String config_defaultNotificationColor = "config_defaultNotificationColor";
         public static final String darker_gray = "darker_gray";
+        public static final String decor_button_dark_color = "decor_button_dark_color";
+        public static final String decor_button_light_color = "decor_button_light_color";
         public static final String holo_blue_bright = "holo_blue_bright";
         public static final String holo_blue_dark = "holo_blue_dark";
         public static final String holo_blue_light = "holo_blue_light";
@@ -1740,19 +1729,21 @@ public final class Rc {
         public static final String lock_pattern_view_error_color = "lock_pattern_view_error_color";
         public static final String lock_pattern_view_regular_color = "lock_pattern_view_regular_color";
         public static final String lock_pattern_view_success_color = "lock_pattern_view_success_color";
-        public static final String notification_action_color_filter = "notification_action_color_filter";
-        public static final String notification_icon_bg_color = "notification_icon_bg_color";
-        public static final String notification_media_primary_color = "notification_media_primary_color";
-        public static final String notification_media_secondary_color = "notification_media_secondary_color";
+        public static final String notification_action_list = "notification_action_list";
+        public static final String notification_icon_default_color = "notification_icon_default_color";
+        public static final String notification_material_background_color = "notification_material_background_color";
         public static final String notification_progress_background_color = "notification_progress_background_color";
         public static final String primary_text_dark = "primary_text_dark";
         public static final String primary_text_dark_nodisable = "primary_text_dark_nodisable";
         public static final String primary_text_light = "primary_text_light";
         public static final String primary_text_light_nodisable = "primary_text_light_nodisable";
+        public static final String resize_shadow_end_color = "resize_shadow_end_color";
+        public static final String resize_shadow_start_color = "resize_shadow_start_color";
         public static final String secondary_text_dark = "secondary_text_dark";
         public static final String secondary_text_dark_nodisable = "secondary_text_dark_nodisable";
         public static final String secondary_text_light = "secondary_text_light";
         public static final String secondary_text_light_nodisable = "secondary_text_light_nodisable";
+        public static final String system_bar_background_semi_transparent = "system_bar_background_semi_transparent";
         public static final String system_notification_accent_color = "system_notification_accent_color";
         public static final String tab_indicator_text = "tab_indicator_text";
         public static final String tab_indicator_text_v4 = "tab_indicator_text_v4";
@@ -1776,9 +1767,6 @@ public final class Rc {
         public static final String user_icon_default_white = "user_icon_default_white";
         public static final String white = "white";
         public static final String widget_edittext_dark = "widget_edittext_dark";
-
-        public color() {
-        }
     }
 
     public static final class dimen {
@@ -1788,7 +1776,7 @@ public final class Rc {
         public static final String action_bar_stacked_tab_max_width = "action_bar_stacked_tab_max_width";
         public static final String alert_dialog_round_padding = "alert_dialog_round_padding";
         public static final String app_icon_size = "app_icon_size";
-        public static final String circular_display_mask_offset = "circular_display_mask_offset";
+        public static final String cascading_menus_min_smallest_width = "cascading_menus_min_smallest_width";
         public static final String circular_display_mask_thickness = "circular_display_mask_thickness";
         public static final String config_mediaMetadataBitmapMaxSize = "config_mediaMetadataBitmapMaxSize";
         public static final String config_minScalingSpan = "config_minScalingSpan";
@@ -1815,8 +1803,12 @@ public final class Rc {
         public static final String default_app_widget_padding_right = "default_app_widget_padding_right";
         public static final String default_app_widget_padding_top = "default_app_widget_padding_top";
         public static final String default_gap = "default_gap";
+        public static final String default_minimal_size_resizable_task = "default_minimal_size_resizable_task";
         public static final String dialog_min_width_major = "dialog_min_width_major";
         public static final String dialog_min_width_minor = "dialog_min_width_minor";
+        public static final String docked_stack_divider_insets = "docked_stack_divider_insets";
+        public static final String docked_stack_divider_thickness = "docked_stack_divider_thickness";
+        public static final String docked_stack_minimize_thickness = "docked_stack_minimize_thickness";
         public static final String dropdownitem_icon_width = "dropdownitem_icon_width";
         public static final String dropdownitem_text_padding_left = "dropdownitem_text_padding_left";
         public static final String fast_scroller_minimum_touch_target = "fast_scroller_minimum_touch_target";
@@ -1830,19 +1822,39 @@ public final class Rc {
         public static final String floating_toolbar_preferred_width = "floating_toolbar_preferred_width";
         public static final String floating_toolbar_text_size = "floating_toolbar_text_size";
         public static final String floating_toolbar_vertical_margin = "floating_toolbar_vertical_margin";
-        public static final String global_actions_avatar_size = "global_actions_avatar_size";
         public static final String immersive_mode_cling_width = "immersive_mode_cling_width";
+        public static final String input_extract_action_button_height = "input_extract_action_button_height";
+        public static final String input_extract_action_button_width = "input_extract_action_button_width";
         public static final String lock_pattern_dot_line_width = "lock_pattern_dot_line_width";
         public static final String lock_pattern_dot_size = "lock_pattern_dot_size";
         public static final String lock_pattern_dot_size_activated = "lock_pattern_dot_size_activated";
+        public static final String media_notification_expanded_image_margin_bottom = "media_notification_expanded_image_margin_bottom";
+        public static final String media_notification_expanded_image_max_size = "media_notification_expanded_image_max_size";
         public static final String navigation_bar_height = "navigation_bar_height";
+        public static final String navigation_bar_height_car_mode = "navigation_bar_height_car_mode";
         public static final String navigation_bar_height_landscape = "navigation_bar_height_landscape";
+        public static final String navigation_bar_height_landscape_car_mode = "navigation_bar_height_landscape_car_mode";
         public static final String navigation_bar_width = "navigation_bar_width";
+        public static final String navigation_bar_width_car_mode = "navigation_bar_width_car_mode";
+        public static final String notification_action_list_height = "notification_action_list_height";
         public static final String notification_badge_size = "notification_badge_size";
+        public static final String notification_content_image_margin_end = "notification_content_image_margin_end";
+        public static final String notification_content_margin_bottom = "notification_content_margin_bottom";
+        public static final String notification_content_margin_end = "notification_content_margin_end";
+        public static final String notification_content_margin_start = "notification_content_margin_start";
+        public static final String notification_content_margin_top = "notification_content_margin_top";
+        public static final String notification_content_picture_margin = "notification_content_picture_margin";
+        public static final String notification_content_plus_picture_margin_end = "notification_content_plus_picture_margin_end";
+        public static final String notification_header_background_height = "notification_header_background_height";
+        public static final String notification_header_shrink_min_width = "notification_header_shrink_min_width";
+        public static final String notification_inbox_item_top_padding = "notification_inbox_item_top_padding";
         public static final String notification_large_icon_circle_padding = "notification_large_icon_circle_padding";
         public static final String notification_large_icon_height = "notification_large_icon_height";
         public static final String notification_large_icon_width = "notification_large_icon_width";
+        public static final String notification_messaging_spacing = "notification_messaging_spacing";
+        public static final String notification_min_content_height = "notification_min_content_height";
         public static final String notification_subtext_size = "notification_subtext_size";
+        public static final String notification_text_margin_top = "notification_text_margin_top";
         public static final String notification_text_size = "notification_text_size";
         public static final String notification_title_text_size = "notification_title_text_size";
         public static final String notification_top_pad = "notification_top_pad";
@@ -1852,6 +1864,8 @@ public final class Rc {
         public static final String password_keyboard_spacebar_vertical_correction = "password_keyboard_spacebar_vertical_correction";
         public static final String preference_fragment_padding_bottom = "preference_fragment_padding_bottom";
         public static final String preference_fragment_padding_side = "preference_fragment_padding_side";
+        public static final String resize_shadow_size = "resize_shadow_size";
+        public static final String search_view_preferred_height = "search_view_preferred_height";
         public static final String search_view_preferred_width = "search_view_preferred_width";
         public static final String status_bar_height = "status_bar_height";
         public static final String status_bar_icon_size = "status_bar_icon_size";
@@ -1873,9 +1887,6 @@ public final class Rc {
         public static final String timepicker_text_size_inner = "timepicker_text_size_inner";
         public static final String timepicker_text_size_normal = "timepicker_text_size_normal";
         public static final String toast_y_offset = "toast_y_offset";
-
-        public dimen() {
-        }
     }
 
     public static final class drawable {
@@ -1883,7 +1894,6 @@ public final class Rc {
         public static final String alert_light_frame = "alert_light_frame";
         public static final String arrow_down_float = "arrow_down_float";
         public static final String arrow_up_float = "arrow_up_float";
-        public static final String boot_logo = "boot_logo";
         public static final String bottom_bar = "bottom_bar";
         public static final String btn_check_off = "btn_check_off";
         public static final String btn_default = "btn_default";
@@ -1911,6 +1921,12 @@ public final class Rc {
         public static final String compass_base = "compass_base";
         public static final String create_contact = "create_contact";
         public static final String dark_header = "dark_header";
+        public static final String decor_caption_title_focused = "decor_caption_title_focused";
+        public static final String decor_close_button_dark = "decor_close_button_dark";
+        public static final String decor_close_button_light = "decor_close_button_light";
+        public static final String decor_maximize_button_dark = "decor_maximize_button_dark";
+        public static final String decor_maximize_button_light = "decor_maximize_button_light";
+        public static final String default_lock_wallpaper = "default_lock_wallpaper";
         public static final String default_wallpaper = "default_wallpaper";
         public static final String dialog_frame = "dialog_frame";
         public static final String dialog_holo_dark_frame = "dialog_holo_dark_frame";
@@ -1946,6 +1962,10 @@ public final class Rc {
         public static final String expander_ic_maximized = "expander_ic_maximized";
         public static final String expander_ic_minimized = "expander_ic_minimized";
         public static final String expander_open_holo_dark = "expander_open_holo_dark";
+        public static final String ft_avd_toarrow = "ft_avd_toarrow";
+        public static final String ft_avd_toarrow_animation = "ft_avd_toarrow_animation";
+        public static final String ft_avd_tooverflow = "ft_avd_tooverflow";
+        public static final String ft_avd_tooverflow_animation = "ft_avd_tooverflow_animation";
         public static final String gallery_thumb = "gallery_thumb";
         public static final String ic_account_circle = "ic_account_circle";
         public static final String ic_action_assist_focused = "ic_action_assist_focused";
@@ -1963,11 +1983,16 @@ public final class Rc {
         public static final String ic_btn_speak_now = "ic_btn_speak_now";
         public static final String ic_bullet_key_permission = "ic_bullet_key_permission";
         public static final String ic_check_circle_24px = "ic_check_circle_24px";
+        public static final String ic_collapse_bundle = "ic_collapse_bundle";
+        public static final String ic_collapse_notification = "ic_collapse_notification";
         public static final String ic_contact_picture = "ic_contact_picture";
         public static final String ic_corp_badge = "ic_corp_badge";
+        public static final String ic_corp_badge_no_background = "ic_corp_badge_no_background";
+        public static final String ic_corp_badge_off = "ic_corp_badge_off";
         public static final String ic_corp_icon = "ic_corp_icon";
         public static final String ic_corp_icon_badge = "ic_corp_icon_badge";
         public static final String ic_corp_statusbar_icon = "ic_corp_statusbar_icon";
+        public static final String ic_corp_user_badge = "ic_corp_user_badge";
         public static final String ic_delete = "ic_delete";
         public static final String ic_dialog_alert = "ic_dialog_alert";
         public static final String ic_dialog_alert_material = "ic_dialog_alert_material";
@@ -1978,10 +2003,19 @@ public final class Rc {
         public static final String ic_dialog_usb = "ic_dialog_usb";
         public static final String ic_eject_24dp = "ic_eject_24dp";
         public static final String ic_emergency = "ic_emergency";
+        public static final String ic_expand_bundle = "ic_expand_bundle";
+        public static final String ic_expand_notification = "ic_expand_notification";
         public static final String ic_folder_24dp = "ic_folder_24dp";
         public static final String ic_grayedout_printer = "ic_grayedout_printer";
         public static final String ic_input_add = "ic_input_add";
         public static final String ic_input_delete = "ic_input_delete";
+        public static final String ic_input_extract_action_done = "ic_input_extract_action_done";
+        public static final String ic_input_extract_action_go = "ic_input_extract_action_go";
+        public static final String ic_input_extract_action_next = "ic_input_extract_action_next";
+        public static final String ic_input_extract_action_previous = "ic_input_extract_action_previous";
+        public static final String ic_input_extract_action_return = "ic_input_extract_action_return";
+        public static final String ic_input_extract_action_search = "ic_input_extract_action_search";
+        public static final String ic_input_extract_action_send = "ic_input_extract_action_send";
         public static final String ic_input_get = "ic_input_get";
         public static final String ic_jog_dial_sound_off = "ic_jog_dial_sound_off";
         public static final String ic_jog_dial_sound_on = "ic_jog_dial_sound_on";
@@ -1997,12 +2031,8 @@ public final class Rc {
         public static final String ic_lock_lock = "ic_lock_lock";
         public static final String ic_lock_power_off = "ic_lock_power_off";
         public static final String ic_lock_power_reboot = "ic_lock_power_reboot";
-        public static final String ic_lock_screenrecord = "ic_lock_screenrecord";
-        public static final String ic_lock_screenshot = "ic_lock_screenshot";
-        public static final String ic_lock_settings = "ic_lock_settings";
         public static final String ic_lock_silent_mode = "ic_lock_silent_mode";
         public static final String ic_lock_silent_mode_off = "ic_lock_silent_mode_off";
-        public static final String ic_lock_user = "ic_lock_user";
         public static final String ic_maps_indicator_current_position_anim = "ic_maps_indicator_current_position_anim";
         public static final String ic_media_ff = "ic_media_ff";
         public static final String ic_media_next = "ic_media_next";
@@ -2085,6 +2115,7 @@ public final class Rc {
         public static final String ic_storage_48dp = "ic_storage_48dp";
         public static final String ic_text_dot = "ic_text_dot";
         public static final String ic_usb_48dp = "ic_usb_48dp";
+        public static final String ic_user_secure = "ic_user_secure";
         public static final String ic_voice_search = "ic_voice_search";
         public static final String ic_volume = "ic_volume";
         public static final String indicator_input_error = "indicator_input_error";
@@ -2117,13 +2148,11 @@ public final class Rc {
         public static final String menu_full_frame = "menu_full_frame";
         public static final String menuitem_background = "menuitem_background";
         public static final String no_tile_256 = "no_tile_256";
-        public static final String notification_icon_legacy_bg = "notification_icon_legacy_bg";
         public static final String notification_template_icon_bg = "notification_template_icon_bg";
         public static final String notification_template_icon_low_bg = "notification_template_icon_low_bg";
         public static final String picture_emergency = "picture_emergency";
         public static final String picture_frame = "picture_frame";
         public static final String platlogo = "platlogo";
-        public static final String platlogo_cm = "platlogo_cm";
         public static final String platlogo_m = "platlogo_m";
         public static final String popup_bottom_bright = "popup_bottom_bright";
         public static final String popup_bottom_dark = "popup_bottom_dark";
@@ -2182,7 +2211,6 @@ public final class Rc {
         public static final String stat_notify_error = "stat_notify_error";
         public static final String stat_notify_missed_call = "stat_notify_missed_call";
         public static final String stat_notify_more = "stat_notify_more";
-        public static final String stat_notify_privacy_guard = "stat_notify_privacy_guard";
         public static final String stat_notify_rssi_in_range = "stat_notify_rssi_in_range";
         public static final String stat_notify_sdcard = "stat_notify_sdcard";
         public static final String stat_notify_sdcard_prepare = "stat_notify_sdcard_prepare";
@@ -2245,9 +2273,6 @@ public final class Rc {
         public static final String tab_indicator_v4 = "tab_indicator_v4";
         public static final String text_edit_paste_window = "text_edit_paste_window";
         public static final String text_edit_side_paste_window = "text_edit_side_paste_window";
-        public static final String text_select_handle_left = "text_select_handle_left";
-        public static final String text_select_handle_middle = "text_select_handle_middle";
-        public static final String text_select_handle_right = "text_select_handle_right";
         public static final String title_bar = "title_bar";
         public static final String title_bar_medium = "title_bar_medium";
         public static final String title_bar_tall = "title_bar_tall";
@@ -2257,23 +2282,24 @@ public final class Rc {
         public static final String unlock_halo = "unlock_halo";
         public static final String unlock_ring = "unlock_ring";
         public static final String unlock_wave = "unlock_wave";
-        public static final String usb_android = "usb_android";
-        public static final String usb_android_connected = "usb_android_connected";
         public static final String vpn_connected = "vpn_connected";
         public static final String vpn_disconnected = "vpn_disconnected";
         public static final String zoom_plate = "zoom_plate";
-
-        public drawable() {
-        }
     }
 
     public static final class fraction {
+        public static final String config_autoBrightnessAdjustmentMaxGamma = "config_autoBrightnessAdjustmentMaxGamma";
         public static final String config_dimBehindFadeDuration = "config_dimBehindFadeDuration";
         public static final String config_maximumScreenDimRatio = "config_maximumScreenDimRatio";
         public static final String config_screenAutoBrightnessDozeScaleFactor = "config_screenAutoBrightnessDozeScaleFactor";
-
-        public fraction() {
-        }
+        public static final String docked_stack_divider_fixed_ratio = "docked_stack_divider_fixed_ratio";
+        public static final String input_extract_action_margin_bottom = "input_extract_action_margin_bottom";
+        public static final String input_extract_layout_height = "input_extract_layout_height";
+        public static final String input_extract_layout_padding_left = "input_extract_layout_padding_left";
+        public static final String input_extract_layout_padding_left_no_action = "input_extract_layout_padding_left_no_action";
+        public static final String input_extract_layout_padding_right = "input_extract_layout_padding_right";
+        public static final String input_extract_text_margin_bottom = "input_extract_text_margin_bottom";
+        public static final String thumbnail_fullscreen_scale = "thumbnail_fullscreen_scale";
     }
 
     public static final class id {
@@ -2283,6 +2309,7 @@ public final class Rc {
         public static final String accessibilityActionScrollRight = "accessibilityActionScrollRight";
         public static final String accessibilityActionScrollToPosition = "accessibilityActionScrollToPosition";
         public static final String accessibilityActionScrollUp = "accessibilityActionScrollUp";
+        public static final String accessibilityActionSetProgress = "accessibilityActionSetProgress";
         public static final String accessibilityActionShowOnScreen = "accessibilityActionShowOnScreen";
         public static final String account_name = "account_name";
         public static final String account_row_icon = "account_row_icon";
@@ -2297,13 +2324,19 @@ public final class Rc {
         public static final String action_bar_subtitle = "action_bar_subtitle";
         public static final String action_bar_title = "action_bar_title";
         public static final String action_context_bar = "action_context_bar";
-        public static final String action_divider = "action_divider";
         public static final String action_menu_presenter = "action_menu_presenter";
         public static final String action_mode_bar_stub = "action_mode_bar_stub";
         public static final String action_mode_close_button = "action_mode_close_button";
         public static final String actions = "actions";
+        public static final String actions_container = "actions_container";
         public static final String activity_chooser_view_content = "activity_chooser_view_content";
         public static final String addToDictionary = "addToDictionary";
+        public static final String addToDictionaryButton = "addToDictionaryButton";
+        public static final String aerr_close = "aerr_close";
+        public static final String aerr_mute = "aerr_mute";
+        public static final String aerr_report = "aerr_report";
+        public static final String aerr_restart = "aerr_restart";
+        public static final String aerr_wait = "aerr_wait";
         public static final String alertTitle = "alertTitle";
         public static final String allow_button = "allow_button";
         public static final String alwaysUse = "alwaysUse";
@@ -2311,11 +2344,11 @@ public final class Rc {
         public static final String am_label = "am_label";
         public static final String ampm_layout = "ampm_layout";
         public static final String animator = "animator";
+        public static final String app_name_text = "app_name_text";
         public static final String ask_checkbox = "ask_checkbox";
         public static final String authtoken_type = "authtoken_type";
         public static final String back_button = "back_button";
         public static final String background = "background";
-        public static final String banner = "banner";
         public static final String big_picture = "big_picture";
         public static final String big_text = "big_text";
         public static final String body = "body";
@@ -2343,6 +2376,7 @@ public final class Rc {
         public static final String chronometer = "chronometer";
         public static final String clearDefaultH = "clearDefaultH";
         public static final String closeButton = "closeButton";
+        public static final String close_window = "close_window";
         public static final String compat_checkbox = "compat_checkbox";
         public static final String content = "content";
         public static final String contentPanel = "contentPanel";
@@ -2365,6 +2399,7 @@ public final class Rc {
         public static final String decor_content_parent = "decor_content_parent";
         public static final String decrement = "decrement";
         public static final String default_activity_button = "default_activity_button";
+        public static final String deleteButton = "deleteButton";
         public static final String deny_button = "deny_button";
         public static final String description = "description";
         public static final String divider = "divider";
@@ -2375,11 +2410,11 @@ public final class Rc {
         public static final String empty = "empty";
         public static final String enter_pin_section = "enter_pin_section";
         public static final String expand_activities_button = "expand_activities_button";
+        public static final String expand_button = "expand_button";
         public static final String expires_on = "expires_on";
         public static final String extractArea = "extractArea";
         public static final String ffwd = "ffwd";
         public static final String fillInIntent = "fillInIntent";
-        public static final String filtered_item_container = "filtered_item_container";
         public static final String find = "find";
         public static final String find_next = "find_next";
         public static final String find_prev = "find_prev";
@@ -2389,6 +2424,8 @@ public final class Rc {
         public static final String fullscreenArea = "fullscreenArea";
         public static final String hard_keyboard_section = "hard_keyboard_section";
         public static final String hard_keyboard_switch = "hard_keyboard_switch";
+        public static final String header_text = "header_text";
+        public static final String header_text_divider = "header_text_divider";
         public static final String headers = "headers";
         public static final String h = "h";
         public static final String home = "home";
@@ -2400,8 +2437,6 @@ public final class Rc {
         public static final String icon_frame = "icon_frame";
         public static final String icon_menu_presenter = "icon_menu_presenter";
         public static final String image = "image";
-        public static final String inbox_end_pad = "inbox_end_pad";
-        public static final String inbox_more = "inbox_more";
         public static final String inbox_text0 = "inbox_text0";
         public static final String inbox_text1 = "inbox_text1";
         public static final String inbox_text2 = "inbox_text2";
@@ -2416,6 +2451,7 @@ public final class Rc {
         public static final String inputExtractAccessories = "inputExtractAccessories";
         public static final String inputExtractAction = "inputExtractAction";
         public static final String inputExtractEditText = "inputExtractEditText";
+        public static final String insertion_handle = "insertion_handle";
         public static final String internalEmpty = "internalEmpty";
         public static final String issued_on = "issued_on";
         public static final String keyboard = "keyboard";
@@ -2423,16 +2459,18 @@ public final class Rc {
         public static final String leftSpacer = "leftSpacer";
         public static final String left_icon = "left_icon";
         public static final String line1 = "line1";
-        public static final String line3 = "line3";
         public static final String list = "list";
         public static final String listContainer = "listContainer";
+        public static final String list_container = "list_container";
         public static final String list_footer = "list_footer";
         public static final String list_item = "list_item";
         public static final String list_menu_presenter = "list_menu_presenter";
         public static final String locale = "locale";
+        public static final String locale_search_menu = "locale_search_menu";
         public static final String lock_screen = "lock_screen";
         public static final String mask = "mask";
         public static final String matches = "matches";
+        public static final String maximize_window = "maximize_window";
         public static final String media_actions = "media_actions";
         public static final String media_route_control_frame = "media_route_control_frame";
         public static final String media_route_disconnect_button = "media_route_disconnect_button";
@@ -2445,11 +2483,9 @@ public final class Rc {
         public static final String minute = "minute";
         public static final String minutes = "minutes";
         public static final String mode_normal = "mode_normal";
-        public static final String monitor_box = "monitor_box";
         public static final String month = "month";
         public static final String month_name = "month_name";
         public static final String month_view = "month_view";
-        public static final String mount_button = "mount_button";
         public static final String name = "name";
         public static final String navigationBarBackground = "navigationBarBackground";
         public static final String new_app_action = "new_app_action";
@@ -2460,7 +2496,15 @@ public final class Rc {
         public static final String nine = "nine";
         public static final String no_applications_message = "no_applications_message";
         public static final String no_permissions = "no_permissions";
+        public static final String notification_action_list_margin_target = "notification_action_list_margin_target";
+        public static final String notification_content_container = "notification_content_container";
+        public static final String notification_header = "notification_header";
         public static final String notification_main_column = "notification_main_column";
+        public static final String notification_material_reply_container = "notification_material_reply_container";
+        public static final String notification_material_reply_text_1 = "notification_material_reply_text_1";
+        public static final String notification_material_reply_text_2 = "notification_material_reply_text_2";
+        public static final String notification_material_reply_text_3 = "notification_material_reply_text_3";
+        public static final String notification_messaging = "notification_messaging";
         public static final String numberpicker_input = "numberpicker_input";
         public static final String ok = "ok";
         public static final String old_app_action = "old_app_action";
@@ -2470,10 +2514,9 @@ public final class Rc {
         public static final String option1 = "option1";
         public static final String option2 = "option2";
         public static final String option3 = "option3";
-        public static final String option4 = "option4";
         public static final String original_app_icon = "original_app_icon";
         public static final String original_message = "original_message";
-        public static final String overflow_divider = "overflow_divider";
+        public static final String overflow = "overflow";
         public static final String overlay_display_window_texture = "overlay_display_window_texture";
         public static final String overlay_display_window_title = "overlay_display_window_title";
         public static final String package_label = "package_label";
@@ -2487,10 +2530,6 @@ public final class Rc {
         public static final String perm_name = "perm_name";
         public static final String permission_group = "permission_group";
         public static final String permission_list = "permission_list";
-        public static final String permission_remember_choice_checkbox = "permission_remember_choice_checkbox";
-        public static final String permission_remember_choice_text = "permission_remember_choice_text";
-        public static final String permission_remember_layout = "permission_remember_layout";
-        public static final String permission_text = "permission_text";
         public static final String perms_list = "perms_list";
         public static final String pickers = "pickers";
         public static final String pin_cancel_button = "pin_cancel_button";
@@ -2505,9 +2544,7 @@ public final class Rc {
         public static final String prefs_frame = "prefs_frame";
         public static final String prev = "prev";
         public static final String primary = "primary";
-        public static final String profile_badge_large_template = "profile_badge_large_template";
-        public static final String profile_badge_line2 = "profile_badge_line2";
-        public static final String profile_badge_line3 = "profile_badge_line3";
+        public static final String profile_badge = "profile_badge";
         public static final String profile_button = "profile_button";
         public static final String progress = "progress";
         public static final String progressContainer = "progressContainer";
@@ -2519,6 +2556,7 @@ public final class Rc {
         public static final String radio = "radio";
         public static final String reask_h = "reask_h";
         public static final String redo = "redo";
+        public static final String remote_input_tag = "remote_input_tag";
         public static final String replaceText = "replaceText";
         public static final String replace_app_icon = "replace_app_icon";
         public static final String replace_message = "replace_message";
@@ -2542,12 +2580,13 @@ public final class Rc {
         public static final String search_view = "search_view";
         public static final String search_voice_btn = "search_voice_btn";
         public static final String secondaryProgress = "secondaryProgress";
-        public static final String seek_bar = "seek_bar";
         public static final String seekbar = "seekbar";
         public static final String selectAll = "selectAll";
         public static final String selectTextMode = "selectTextMode";
         public static final String select_all = "select_all";
         public static final String selectedIcon = "selectedIcon";
+        public static final String selection_end_handle = "selection_end_handle";
+        public static final String selection_start_handle = "selection_start_handle";
         public static final String separator = "separator";
         public static final String serial_number = "serial_number";
         public static final String seven = "seven";
@@ -2570,12 +2609,15 @@ public final class Rc {
         public static final String statusBarBackground = "statusBarBackground";
         public static final String status_bar_latest_event_content = "status_bar_latest_event_content";
         public static final String stopSelectingText = "stopSelectingText";
+        public static final String submenuarrow = "submenuarrow";
         public static final String submit_area = "submit_area";
+        public static final String suggestionContainer = "suggestionContainer";
+        public static final String suggestionWindowContainer = "suggestionWindowContainer";
         public static final String summary = "summary";
         public static final String switchInputMethod = "switchInputMethod";
-        public static final String switchWidget = "switchWidget";
         public static final String switch_new = "switch_new";
         public static final String switch_old = "switch_old";
+        public static final String switch_widget = "switch_widget";
         public static final String tabcontent = "tabcontent";
         public static final String tabhost = "tabhost";
         public static final String tabs = "tabs";
@@ -2584,14 +2626,18 @@ public final class Rc {
         public static final String text1 = "text1";
         public static final String text2 = "text2";
         public static final String textSpacerNoButtons = "textSpacerNoButtons";
+        public static final String textSpacerNoTitle = "textSpacerNoTitle";
+        public static final String text_line_1 = "text_line_1";
         public static final String three = "three";
         public static final String time = "time";
         public static final String timePicker = "timePicker";
         public static final String timePickerLayout = "timePickerLayout";
         public static final String time_current = "time_current";
+        public static final String time_divider = "time_divider";
         public static final String time_header = "time_header";
         public static final String title = "title";
         public static final String titleDivider = "titleDivider";
+        public static final String titleDividerNoCustom = "titleDividerNoCustom";
         public static final String titleDividerTop = "titleDividerTop";
         public static final String title_container = "title_container";
         public static final String title_icon = "title_icon";
@@ -2605,21 +2651,22 @@ public final class Rc {
         public static final String transitionTransform = "transitionTransform";
         public static final String two = "two";
         public static final String undo = "undo";
-        public static final String unmount_button = "unmount_button";
+        public static final String unlaunchable_app_message = "unlaunchable_app_message";
+        public static final String unlaunchable_app_title = "unlaunchable_app_title";
         public static final String up = "up";
         public static final String value = "value";
         public static final String websearch = "websearch";
         public static final String widget_frame = "widget_frame";
         public static final String wifi_p2p_wps_pin = "wifi_p2p_wps_pin";
+        public static final String work_widget_app_icon = "work_widget_app_icon";
+        public static final String work_widget_badge_icon = "work_widget_badge_icon";
+        public static final String work_widget_mask_frame = "work_widget_mask_frame";
         public static final String year = "year";
         public static final String zero = "zero";
         public static final String zoomControls = "zoomControls";
         public static final String zoomIn = "zoomIn";
         public static final String zoomMagnify = "zoomMagnify";
         public static final String zoomOut = "zoomOut";
-
-        public id() {
-        }
     }
 
     public static final class integer {
@@ -2627,22 +2674,22 @@ public final class Rc {
         public static final String config_MaxConcurrentDownloadsAllowed = "config_MaxConcurrentDownloadsAllowed";
         public static final String config_autoBrightnessAmbientLightHorizon = "config_autoBrightnessAmbientLightHorizon";
         public static final String config_autoBrightnessBrighteningLightDebounce = "config_autoBrightnessBrighteningLightDebounce";
-        public static final String config_autoBrightnessBrighteningLightFastDebounce = "config_autoBrightnessBrighteningLightFastDebounce";
         public static final String config_autoBrightnessDarkeningLightDebounce = "config_autoBrightnessDarkeningLightDebounce";
         public static final String config_autoBrightnessLightSensorRate = "config_autoBrightnessLightSensorRate";
-        public static final String config_backKillTimeout = "config_backKillTimeout";
+        public static final String config_autoPowerModeAnyMotionSensor = "config_autoPowerModeAnyMotionSensor";
+        public static final String config_autoPowerModeThresholdAngle = "config_autoPowerModeThresholdAngle";
         public static final String config_bluetooth_idle_cur_ma = "config_bluetooth_idle_cur_ma";
         public static final String config_bluetooth_max_advertisers = "config_bluetooth_max_advertisers";
         public static final String config_bluetooth_max_scan_filters = "config_bluetooth_max_scan_filters";
         public static final String config_bluetooth_operating_voltage_mv = "config_bluetooth_operating_voltage_mv";
         public static final String config_bluetooth_rx_cur_ma = "config_bluetooth_rx_cur_ma";
         public static final String config_bluetooth_tx_cur_ma = "config_bluetooth_tx_cur_ma";
+        public static final String config_brightness_ramp_rate_fast = "config_brightness_ramp_rate_fast";
         public static final String config_burnInProtectionMaxHorizontalOffset = "config_burnInProtectionMaxHorizontalOffset";
         public static final String config_burnInProtectionMaxRadius = "config_burnInProtectionMaxRadius";
         public static final String config_burnInProtectionMaxVerticalOffset = "config_burnInProtectionMaxVerticalOffset";
         public static final String config_burnInProtectionMinHorizontalOffset = "config_burnInProtectionMinHorizontalOffset";
         public static final String config_burnInProtectionMinVerticalOffset = "config_burnInProtectionMinVerticalOffset";
-        public static final String config_buttonBrightnessSettingDefault = "config_buttonBrightnessSettingDefault";
         public static final String config_cameraLaunchGestureSensorType = "config_cameraLaunchGestureSensorType";
         public static final String config_carDockKeepsScreenOn = "config_carDockKeepsScreenOn";
         public static final String config_carDockRotation = "config_carDockRotation";
@@ -2653,15 +2700,13 @@ public final class Rc {
         public static final String config_datause_polling_period_sec = "config_datause_polling_period_sec";
         public static final String config_datause_threshold_bytes = "config_datause_threshold_bytes";
         public static final String config_datause_throttle_kbitsps = "config_datause_throttle_kbitsps";
-        public static final String config_dayColorTemperature = "config_dayColorTemperature";
         public static final String config_defaultNightMode = "config_defaultNightMode";
         public static final String config_defaultNotificationLedOff = "config_defaultNotificationLedOff";
         public static final String config_defaultNotificationLedOn = "config_defaultNotificationLedOn";
         public static final String config_defaultUiModeType = "config_defaultUiModeType";
         public static final String config_deskDockKeepsScreenOn = "config_deskDockKeepsScreenOn";
         public static final String config_deskDockRotation = "config_deskDockRotation";
-        public static final String config_deviceHardwareKeys = "config_deviceHardwareKeys";
-        public static final String config_deviceHardwareWakeKeys = "config_deviceHardwareWakeKeys";
+        public static final String config_dockedStackDividerSnapMode = "config_dockedStackDividerSnapMode";
         public static final String config_doublePressOnPowerBehavior = "config_doublePressOnPowerBehavior";
         public static final String config_doubleTapOnHomeBehavior = "config_doubleTapOnHomeBehavior";
         public static final String config_downloadDataDirLowSpaceThreshold = "config_downloadDataDirLowSpaceThreshold";
@@ -2670,21 +2715,22 @@ public final class Rc {
         public static final String config_dreamsBatteryLevelDrainCutoff = "config_dreamsBatteryLevelDrainCutoff";
         public static final String config_dreamsBatteryLevelMinimumWhenNotPowered = "config_dreamsBatteryLevelMinimumWhenNotPowered";
         public static final String config_dreamsBatteryLevelMinimumWhenPowered = "config_dreamsBatteryLevelMinimumWhenPowered";
+        public static final String config_externalHardKeyboardBehavior = "config_externalHardKeyboardBehavior";
         public static final String config_extraFreeKbytesAbsolute = "config_extraFreeKbytesAbsolute";
         public static final String config_extraFreeKbytesAdjust = "config_extraFreeKbytesAdjust";
         public static final String config_fingerprintMaxTemplatesPerUser = "config_fingerprintMaxTemplatesPerUser";
         public static final String config_globalActionsKeyTimeout = "config_globalActionsKeyTimeout";
         public static final String config_immersive_mode_confirmation_panic = "config_immersive_mode_confirmation_panic";
-        public static final String config_keyboardBrightnessSettingDefault = "config_keyboardBrightnessSettingDefault";
+        public static final String config_jobSchedulerIdleWindowSlop = "config_jobSchedulerIdleWindowSlop";
+        public static final String config_jobSchedulerInactivityIdleThreshold = "config_jobSchedulerInactivityIdleThreshold";
         public static final String config_lidKeyboardAccessibility = "config_lidKeyboardAccessibility";
         public static final String config_lidNavigationAccessibility = "config_lidNavigationAccessibility";
         public static final String config_lidOpenRotation = "config_lidOpenRotation";
         public static final String config_lightSensorWarmupTime = "config_lightSensorWarmupTime";
         public static final String config_lockSoundVolumeDb = "config_lockSoundVolumeDb";
         public static final String config_longAnimTime = "config_longAnimTime";
-        public static final String config_longPressOnAppSwitchBehavior = "config_longPressOnAppSwitchBehavior";
+        public static final String config_longPressOnBackBehavior = "config_longPressOnBackBehavior";
         public static final String config_longPressOnHomeBehavior = "config_longPressOnHomeBehavior";
-        public static final String config_longPressOnMenuBehavior = "config_longPressOnMenuBehavior";
         public static final String config_longPressOnPowerBehavior = "config_longPressOnPowerBehavior";
         public static final String config_lowBatteryCloseWarningBump = "config_lowBatteryCloseWarningBump";
         public static final String config_lowBatteryWarningLevel = "config_lowBatteryWarningLevel";
@@ -2699,6 +2745,7 @@ public final class Rc {
         public static final String config_mobile_hotspot_provision_check_period = "config_mobile_hotspot_provision_check_period";
         public static final String config_mobile_mtu = "config_mobile_mtu";
         public static final String config_multiuserMaximumUsers = "config_multiuserMaximumUsers";
+        public static final String config_navBarOpacityMode = "config_navBarOpacityMode";
         public static final String config_networkPolicyDefaultWarning = "config_networkPolicyDefaultWarning";
         public static final String config_networkTransitionTimeout = "config_networkTransitionTimeout";
         public static final String config_notificationServiceArchiveSize = "config_notificationServiceArchiveSize";
@@ -2707,7 +2754,6 @@ public final class Rc {
         public static final String config_notificationsBatteryLedOn = "config_notificationsBatteryLedOn";
         public static final String config_notificationsBatteryLowARGB = "config_notificationsBatteryLowARGB";
         public static final String config_notificationsBatteryMediumARGB = "config_notificationsBatteryMediumARGB";
-        public static final String config_notificationsBatteryReallyFullARGB = "config_notificationsBatteryReallyFullARGB";
         public static final String config_ntpPollingInterval = "config_ntpPollingInterval";
         public static final String config_ntpPollingIntervalShorter = "config_ntpPollingIntervalShorter";
         public static final String config_ntpRetry = "config_ntpRetry";
@@ -2736,30 +2782,26 @@ public final class Rc {
         public static final String config_virtualKeyQuietTimeMillis = "config_virtualKeyQuietTimeMillis";
         public static final String config_volte_replacement_rat = "config_volte_replacement_rat";
         public static final String config_wifi_active_rx_cur_ma = "config_wifi_active_rx_cur_ma";
-        public static final String config_wifi_associated_long_scan_interval = "config_wifi_associated_long_scan_interval";
         public static final String config_wifi_associated_short_scan_interval = "config_wifi_associated_short_scan_interval";
-        public static final String config_wifi_disconnected_long_scan_interval = "config_wifi_disconnected_long_scan_interval";
         public static final String config_wifi_disconnected_short_scan_interval = "config_wifi_disconnected_short_scan_interval";
-        public static final String config_wifi_driver_stop_delay = "config_wifi_driver_stop_delay";
         public static final String config_wifi_framework_5GHz_preference_boost_factor = "config_wifi_framework_5GHz_preference_boost_factor";
         public static final String config_wifi_framework_5GHz_preference_boost_threshold = "config_wifi_framework_5GHz_preference_boost_threshold";
-        public static final String config_wifi_framework_5GHz_preference_penalty_factor = "config_wifi_framework_5GHz_preference_penalty_factor";
         public static final String config_wifi_framework_5GHz_preference_penalty_threshold = "config_wifi_framework_5GHz_preference_penalty_threshold";
+        public static final String config_wifi_framework_LAST_SELECTION_AWARD = "config_wifi_framework_LAST_SELECTION_AWARD";
+        public static final String config_wifi_framework_PASSPOINT_SECURITY_AWARD = "config_wifi_framework_PASSPOINT_SECURITY_AWARD";
+        public static final String config_wifi_framework_RSSI_SCORE_OFFSET = "config_wifi_framework_RSSI_SCORE_OFFSET";
+        public static final String config_wifi_framework_RSSI_SCORE_SLOPE = "config_wifi_framework_RSSI_SCORE_SLOPE";
+        public static final String config_wifi_framework_SAME_BSSID_AWARD = "config_wifi_framework_SAME_BSSID_AWARD";
+        public static final String config_wifi_framework_SECURITY_AWARD = "config_wifi_framework_SECURITY_AWARD";
         public static final String config_wifi_framework_associated_full_scan_backoff = "config_wifi_framework_associated_full_scan_backoff";
         public static final String config_wifi_framework_associated_full_scan_max_interval = "config_wifi_framework_associated_full_scan_max_interval";
         public static final String config_wifi_framework_associated_full_scan_max_total_dwell_time = "config_wifi_framework_associated_full_scan_max_total_dwell_time";
         public static final String config_wifi_framework_associated_full_scan_rx_packet_threshold = "config_wifi_framework_associated_full_scan_rx_packet_threshold";
         public static final String config_wifi_framework_associated_full_scan_tx_packet_threshold = "config_wifi_framework_associated_full_scan_tx_packet_threshold";
         public static final String config_wifi_framework_associated_partial_scan_max_num_active_channels = "config_wifi_framework_associated_partial_scan_max_num_active_channels";
-        public static final String config_wifi_framework_associated_partial_scan_max_num_passive_channels = "config_wifi_framework_associated_partial_scan_max_num_passive_channels";
         public static final String config_wifi_framework_associated_partial_scan_rx_packet_threshold = "config_wifi_framework_associated_partial_scan_rx_packet_threshold";
         public static final String config_wifi_framework_associated_partial_scan_tx_packet_threshold = "config_wifi_framework_associated_partial_scan_tx_packet_threshold";
-        public static final String config_wifi_framework_current_association_hysteresis_high = "config_wifi_framework_current_association_hysteresis_high";
-        public static final String config_wifi_framework_current_association_hysteresis_low = "config_wifi_framework_current_association_hysteresis_low";
         public static final String config_wifi_framework_current_network_boost = "config_wifi_framework_current_network_boost";
-        public static final String config_wifi_framework_max_auth_errors_to_blacklist = "config_wifi_framework_max_auth_errors_to_blacklist";
-        public static final String config_wifi_framework_max_connection_errors_to_blacklist = "config_wifi_framework_max_connection_errors_to_blacklist";
-        public static final String config_wifi_framework_network_black_list_min_time_milli = "config_wifi_framework_network_black_list_min_time_milli";
         public static final String config_wifi_framework_network_switch_rx_packet_threshold = "config_wifi_framework_network_switch_rx_packet_threshold";
         public static final String config_wifi_framework_network_switch_tx_packet_threshold = "config_wifi_framework_network_switch_tx_packet_threshold";
         public static final String config_wifi_framework_scan_interval = "config_wifi_framework_scan_interval";
@@ -2775,6 +2817,7 @@ public final class Rc {
         public static final String config_wifi_framework_wifi_score_low_rssi_threshold_24GHz = "config_wifi_framework_wifi_score_low_rssi_threshold_24GHz";
         public static final String config_wifi_framework_wifi_score_low_rssi_threshold_5GHz = "config_wifi_framework_wifi_score_low_rssi_threshold_5GHz";
         public static final String config_wifi_idle_receive_cur_ma = "config_wifi_idle_receive_cur_ma";
+        public static final String config_wifi_logger_ring_buffer_size_limit_kb = "config_wifi_logger_ring_buffer_size_limit_kb";
         public static final String config_wifi_network_switching_blacklist_time = "config_wifi_network_switching_blacklist_time";
         public static final String config_wifi_no_network_periodic_scan_interval = "config_wifi_no_network_periodic_scan_interval";
         public static final String config_wifi_operating_voltage_mv = "config_wifi_operating_voltage_mv";
@@ -2786,13 +2829,9 @@ public final class Rc {
         public static final String db_connection_pool_size = "db_connection_pool_size";
         public static final String db_journal_size_limit = "db_journal_size_limit";
         public static final String db_wal_autocheckpo = "db_wal_autocheckpo";
-        public static final String def_wifi_idle_ms = "def_wifi_idle_ms";
         public static final String dock_enter_exit_duration = "dock_enter_exit_duration";
-        public static final String max_action_buttons = "max_action_buttons";
         public static final String status_bar_notification_info_maxnum = "status_bar_notification_info_maxnum";
-
-        public integer() {
-        }
+        public static final String thumbnail_width_tv = "thumbnail_width_tv";
     }
 
     public static final class interpolator {
@@ -2812,9 +2851,6 @@ public final class Rc {
         public static final String linear = "linear";
         public static final String linear_out_slow_in = "linear_out_slow_in";
         public static final String overshoot = "overshoot";
-
-        public interpolator() {
-        }
     }
 
     public static final class layout {
@@ -2833,6 +2869,8 @@ public final class Rc {
         public static final String alert_dialog_progress = "alert_dialog_progress";
         public static final String always_use_checkbox = "always_use_checkbox";
         public static final String am_compat_mode_dialog = "am_compat_mode_dialog";
+        public static final String app_anr_dialog = "app_anr_dialog";
+        public static final String app_error_dialog = "app_error_dialog";
         public static final String app_not_authorized = "app_not_authorized";
         public static final String app_permission_item = "app_permission_item";
         public static final String app_permission_item_money = "app_permission_item_money";
@@ -2855,6 +2893,7 @@ public final class Rc {
         public static final String date_picker_material = "date_picker_material";
         public static final String date_picker_month_item_material = "date_picker_month_item_material";
         public static final String day_picker_content_material = "day_picker_content_material";
+        public static final String decor_caption = "decor_caption";
         public static final String expandable_list_content = "expandable_list_content";
         public static final String expanded_menu_layout = "expanded_menu_layout";
         public static final String floating_popup_close_overflow_button = "floating_popup_close_overflow_button";
@@ -2862,6 +2901,7 @@ public final class Rc {
         public static final String floating_popup_menu_button = "floating_popup_menu_button";
         public static final String floating_popup_menu_image_button = "floating_popup_menu_image_button";
         public static final String floating_popup_open_overflow_button = "floating_popup_open_overflow_button";
+        public static final String floating_popup_overflow_button = "floating_popup_overflow_button";
         public static final String floating_popup_overflow_image_list_item = "floating_popup_overflow_image_list_item";
         public static final String floating_popup_overflow_list_item = "floating_popup_overflow_list_item";
         public static final String fragment_bread_crumb_item = "fragment_bread_crumb_item";
@@ -2878,6 +2918,8 @@ public final class Rc {
         public static final String input_method_switch_dialog_title = "input_method_switch_dialog_title";
         public static final String input_method_switch_item = "input_method_switch_item";
         public static final String js_prompt = "js_prompt";
+        public static final String language_picker_item = "language_picker_item";
+        public static final String language_picker_section_header = "language_picker_section_header";
         public static final String launch_warning = "launch_warning";
         public static final String list_content = "list_content";
         public static final String list_content_simple = "list_content_simple";
@@ -2895,19 +2937,19 @@ public final class Rc {
         public static final String notification_material_action_list = "notification_material_action_list";
         public static final String notification_material_action_tombstone = "notification_material_action_tombstone";
         public static final String notification_material_media_action = "notification_material_media_action";
-        public static final String notification_template_icon_group = "notification_template_icon_group";
+        public static final String notification_template_header = "notification_template_header";
         public static final String notification_template_material_base = "notification_template_material_base";
         public static final String notification_template_material_big_base = "notification_template_material_big_base";
         public static final String notification_template_material_big_media = "notification_template_material_big_media";
-        public static final String notification_template_material_big_media_narrow = "notification_template_material_big_media_narrow";
         public static final String notification_template_material_big_picture = "notification_template_material_big_picture";
         public static final String notification_template_material_big_text = "notification_template_material_big_text";
         public static final String notification_template_material_inbox = "notification_template_material_inbox";
         public static final String notification_template_material_media = "notification_template_material_media";
+        public static final String notification_template_material_messaging = "notification_template_material_messaging";
         public static final String number_picker = "number_picker";
         public static final String overlay_display_window = "overlay_display_window";
-        public static final String permission_confirmation_dialog = "permission_confirmation_dialog";
         public static final String permissions_package_list_item = "permissions_package_list_item";
+        public static final String popup_menu_header_item_layout = "popup_menu_header_item_layout";
         public static final String popup_menu_item_layout = "popup_menu_item_layout";
         public static final String preference = "preference";
         public static final String preference_category = "preference_category";
@@ -2962,7 +3004,6 @@ public final class Rc {
         public static final String simple_selectable_list_item = "simple_selectable_list_item";
         public static final String simple_spinner_dropdown_item = "simple_spinner_dropdown_item";
         public static final String simple_spinner_item = "simple_spinner_item";
-        public static final String slider_preference = "slider_preference";
         public static final String sms_short_code_confirmation_dialog = "sms_short_code_confirmation_dialog";
         public static final String ssl_certificate = "ssl_certificate";
         public static final String status_bar_latest_event_content = "status_bar_latest_event_content";
@@ -2979,7 +3020,8 @@ public final class Rc {
         public static final String transient_notification = "transient_notification";
         public static final String two_line_list_item = "two_line_list_item";
         public static final String typing_filter = "typing_filter";
-        public static final String usb_storage_activity = "usb_storage_activity";
+        public static final String unlaunchable_app_activity = "unlaunchable_app_activity";
+        public static final String unsupported_display_size_dialog_content = "unsupported_display_size_dialog_content";
         public static final String user_switching_dialog = "user_switching_dialog";
         public static final String voice_interaction_session = "voice_interaction_session";
         public static final String web_text_view_dropdown = "web_text_view_dropdown";
@@ -2987,39 +3029,50 @@ public final class Rc {
         public static final String webview_select_singlechoice = "webview_select_singlechoice";
         public static final String wifi_p2p_dialog = "wifi_p2p_dialog";
         public static final String wifi_p2p_dialog_row = "wifi_p2p_dialog_row";
+        public static final String work_widget_mask_view = "work_widget_mask_view";
         public static final String year_label_text_view = "year_label_text_view";
         public static final String zoom_container = "zoom_container";
         public static final String zoom_controls = "zoom_controls";
         public static final String zoom_magnify = "zoom_magnify";
-
-        public layout() {
-        }
     }
 
     public static final class menu {
+        public static final String language_selection_list = "language_selection_list";
         public static final String webview_copy = "webview_copy";
         public static final String webview_find = "webview_find";
-
-        public menu() {
-        }
     }
 
     public static final class mipmap {
         public static final String sym_def_app_icon = "sym_def_app_icon";
-
-        public mipmap() {
-        }
     }
 
     public static final class plurals {
+        public static final String bugreport_countdown = "bugreport_countdown";
+        public static final String duration_days_relative = "duration_days_relative";
+        public static final String duration_days_relative_future = "duration_days_relative_future";
+        public static final String duration_days_shortest = "duration_days_shortest";
+        public static final String duration_days_shortest_future = "duration_days_shortest_future";
         public static final String duration_hours = "duration_hours";
+        public static final String duration_hours_relative = "duration_hours_relative";
+        public static final String duration_hours_relative_future = "duration_hours_relative_future";
+        public static final String duration_hours_shortest = "duration_hours_shortest";
+        public static final String duration_hours_shortest_future = "duration_hours_shortest_future";
         public static final String duration_minutes = "duration_minutes";
+        public static final String duration_minutes_relative = "duration_minutes_relative";
+        public static final String duration_minutes_relative_future = "duration_minutes_relative_future";
+        public static final String duration_minutes_shortest = "duration_minutes_shortest";
+        public static final String duration_minutes_shortest_future = "duration_minutes_shortest_future";
         public static final String duration_seconds = "duration_seconds";
+        public static final String duration_years_relative = "duration_years_relative";
+        public static final String duration_years_relative_future = "duration_years_relative_future";
+        public static final String duration_years_shortest = "duration_years_shortest";
+        public static final String duration_years_shortest_future = "duration_years_shortest_future";
         public static final String last_num_days = "last_num_days";
         public static final String matches_found = "matches_found";
         public static final String pinpuk_attempts = "pinpuk_attempts";
         public static final String restr_pin_countdown = "restr_pin_countdown";
         public static final String selected_count = "selected_count";
+        public static final String ssl_ca_cert_warning = "ssl_ca_cert_warning";
         public static final String wifi_available = "wifi_available";
         public static final String wifi_available_detailed = "wifi_available_detailed";
         public static final String zen_mode_duration_hours = "zen_mode_duration_hours";
@@ -3030,9 +3083,6 @@ public final class Rc {
         public static final String zen_mode_duration_minutes_short = "zen_mode_duration_minutes_short";
         public static final String zen_mode_duration_minutes_summary = "zen_mode_duration_minutes_summary";
         public static final String zen_mode_duration_minutes_summary_short = "zen_mode_duration_minutes_summary_short";
-
-        public plurals() {
-        }
     }
 
     public static final class raw {
@@ -3043,9 +3093,6 @@ public final class Rc {
         public static final String incognito_mode_start_page = "incognito_mode_start_page";
         public static final String loaderror = "loaderror";
         public static final String nodomain = "nodomain";
-
-        public raw() {
-        }
     }
 
     public static final class string {
@@ -3065,7 +3112,6 @@ public final class Rc {
         public static final String Noon = "Noon";
         public static final String PinMmi = "PinMmi";
         public static final String PwdMmi = "PwdMmi";
-        public static final String RestrictedChangedTitle = "RestrictedChangedTitle";
         public static final String RestrictedOnAllVoice = "RestrictedOnAllVoice";
         public static final String RestrictedOnData = "RestrictedOnData";
         public static final String RestrictedOnEmergency = "RestrictedOnEmergency";
@@ -3082,15 +3128,10 @@ public final class Rc {
         public static final String action_bar_home_description_format = "action_bar_home_description_format";
         public static final String action_bar_home_subtitle_description_format = "action_bar_home_subtitle_description_format";
         public static final String action_bar_up_description = "action_bar_up_description";
-        public static final String action_null = "action_null";
         public static final String activity_chooser_view_see_all = "activity_chooser_view_see_all";
         public static final String activity_resolver_work_profiles_support = "activity_resolver_work_profiles_support";
         public static final String activitychooserview_choose_application = "activitychooserview_choose_application";
         public static final String activitychooserview_choose_application_error = "activitychooserview_choose_application_error";
-        public static final String adb_active_custom_tile = "adb_active_custom_tile";
-        public static final String adb_active_custom_tile_both = "adb_active_custom_tile_both";
-        public static final String adb_active_custom_tile_net = "adb_active_custom_tile_net";
-        public static final String adb_active_custom_tile_usb = "adb_active_custom_tile_usb";
         public static final String adb_active_generic_notification_message = "adb_active_generic_notification_message";
         public static final String adb_active_notification_message = "adb_active_notification_message";
         public static final String adb_active_notification_title = "adb_active_notification_title";
@@ -3099,9 +3140,9 @@ public final class Rc {
         public static final String addToDictionary = "addToDictionary";
         public static final String add_account_button_label = "add_account_button_label";
         public static final String aerr_application = "aerr_application";
+        public static final String aerr_application_repeated = "aerr_application_repeated";
         public static final String aerr_process = "aerr_process";
-        public static final String aerr_title = "aerr_title";
-        public static final String allow = "allow";
+        public static final String aerr_process_repeated = "aerr_process_repeated";
         public static final String alternate_eri_file = "alternate_eri_file";
         public static final String alwaysUse = "alwaysUse";
         public static final String android_preparing_apk = "android_preparing_apk";
@@ -3110,30 +3151,19 @@ public final class Rc {
         public static final String android_upgrading_apk = "android_upgrading_apk";
         public static final String android_upgrading_complete = "android_upgrading_complete";
         public static final String android_upgrading_fstrim = "android_upgrading_fstrim";
+        public static final String android_upgrading_notification_body = "android_upgrading_notification_body";
+        public static final String android_upgrading_notification_title = "android_upgrading_notification_title";
         public static final String android_upgrading_starting_apps = "android_upgrading_starting_apps";
         public static final String android_upgrading_title = "android_upgrading_title";
-        public static final String animation_default = "animation_default";
-        public static final String animation_fade = "animation_fade";
-        public static final String animation_grow_shrink = "animation_grow_shrink";
-        public static final String animation_grow_shrink_bottom = "animation_grow_shrink_bottom";
-        public static final String animation_grow_shrink_center = "animation_grow_shrink_center";
-        public static final String animation_grow_shrink_left = "animation_grow_shrink_left";
-        public static final String animation_grow_shrink_right = "animation_grow_shrink_right";
-        public static final String animation_slide_down = "animation_slide_down";
-        public static final String animation_slide_left = "animation_slide_left";
-        public static final String animation_slide_left_no_fade = "animation_slide_left_no_fade";
-        public static final String animation_slide_right = "animation_slide_right";
-        public static final String animation_slide_right_no_fade = "animation_slide_right_no_fade";
-        public static final String animation_slide_up = "animation_slide_up";
-        public static final String animation_translucent = "animation_translucent";
         public static final String anr_activity_application = "anr_activity_application";
         public static final String anr_activity_process = "anr_activity_process";
         public static final String anr_application_process = "anr_application_process";
         public static final String anr_process = "anr_process";
         public static final String anr_title = "anr_title";
-        public static final String app_killed_message = "app_killed_message";
         public static final String app_running_notification_text = "app_running_notification_text";
         public static final String app_running_notification_title = "app_running_notification_title";
+        public static final String audit_safemode_notification = "audit_safemode_notification";
+        public static final String audit_safemode_notification_details = "audit_safemode_notification_details";
         public static final String autofill_address_line_1_label_re = "autofill_address_line_1_label_re";
         public static final String autofill_address_line_1_re = "autofill_address_line_1_re";
         public static final String autofill_address_line_2_re = "autofill_address_line_2_re";
@@ -3196,18 +3226,34 @@ public final class Rc {
         public static final String badPuk = "badPuk";
         public static final String battery_saver_description = "battery_saver_description";
         public static final String bluetooth_a2dp_audio_route_name = "bluetooth_a2dp_audio_route_name";
+        public static final String bugreport_message = "bugreport_message";
+        public static final String bugreport_option_full_summary = "bugreport_option_full_summary";
+        public static final String bugreport_option_full_title = "bugreport_option_full_title";
+        public static final String bugreport_option_interactive_summary = "bugreport_option_interactive_summary";
+        public static final String bugreport_option_interactive_title = "bugreport_option_interactive_title";
+        public static final String bugreport_status = "bugreport_status";
+        public static final String bugreport_title = "bugreport_title";
         public static final String byteShort = "byteShort";
         public static final String cancel = "cancel";
+        public static final String capability_desc_canControlMagnification = "capability_desc_canControlMagnification";
+        public static final String capability_desc_canPerformGestures = "capability_desc_canPerformGestures";
         public static final String capability_desc_canRequestEnhancedWebAccessibility = "capability_desc_canRequestEnhancedWebAccessibility";
         public static final String capability_desc_canRequestFilterKeyEvents = "capability_desc_canRequestFilterKeyEvents";
         public static final String capability_desc_canRequestTouchExploration = "capability_desc_canRequestTouchExploration";
         public static final String capability_desc_canRetrieveWindowContent = "capability_desc_canRetrieveWindowContent";
+        public static final String capability_title_canControlMagnification = "capability_title_canControlMagnification";
+        public static final String capability_title_canPerformGestures = "capability_title_canPerformGestures";
         public static final String capability_title_canRequestEnhancedWebAccessibility = "capability_title_canRequestEnhancedWebAccessibility";
         public static final String capability_title_canRequestFilterKeyEvents = "capability_title_canRequestFilterKeyEvents";
         public static final String capability_title_canRequestTouchExploration = "capability_title_canRequestTouchExploration";
         public static final String capability_title_canRetrieveWindowContent = "capability_title_canRetrieveWindowContent";
         public static final String car_mode_disable_notification_message = "car_mode_disable_notification_message";
         public static final String car_mode_disable_notification_title = "car_mode_disable_notification_title";
+        public static final String carrier_app_dialog_button = "carrier_app_dialog_button";
+        public static final String carrier_app_dialog_message = "carrier_app_dialog_message";
+        public static final String carrier_app_dialog_not_now = "carrier_app_dialog_not_now";
+        public static final String carrier_app_notification_text = "carrier_app_notification_text";
+        public static final String carrier_app_notification_title = "carrier_app_notification_title";
         public static final String cfTemplateForwarded = "cfTemplateForwarded";
         public static final String cfTemplateForwardedTime = "cfTemplateForwardedTime";
         public static final String cfTemplateNotForwarded = "cfTemplateNotForwarded";
@@ -3222,21 +3268,19 @@ public final class Rc {
         public static final String common_name_suffixes = "common_name_suffixes";
         public static final String condition_provider_service_binding_label = "condition_provider_service_binding_label";
         public static final String config_activityRecognitionHardwarePackageName = "config_activityRecognitionHardwarePackageName";
-        public static final String config_alternateWebViewPackageName = "config_alternateWebViewPackageName";
         public static final String config_appsAuthorizedForSharedAccounts = "config_appsAuthorizedForSharedAccounts";
+        public static final String config_appsNotReportingCrashes = "config_appsNotReportingCrashes";
         public static final String config_cameraLaunchGestureSensorStringType = "config_cameraLaunchGestureSensorStringType";
         public static final String config_chooseAccountActivity = "config_chooseAccountActivity";
         public static final String config_chooseTypeAndAccountActivity = "config_chooseTypeAndAccountActivity";
-        public static final String config_comboNetworkLocationProvider = "config_comboNetworkLocationProvider";
         public static final String config_customAdbPublicKeyConfirmationComponent = "config_customAdbPublicKeyConfirmationComponent";
         public static final String config_customAdbPublicKeyConfirmationSecondaryUserComponent = "config_customAdbPublicKeyConfirmationSecondaryUserComponent";
         public static final String config_customResolverActivity = "config_customResolverActivity";
         public static final String config_customVpnConfirmDialogComponent = "config_customVpnConfirmDialogComponent";
         public static final String config_datause_iface = "config_datause_iface";
         public static final String config_defaultNetworkScorerPackageName = "config_defaultNetworkScorerPackageName";
+        public static final String config_defaultPictureInPictureBounds = "config_defaultPictureInPictureBounds";
         public static final String config_default_dns_server = "config_default_dns_server";
-        public static final String config_deviceKeyHandlerClass = "config_deviceKeyHandlerClass";
-        public static final String config_deviceKeyHandlerLib = "config_deviceKeyHandlerLib";
         public static final String config_dozeComponent = "config_dozeComponent";
         public static final String config_dreamsDefaultComponent = "config_dreamsDefaultComponent";
         public static final String config_ethernet_iface_regex = "config_ethernet_iface_regex";
@@ -3244,9 +3288,9 @@ public final class Rc {
         public static final String config_forceVoiceInteractionServicePackage = "config_forceVoiceInteractionServicePackage";
         public static final String config_fusedLocationProviderPackageName = "config_fusedLocationProviderPackageName";
         public static final String config_geocoderProviderPackageName = "config_geocoderProviderPackageName";
-        public static final String config_geofenceProvider = "config_geofenceProvider";
         public static final String config_geofenceProviderPackageName = "config_geofenceProviderPackageName";
         public static final String config_hardwareFlpPackageName = "config_hardwareFlpPackageName";
+        public static final String config_iccHotswapPromptForRestartDialogComponent = "config_iccHotswapPromptForRestartDialogComponent";
         public static final String config_keyguardComponent = "config_keyguardComponent";
         public static final String config_mms_user_agent = "config_mms_user_agent";
         public static final String config_mms_user_agent_profile_url = "config_mms_user_agent_profile_url";
@@ -3254,12 +3298,12 @@ public final class Rc {
         public static final String config_mobile_hotspot_provision_response = "config_mobile_hotspot_provision_response";
         public static final String config_networkLocationProviderPackageName = "config_networkLocationProviderPackageName";
         public static final String config_ntpServer = "config_ntpServer";
-        public static final String config_orientationSensorType = "config_orientationSensorType";
         public static final String config_packagedKeyboardName = "config_packagedKeyboardName";
         public static final String config_persistentDataPackageName = "config_persistentDataPackageName";
         public static final String config_radio_access_family = "config_radio_access_family";
+        public static final String config_tvRemoteServicePackage = "config_tvRemoteServicePackage";
         public static final String config_useragentprofile_url = "config_useragentprofile_url";
-        public static final String config_webViewPackageName = "config_webViewPackageName";
+        public static final String config_wallpaperCropperPackage = "config_wallpaperCropperPackage";
         public static final String config_wifi_framework_sap_2G_channel_list = "config_wifi_framework_sap_2G_channel_list";
         public static final String config_wifi_p2p_device_type = "config_wifi_p2p_device_type";
         public static final String config_wifi_random_mac_oui = "config_wifi_random_mac_oui";
@@ -3270,15 +3314,18 @@ public final class Rc {
         public static final String config_wimaxServiceClassname = "config_wimaxServiceClassname";
         public static final String config_wimaxServiceJarLocation = "config_wimaxServiceJarLocation";
         public static final String config_wimaxStateTrackerClassname = "config_wimaxStateTrackerClassname";
-        public static final String configure_input_methods = "configure_input_methods";
         public static final String contentServiceSync = "contentServiceSync";
         public static final String contentServiceSyncNotificationTitle = "contentServiceSyncNotificationTitle";
         public static final String contentServiceTooManyDeletesNotificationDesc = "contentServiceTooManyDeletesNotificationDesc";
         public static final String continue_to_enable_accessibility = "continue_to_enable_accessibility";
         public static final String copy = "copy";
         public static final String copyUrl = "copyUrl";
+        public static final String country_selection_title = "country_selection_title";
         public static final String create_contact_using = "create_contact_using";
         public static final String cut = "cut";
+        public static final String data_saver_description = "data_saver_description";
+        public static final String data_saver_enable_button = "data_saver_enable_button";
+        public static final String data_saver_enable_title = "data_saver_enable_title";
         public static final String data_usage_3g_limit_snoozed_title = "data_usage_3g_limit_snoozed_title";
         public static final String data_usage_3g_limit_title = "data_usage_3g_limit_title";
         public static final String data_usage_4g_limit_snoozed_title = "data_usage_4g_limit_snoozed_title";
@@ -3313,6 +3360,7 @@ public final class Rc {
         public static final String db_default_sync_mode = "db_default_sync_mode";
         public static final String db_wal_sync_mode = "db_wal_sync_mode";
         public static final String decline = "decline";
+        public static final String decline_remote_bugreport_action = "decline_remote_bugreport_action";
         public static final String defaultMsisdnAlphaTag = "defaultMsisdnAlphaTag";
         public static final String defaultVoiceMailAlphaTag = "defaultVoiceMailAlphaTag";
         public static final String default_audio_route_category_name = "default_audio_route_category_name";
@@ -3322,12 +3370,10 @@ public final class Rc {
         public static final String default_browser = "default_browser";
         public static final String default_media_route_name_hdmi = "default_media_route_name_hdmi";
         public static final String default_sms_application = "default_sms_application";
-        public static final String default_string = "default_string";
         public static final String default_wallpaper_component = "default_wallpaper_component";
         public static final String delete = "delete";
         public static final String deleteText = "deleteText";
         public static final String deleted_key = "deleted_key";
-        public static final String deny = "deny";
         public static final String description_target_unlock_tablet = "description_target_unlock_tablet";
         public static final String dial_number_using = "dial_number_using";
         public static final String dialog_alert_title = "dialog_alert_title";
@@ -3336,9 +3382,6 @@ public final class Rc {
         public static final String display_manager_overlay_display_name = "display_manager_overlay_display_name";
         public static final String display_manager_overlay_display_secure_suffix = "display_manager_overlay_display_secure_suffix";
         public static final String display_manager_overlay_display_title = "display_manager_overlay_display_title";
-        public static final String dlg_confirm_kill_storage_users_text = "dlg_confirm_kill_storage_users_text";
-        public static final String dlg_confirm_kill_storage_users_title = "dlg_confirm_kill_storage_users_title";
-        public static final String dlg_error_title = "dlg_error_title";
         public static final String dlg_ok = "dlg_ok";
         public static final String done_label = "done_label";
         public static final String double_tap_toast = "double_tap_toast";
@@ -3378,6 +3421,7 @@ public final class Rc {
         public static final String eventTypeBirthday = "eventTypeBirthday";
         public static final String eventTypeCustom = "eventTypeCustom";
         public static final String eventTypeOther = "eventTypeOther";
+        public static final String expand_action_accessibility = "expand_action_accessibility";
         public static final String ext_media_badremoval_notification_message = "ext_media_badremoval_notification_message";
         public static final String ext_media_badremoval_notification_title = "ext_media_badremoval_notification_title";
         public static final String ext_media_browse_action = "ext_media_browse_action";
@@ -3436,6 +3480,8 @@ public final class Rc {
         public static final String fingerprint_error_unable_to_process = "fingerprint_error_unable_to_process";
         public static final String fingerprint_icon_content_description = "fingerprint_icon_content_description";
         public static final String fingerprint_name_template = "fingerprint_name_template";
+        public static final String floating_toolbar_close_overflow_description = "floating_toolbar_close_overflow_description";
+        public static final String floating_toolbar_open_overflow_description = "floating_toolbar_open_overflow_description";
         public static final String force_close = "force_close";
         public static final String forward_intent_to_owner = "forward_intent_to_owner";
         public static final String forward_intent_to_work = "forward_intent_to_work";
@@ -3443,12 +3489,9 @@ public final class Rc {
         public static final String gigabyteShort = "gigabyteShort";
         public static final String global_action_assist = "global_action_assist";
         public static final String global_action_bug_report = "global_action_bug_report";
-        public static final String global_action_current_user = "global_action_current_user";
         public static final String global_action_lockdown = "global_action_lockdown";
         public static final String global_action_power_off = "global_action_power_off";
         public static final String global_action_reboot = "global_action_reboot";
-        public static final String global_action_screenrecord = "global_action_screenrecord";
-        public static final String global_action_screenshot = "global_action_screenshot";
         public static final String global_action_settings = "global_action_settings";
         public static final String global_action_silent_mode_off_status = "global_action_silent_mode_off_status";
         public static final String global_action_silent_mode_on_status = "global_action_silent_mode_on_status";
@@ -3471,9 +3514,6 @@ public final class Rc {
         public static final String hardware = "hardware";
         public static final String heavy_weight_notification = "heavy_weight_notification";
         public static final String heavy_weight_notification_detail = "heavy_weight_notification_detail";
-        public static final String high_definition_tag = "high_definition_tag";
-        public static final String hour_ampm = "hour_ampm";
-        public static final String hour_cap_ampm = "hour_cap_ampm";
         public static final String hour_picker_description = "hour_picker_description";
         public static final String httpError = "httpError";
         public static final String httpErrorAuth = "httpErrorAuth";
@@ -3514,6 +3554,8 @@ public final class Rc {
         public static final String ime_action_search = "ime_action_search";
         public static final String ime_action_send = "ime_action_send";
         public static final String imei = "imei";
+        public static final String importance_from_person = "importance_from_person";
+        public static final String importance_from_user = "importance_from_user";
         public static final String inputMethod = "inputMethod";
         public static final String input_method_binding_label = "input_method_binding_label";
         public static final String invalidPin = "invalidPin";
@@ -3533,32 +3575,20 @@ public final class Rc {
         public static final String keyboardview_keycode_enter = "keyboardview_keycode_enter";
         public static final String keyboardview_keycode_mode_change = "keyboardview_keycode_mode_change";
         public static final String keyboardview_keycode_shift = "keyboardview_keycode_shift";
-        public static final String kg_sub_separator = "kg_sub_separator";
         public static final String kg_text_message_separator = "kg_text_message_separator";
         public static final String kilobyteShort = "kilobyteShort";
+        public static final String language_picker_section_all = "language_picker_section_all";
+        public static final String language_picker_section_suggested = "language_picker_section_suggested";
+        public static final String language_selection_title = "language_selection_title";
         public static final String last_month = "last_month";
         public static final String launchBrowserDefault = "launchBrowserDefault";
         public static final String launch_warning_original = "launch_warning_original";
         public static final String launch_warning_replace = "launch_warning_replace";
         public static final String launch_warning_title = "launch_warning_title";
-        public static final String list_delimeter = "list_delimeter";
-        public static final String live_display_auto = "live_display_auto";
-        public static final String live_display_auto_summary = "live_display_auto_summary";
-        public static final String live_display_day = "live_display_day";
-        public static final String live_display_day_summary = "live_display_day_summary";
-        public static final String live_display_h = "live_display_h";
-        public static final String live_display_night = "live_display_night";
-        public static final String live_display_night_summary = "live_display_night_summary";
-        public static final String live_display_outdoor = "live_display_outdoor";
-        public static final String live_display_outdoor_summary = "live_display_outdoor_summary";
-        public static final String live_display_title = "live_display_title";
-        public static final String locale_codes = "locale_codes";
         public static final String lock_to_app_exit = "lock_to_app_exit";
         public static final String lock_to_app_start = "lock_to_app_start";
         public static final String lock_to_app_toast = "lock_to_app_toast";
-        public static final String lock_to_app_toast_accessible = "lock_to_app_toast_accessible";
         public static final String lock_to_app_toast_locked = "lock_to_app_toast_locked";
-        public static final String lock_to_app_toast_no_navbar = "lock_to_app_toast_no_navbar";
         public static final String lock_to_app_unlock_password = "lock_to_app_unlock_password";
         public static final String lock_to_app_unlock_pattern = "lock_to_app_unlock_pattern";
         public static final String lock_to_app_unlock_pin = "lock_to_app_unlock_pin";
@@ -3686,21 +3716,26 @@ public final class Rc {
         public static final String muted_by = "muted_by";
         public static final String needPuk = "needPuk";
         public static final String needPuk2 = "needPuk2";
+        public static final String negative_duration = "negative_duration";
         public static final String network_available_sign_in = "network_available_sign_in";
         public static final String network_available_sign_in_detailed = "network_available_sign_in_detailed";
         public static final String new_app_action = "new_app_action";
         public static final String new_app_description = "new_app_description";
+        public static final String new_sms_notification_content = "new_sms_notification_content";
+        public static final String new_sms_notification_title = "new_sms_notification_title";
         public static final String no = "no";
         public static final String noApplications = "noApplications";
         public static final String no_file_chosen = "no_file_chosen";
         public static final String no_matches = "no_matches";
         public static final String noon = "noon";
+        public static final String notification_hidden_by_policy_text = "notification_hidden_by_policy_text";
+        public static final String notification_hidden_text = "notification_hidden_text";
         public static final String notification_inbox_ellipsis = "notification_inbox_ellipsis";
         public static final String notification_listener_binding_label = "notification_listener_binding_label";
+        public static final String notification_messaging_title_template = "notification_messaging_title_template";
+        public static final String notification_ranker_binding_label = "notification_ranker_binding_label";
         public static final String notification_title = "notification_title";
-        public static final String notify_battery_fully_charged_text = "notify_battery_fully_charged_text";
-        public static final String notify_battery_fully_charged_title = "notify_battery_fully_charged_title";
-        public static final String notify_turn_wifi_off_title = "notify_turn_wifi_off_title";
+        public static final String now_string_shortest = "now_string_shortest";
         public static final String number_picker_increment_scroll_action = "number_picker_increment_scroll_action";
         public static final String number_picker_increment_scroll_mode = "number_picker_increment_scroll_mode";
         public static final String ok = "ok";
@@ -3717,6 +3752,7 @@ public final class Rc {
         public static final String package_updated_device_owner = "package_updated_device_owner";
         public static final String passwordIncorrect = "passwordIncorrect";
         public static final String paste = "paste";
+        public static final String paste_as_plain_text = "paste_as_plain_text";
         public static final String peerTtyModeFull = "peerTtyModeFull";
         public static final String peerTtyModeHco = "peerTtyModeHco";
         public static final String peerTtyModeOff = "peerTtyModeOff";
@@ -3779,10 +3815,8 @@ public final class Rc {
         public static final String preposition_for_time = "preposition_for_time";
         public static final String print_service_installed_message = "print_service_installed_message";
         public static final String print_service_installed_title = "print_service_installed_title";
-        public static final String privacy_guard_dialog_summary = "privacy_guard_dialog_summary";
-        public static final String privacy_guard_dialog_title = "privacy_guard_dialog_title";
-        public static final String privacy_guard_notification = "privacy_guard_notification";
-        public static final String privacy_guard_notification_detail = "privacy_guard_notification_detail";
+        public static final String profile_encrypted_detail = "profile_encrypted_detail";
+        public static final String profile_encrypted_message = "profile_encrypted_message";
         public static final String progress_erasing = "progress_erasing";
         public static final String prohibit_manual_network_selection_in_gobal_mode = "prohibit_manual_network_selection_in_gobal_mode";
         public static final String quick_contacts_not_available = "quick_contacts_not_available";
@@ -3793,13 +3827,13 @@ public final class Rc {
         public static final String reboot_progress = "reboot_progress";
         public static final String reboot_safemode_confirm = "reboot_safemode_confirm";
         public static final String reboot_safemode_title = "reboot_safemode_title";
-        public static final String reboot_title = "reboot_title";
         public static final String reboot_to_reset_message = "reboot_to_reset_message";
         public static final String reboot_to_reset_title = "reboot_to_reset_title";
         public static final String reboot_to_update_package = "reboot_to_update_package";
         public static final String reboot_to_update_prepare = "reboot_to_update_prepare";
         public static final String reboot_to_update_reboot = "reboot_to_update_reboot";
         public static final String reboot_to_update_title = "reboot_to_update_title";
+        public static final String redo = "redo";
         public static final String relationTypeAssistant = "relationTypeAssistant";
         public static final String relationTypeBrother = "relationTypeBrother";
         public static final String relationTypeChild = "relationTypeChild";
@@ -3850,6 +3884,7 @@ public final class Rc {
         public static final String save_password_notnow = "save_password_notnow";
         public static final String save_password_remember = "save_password_remember";
         public static final String search_go = "search_go";
+        public static final String search_language_h = "search_language_h";
         public static final String selectAll = "selectAll";
         public static final String selectTextMode = "selectTextMode";
         public static final String select_day = "select_day";
@@ -3877,8 +3912,12 @@ public final class Rc {
         public static final String serviceRegistered = "serviceRegistered";
         public static final String setup_autofill = "setup_autofill";
         public static final String share = "share";
+        public static final String share_remote_bugreport_action = "share_remote_bugreport_action";
+        public static final String share_remote_bugreport_notification_message_finished = "share_remote_bugreport_notification_message_finished";
+        public static final String share_remote_bugreport_notification_title = "share_remote_bugreport_notification_title";
         public static final String shareactionprovider_share_with = "shareactionprovider_share_with";
         public static final String shareactionprovider_share_with_application = "shareactionprovider_share_with_application";
+        public static final String sharing_remote_bugreport_notification_title = "sharing_remote_bugreport_notification_title";
         public static final String shutdown_confirm = "shutdown_confirm";
         public static final String shutdown_confirm_question = "shutdown_confirm_question";
         public static final String shutdown_progress = "shutdown_progress";
@@ -3908,10 +3947,35 @@ public final class Rc {
         public static final String ssl_ca_cert_noti_by_administrator = "ssl_ca_cert_noti_by_administrator";
         public static final String ssl_ca_cert_noti_by_unknown = "ssl_ca_cert_noti_by_unknown";
         public static final String ssl_ca_cert_noti_managed = "ssl_ca_cert_noti_managed";
-        public static final String ssl_ca_cert_warning = "ssl_ca_cert_warning";
         public static final String ssl_certificate = "ssl_certificate";
         public static final String ssl_certificate_is_valid = "ssl_certificate_is_valid";
+        public static final String status_bar_alarm_clock = "status_bar_alarm_clock";
+        public static final String status_bar_battery = "status_bar_battery";
+        public static final String status_bar_bluetooth = "status_bar_bluetooth";
+        public static final String status_bar_cast = "status_bar_cast";
+        public static final String status_bar_cdma_eri = "status_bar_cdma_eri";
+        public static final String status_bar_clock = "status_bar_clock";
+        public static final String status_bar_data_connection = "status_bar_data_connection";
+        public static final String status_bar_data_saver = "status_bar_data_saver";
+        public static final String status_bar_headset = "status_bar_headset";
+        public static final String status_bar_hotspot = "status_bar_hotspot";
+        public static final String status_bar_ime = "status_bar_ime";
+        public static final String status_bar_location = "status_bar_location";
+        public static final String status_bar_managed_profile = "status_bar_managed_profile";
+        public static final String status_bar_mute = "status_bar_mute";
+        public static final String status_bar_nfc = "status_bar_nfc";
         public static final String status_bar_notification_info_overflow = "status_bar_notification_info_overflow";
+        public static final String status_bar_phone_evdo_signal = "status_bar_phone_evdo_signal";
+        public static final String status_bar_phone_signal = "status_bar_phone_signal";
+        public static final String status_bar_rotate = "status_bar_rotate";
+        public static final String status_bar_secure = "status_bar_secure";
+        public static final String status_bar_speakerphone = "status_bar_speakerphone";
+        public static final String status_bar_sync_active = "status_bar_sync_active";
+        public static final String status_bar_sync_failing = "status_bar_sync_failing";
+        public static final String status_bar_tty = "status_bar_tty";
+        public static final String status_bar_volume = "status_bar_volume";
+        public static final String status_bar_wifi = "status_bar_wifi";
+        public static final String status_bar_zen = "status_bar_zen";
         public static final String stk_cc_ss_to_dial = "stk_cc_ss_to_dial";
         public static final String stk_cc_ss_to_ss = "stk_cc_ss_to_ss";
         public static final String stk_cc_ss_to_ussd = "stk_cc_ss_to_ussd";
@@ -3924,9 +3988,8 @@ public final class Rc {
         public static final String storage_usb = "storage_usb";
         public static final String storage_usb_drive = "storage_usb_drive";
         public static final String storage_usb_drive_label = "storage_usb_drive_label";
-        public static final String stylus_app_not_installed = "stylus_app_not_installed";
         public static final String submit = "submit";
-        public static final String subscription_change_disabled_wifi_ap = "subscription_change_disabled_wifi_ap";
+        public static final String suspended_widget_accessibility = "suspended_widget_accessibility";
         public static final String sync_binding_label = "sync_binding_label";
         public static final String sync_do_nothing = "sync_do_nothing";
         public static final String sync_really_delete = "sync_really_delete";
@@ -3935,11 +3998,9 @@ public final class Rc {
         public static final String system_error_manufacturer = "system_error_manufacturer";
         public static final String system_error_wipe_data = "system_error_wipe_data";
         public static final String system_ui_date_pattern = "system_ui_date_pattern";
+        public static final String taking_remote_bugreport_notification_title = "taking_remote_bugreport_notification_title";
         public static final String terabyteShort = "terabyteShort";
         public static final String tethered_notification_message = "tethered_notification_message";
-        public static final String tethered_notification_multi_device_message = "tethered_notification_multi_device_message";
-        public static final String tethered_notification_no_device_message = "tethered_notification_no_device_message";
-        public static final String tethered_notification_one_device_message = "tethered_notification_one_device_message";
         public static final String tethered_notification_title = "tethered_notification_title";
         public static final String textSelectionCABTitle = "textSelectionCABTitle";
         public static final String text_copied = "text_copied";
@@ -3952,7 +4013,9 @@ public final class Rc {
         public static final String time_picker_increment_minute_button = "time_picker_increment_minute_button";
         public static final String time_picker_increment_set_pm_button = "time_picker_increment_set_pm_button";
         public static final String time_placeholder = "time_placeholder";
+        public static final String undo = "undo";
         public static final String unknownName = "unknownName";
+        public static final String unsupported_display_size_message = "unsupported_display_size_message";
         public static final String untitled = "untitled";
         public static final String upload_file = "upload_file";
         public static final String usb_accessory_notification_title = "usb_accessory_notification_title";
@@ -3961,18 +4024,18 @@ public final class Rc {
         public static final String usb_midi_peripheral_manufacturer_name = "usb_midi_peripheral_manufacturer_name";
         public static final String usb_midi_peripheral_name = "usb_midi_peripheral_name";
         public static final String usb_midi_peripheral_product_name = "usb_midi_peripheral_product_name";
+        public static final String usb_mtp_launch_notification_description = "usb_mtp_launch_notification_description";
+        public static final String usb_mtp_launch_notification_title = "usb_mtp_launch_notification_title";
         public static final String usb_mtp_notification_title = "usb_mtp_notification_title";
         public static final String usb_notification_message = "usb_notification_message";
         public static final String usb_ptp_notification_title = "usb_ptp_notification_title";
-        public static final String usb_storage_error_message = "usb_storage_error_message";
-        public static final String usb_storage_message = "usb_storage_message";
-        public static final String usb_storage_notification_message = "usb_storage_notification_message";
-        public static final String usb_storage_notification_title = "usb_storage_notification_title";
-        public static final String usb_storage_stop_message = "usb_storage_stop_message";
-        public static final String usb_storage_stop_notification_message = "usb_storage_stop_notification_message";
-        public static final String usb_storage_stop_notification_title = "usb_storage_stop_notification_title";
-        public static final String usb_storage_stop_title = "usb_storage_stop_title";
-        public static final String usb_storage_title = "usb_storage_title";
+        public static final String usb_supplying_notification_title = "usb_supplying_notification_title";
+        public static final String user_creation_account_exists = "user_creation_account_exists";
+        public static final String user_creation_adding = "user_creation_adding";
+        public static final String user_encrypted_detail = "user_encrypted_detail";
+        public static final String user_encrypted_message = "user_encrypted_message";
+        public static final String user_encrypted_title = "user_encrypted_title";
+        public static final String user_logging_out_message = "user_logging_out_message";
         public static final String user_switched = "user_switched";
         public static final String user_switching_message = "user_switching_message";
         public static final String volume_alarm = "volume_alarm";
@@ -3989,27 +4052,37 @@ public final class Rc {
         public static final String vpn_text_long = "vpn_text_long";
         public static final String vpn_title = "vpn_title";
         public static final String vpn_title_long = "vpn_title_long";
+        public static final String vr_listener_binding_label = "vr_listener_binding_label";
         public static final String wait = "wait";
         public static final String wallpaper_binding_label = "wallpaper_binding_label";
         public static final String web_user_agent = "web_user_agent";
         public static final String web_user_agent_target_content = "web_user_agent_target_content";
         public static final String webpage_unresponsive = "webpage_unresponsive";
         public static final String websearch = "websearch";
-        public static final String wfcDataSpnFormat = "wfcDataSpnFormat";
         public static final String wfcRegErrorTitle = "wfcRegErrorTitle";
-        public static final String wfcSpnFormat = "wfcSpnFormat";
         public static final String wfc_mode_cellular_preferred_summary = "wfc_mode_cellular_preferred_summary";
         public static final String wfc_mode_wifi_only_summary = "wfc_mode_wifi_only_summary";
         public static final String wfc_mode_wifi_preferred_summary = "wfc_mode_wifi_preferred_summary";
         public static final String whichApplication = "whichApplication";
+        public static final String whichApplicationLabel = "whichApplicationLabel";
         public static final String whichApplicationNamed = "whichApplicationNamed";
         public static final String whichEditApplication = "whichEditApplication";
+        public static final String whichEditApplicationLabel = "whichEditApplicationLabel";
         public static final String whichEditApplicationNamed = "whichEditApplicationNamed";
         public static final String whichHomeApplication = "whichHomeApplication";
+        public static final String whichHomeApplicationLabel = "whichHomeApplicationLabel";
         public static final String whichHomeApplicationNamed = "whichHomeApplicationNamed";
+        public static final String whichImageCaptureApplication = "whichImageCaptureApplication";
+        public static final String whichImageCaptureApplicationLabel = "whichImageCaptureApplicationLabel";
+        public static final String whichImageCaptureApplicationNamed = "whichImageCaptureApplicationNamed";
         public static final String whichSendApplication = "whichSendApplication";
+        public static final String whichSendApplicationLabel = "whichSendApplicationLabel";
         public static final String whichSendApplicationNamed = "whichSendApplicationNamed";
+        public static final String whichSendToApplication = "whichSendToApplication";
+        public static final String whichSendToApplicationLabel = "whichSendToApplicationLabel";
+        public static final String whichSendToApplicationNamed = "whichSendToApplicationNamed";
         public static final String whichViewApplication = "whichViewApplication";
+        public static final String whichViewApplicationLabel = "whichViewApplicationLabel";
         public static final String whichViewApplicationNamed = "whichViewApplicationNamed";
         public static final String widget_default_class_name = "widget_default_class_name";
         public static final String widget_default_package_name = "widget_default_package_name";
@@ -4035,6 +4108,9 @@ public final class Rc {
         public static final String wifi_watchdog_network_disabled = "wifi_watchdog_network_disabled";
         public static final String wifi_watchdog_network_disabled_detailed = "wifi_watchdog_network_disabled_detailed";
         public static final String wireless_display_route_description = "wireless_display_route_description";
+        public static final String work_mode_off_message = "work_mode_off_message";
+        public static final String work_mode_off_title = "work_mode_off_title";
+        public static final String work_mode_turn_on = "work_mode_turn_on";
         public static final String work_profile_deleted = "work_profile_deleted";
         public static final String work_profile_deleted_description = "work_profile_deleted_description";
         public static final String work_profile_deleted_description_dpm_wipe = "work_profile_deleted_description_dpm_wipe";
@@ -4052,9 +4128,6 @@ public final class Rc {
         public static final String zen_mode_forever_dnd = "zen_mode_forever_dnd";
         public static final String zen_mode_rule_name_combination = "zen_mode_rule_name_combination";
         public static final String zen_mode_until = "zen_mode_until";
-
-        public string() {
-        }
     }
 
     public static final class style {
@@ -4072,20 +4145,6 @@ public final class Rc {
         public static final String Animation_PopupWindow = "Animation_PopupWindow";
         public static final String Animation_RecentApplications = "Animation_RecentApplications";
         public static final String Animation_Toast = "Animation_Toast";
-        public static final String Animation_Toast_Fade = "Animation_Toast_Fade";
-        public static final String Animation_Toast_FastFade = "Animation_Toast_FastFade";
-        public static final String Animation_Toast_GrowFade = "Animation_Toast_GrowFade";
-        public static final String Animation_Toast_GrowFadeBottom = "Animation_Toast_GrowFadeBottom";
-        public static final String Animation_Toast_GrowFadeCenter = "Animation_Toast_GrowFadeCenter";
-        public static final String Animation_Toast_Honami = "Animation_Toast_Honami";
-        public static final String Animation_Toast_SlideLeft = "Animation_Toast_SlideLeft";
-        public static final String Animation_Toast_SlideLeftRight = "Animation_Toast_SlideLeftRight";
-        public static final String Animation_Toast_SlideRight = "Animation_Toast_SlideRight";
-        public static final String Animation_Toast_SlideRightLeft = "Animation_Toast_SlideRightLeft";
-        public static final String Animation_Toast_Tn = "Animation_Toast_Tn";
-        public static final String Animation_Toast_Toko = "Animation_Toast_Toko";
-        public static final String Animation_Toast_Translucent = "Animation_Toast_Translucent";
-        public static final String Animation_Toast_Xylon = "Animation_Toast_Xylon";
         public static final String Animation_Translucent = "Animation_Translucent";
         public static final String Animation_TypingFilter = "Animation_TypingFilter";
         public static final String Animation_TypingFilterRestore = "Animation_TypingFilterRestore";
@@ -4105,6 +4164,7 @@ public final class Rc {
         public static final String Holo_Light_ButtonBar_AlertDialog = "Holo_Light_ButtonBar_AlertDialog";
         public static final String Holo_Light_SegmentedButton = "Holo_Light_SegmentedButton";
         public static final String Holo_SegmentedButton = "Holo_SegmentedButton";
+        public static final String LargePointer = "LargePointer";
         public static final String MediaButton = "MediaButton";
         public static final String MediaButton_Ffwd = "MediaButton_Ffwd";
         public static final String MediaButton_Next = "MediaButton_Next";
@@ -4112,6 +4172,7 @@ public final class Rc {
         public static final String MediaButton_Play = "MediaButton_Play";
         public static final String MediaButton_Previous = "MediaButton_Previous";
         public static final String MediaButton_Rew = "MediaButton_Rew";
+        public static final String Pointer = "Pointer";
         public static final String PreviewWallpaperSettings = "PreviewWallpaperSettings";
         public static final String TextAppearance = "TextAppearance";
         public static final String TextAppearance_DeviceDefault = "TextAppearance_DeviceDefault";
@@ -4233,6 +4294,8 @@ public final class Rc {
         public static final String TextAppearance_Material_Widget_ActionMode_Title = "TextAppearance_Material_Widget_ActionMode_Title";
         public static final String TextAppearance_Material_Widget_ActionMode_Title_Inverse = "TextAppearance_Material_Widget_ActionMode_Title_Inverse";
         public static final String TextAppearance_Material_Widget_Button = "TextAppearance_Material_Widget_Button";
+        public static final String TextAppearance_Material_Widget_Button_Borderless_Colored = "TextAppearance_Material_Widget_Button_Borderless_Colored";
+        public static final String TextAppearance_Material_Widget_Button_Colored = "TextAppearance_Material_Widget_Button_Colored";
         public static final String TextAppearance_Material_Widget_Button_Inverse = "TextAppearance_Material_Widget_Button_Inverse";
         public static final String TextAppearance_Material_Widget_Calendar_Day = "TextAppearance_Material_Widget_Calendar_Day";
         public static final String TextAppearance_Material_Widget_Calendar_DayOfWeek = "TextAppearance_Material_Widget_Calendar_DayOfWeek";
@@ -4383,6 +4446,7 @@ public final class Rc {
         public static final String Theme_Material_Light_DarkActionBar = "Theme_Material_Light_DarkActionBar";
         public static final String Theme_Material_Light_Dialog = "Theme_Material_Light_Dialog";
         public static final String Theme_Material_Light_DialogWhenLarge = "Theme_Material_Light_DialogWhenLarge";
+        public static final String Theme_Material_Light_DialogWhenLarge_DarkActionBar = "Theme_Material_Light_DialogWhenLarge_DarkActionBar";
         public static final String Theme_Material_Light_DialogWhenLarge_NoActionBar = "Theme_Material_Light_DialogWhenLarge_NoActionBar";
         public static final String Theme_Material_Light_Dialog_Alert = "Theme_Material_Light_Dialog_Alert";
         public static final String Theme_Material_Light_Dialog_MinWidth = "Theme_Material_Light_Dialog_MinWidth";
@@ -4717,6 +4781,7 @@ public final class Rc {
         public static final String Widget_Material_CompoundButton_CheckBox = "Widget_Material_CompoundButton_CheckBox";
         public static final String Widget_Material_CompoundButton_RadioButton = "Widget_Material_CompoundButton_RadioButton";
         public static final String Widget_Material_CompoundButton_Star = "Widget_Material_CompoundButton_Star";
+        public static final String Widget_Material_CompoundButton_Switch = "Widget_Material_CompoundButton_Switch";
         public static final String Widget_Material_DatePicker = "Widget_Material_DatePicker";
         public static final String Widget_Material_DropDownItem = "Widget_Material_DropDownItem";
         public static final String Widget_Material_DropDownItem_Spinner = "Widget_Material_DropDownItem_Spinner";
@@ -4751,6 +4816,7 @@ public final class Rc {
         public static final String Widget_Material_Light_CompoundButton_CheckBox = "Widget_Material_Light_CompoundButton_CheckBox";
         public static final String Widget_Material_Light_CompoundButton_RadioButton = "Widget_Material_Light_CompoundButton_RadioButton";
         public static final String Widget_Material_Light_CompoundButton_Star = "Widget_Material_Light_CompoundButton_Star";
+        public static final String Widget_Material_Light_CompoundButton_Switch = "Widget_Material_Light_CompoundButton_Switch";
         public static final String Widget_Material_Light_DatePicker = "Widget_Material_Light_DatePicker";
         public static final String Widget_Material_Light_DropDownItem = "Widget_Material_Light_DropDownItem";
         public static final String Widget_Material_Light_DropDownItem_Spinner = "Widget_Material_Light_DropDownItem_Spinner";
@@ -4764,6 +4830,7 @@ public final class Rc {
         public static final String Widget_Material_Light_ListView = "Widget_Material_Light_ListView";
         public static final String Widget_Material_Light_ListView_DropDown = "Widget_Material_Light_ListView_DropDown";
         public static final String Widget_Material_Light_MediaRouteButton = "Widget_Material_Light_MediaRouteButton";
+        public static final String Widget_Material_Light_NumberPicker = "Widget_Material_Light_NumberPicker";
         public static final String Widget_Material_Light_PopupMenu = "Widget_Material_Light_PopupMenu";
         public static final String Widget_Material_Light_PopupMenu_Overflow = "Widget_Material_Light_PopupMenu_Overflow";
         public static final String Widget_Material_Light_PopupWindow = "Widget_Material_Light_PopupWindow";
@@ -4796,6 +4863,7 @@ public final class Rc {
         public static final String Widget_Material_ListView = "Widget_Material_ListView";
         public static final String Widget_Material_ListView_DropDown = "Widget_Material_ListView_DropDown";
         public static final String Widget_Material_MediaRouteButton = "Widget_Material_MediaRouteButton";
+        public static final String Widget_Material_NumberPicker = "Widget_Material_NumberPicker";
         public static final String Widget_Material_PopupMenu = "Widget_Material_PopupMenu";
         public static final String Widget_Material_PopupMenu_Overflow = "Widget_Material_PopupMenu_Overflow";
         public static final String Widget_Material_PopupWindow = "Widget_Material_PopupWindow";
@@ -4810,6 +4878,7 @@ public final class Rc {
         public static final String Widget_Material_ScrollView = "Widget_Material_ScrollView";
         public static final String Widget_Material_SearchView = "Widget_Material_SearchView";
         public static final String Widget_Material_SeekBar = "Widget_Material_SeekBar";
+        public static final String Widget_Material_SeekBar_Discrete = "Widget_Material_SeekBar_Discrete";
         public static final String Widget_Material_SegmentedButton = "Widget_Material_SegmentedButton";
         public static final String Widget_Material_Spinner = "Widget_Material_Spinner";
         public static final String Widget_Material_Spinner_Underlined = "Widget_Material_Spinner_Underlined";
@@ -4845,9 +4914,6 @@ public final class Rc {
         public static final String Widget_Toolbar = "Widget_Toolbar";
         public static final String Widget_Toolbar_Button_Navigation = "Widget_Toolbar_Button_Navigation";
         public static final String Widget_WebView = "Widget_WebView";
-
-        public style() {
-        }
     }
 
     public static final class styleable {
@@ -4875,6 +4941,8 @@ public final class Rc {
         public static final String AccessibilityService_accessibilityEventTypes = "AccessibilityService_accessibilityEventTypes";
         public static final String AccessibilityService_accessibilityFeedbackType = "AccessibilityService_accessibilityFeedbackType";
         public static final String AccessibilityService_accessibilityFlags = "AccessibilityService_accessibilityFlags";
+        public static final String AccessibilityService_canControlMagnification = "AccessibilityService_canControlMagnification";
+        public static final String AccessibilityService_canPerformGestures = "AccessibilityService_canPerformGestures";
         public static final String AccessibilityService_canRequestEnhancedWebAccessibility = "AccessibilityService_canRequestEnhancedWebAccessibility";
         public static final String AccessibilityService_canRequestFilterKeyEvents = "AccessibilityService_canRequestFilterKeyEvents";
         public static final String AccessibilityService_canRequestTouchExplorationMode = "AccessibilityService_canRequestTouchExplorationMode";
@@ -4897,9 +4965,11 @@ public final class Rc {
         public static final String ActionBar_backgroundSplit = "ActionBar_backgroundSplit";
         public static final String ActionBar_backgroundStacked = "ActionBar_backgroundStacked";
         public static final String ActionBar_contentInsetEnd = "ActionBar_contentInsetEnd";
+        public static final String ActionBar_contentInsetEndWithActions = "ActionBar_contentInsetEndWithActions";
         public static final String ActionBar_contentInsetLeft = "ActionBar_contentInsetLeft";
         public static final String ActionBar_contentInsetRight = "ActionBar_contentInsetRight";
         public static final String ActionBar_contentInsetStart = "ActionBar_contentInsetStart";
+        public static final String ActionBar_contentInsetStartWithNavigation = "ActionBar_contentInsetStartWithNavigation";
         public static final String ActionBar_customNavigationLayout = "ActionBar_customNavigationLayout";
         public static final String ActionBar_displayOptions = "ActionBar_displayOptions";
         public static final String ActionBar_divider = "ActionBar_divider";
@@ -4932,6 +5002,9 @@ public final class Rc {
         public static final String ActivityChooserView = "ActivityChooserView";
         public static final String ActivityChooserView_expandActivityOverflowButtonDrawable = "ActivityChooserView_expandActivityOverflowButtonDrawable";
         public static final String ActivityChooserView_initialActivityCount = "ActivityChooserView_initialActivityCount";
+        public static final String ActivityTaskDescription = "ActivityTaskDescription";
+        public static final String ActivityTaskDescription_colorBackground = "ActivityTaskDescription_colorBackground";
+        public static final String ActivityTaskDescription_colorPrimary = "ActivityTaskDescription_colorPrimary";
         public static final String AdapterViewAnimator = "AdapterViewAnimator";
         public static final String AdapterViewAnimator_animateFirstView = "AdapterViewAnimator_animateFirstView";
         public static final String AdapterViewAnimator_inAnimation = "AdapterViewAnimator_inAnimation";
@@ -4964,6 +5037,7 @@ public final class Rc {
         public static final String AlertDialog_multiChoiceItemLayout = "AlertDialog_multiChoiceItemLayout";
         public static final String AlertDialog_needsDefaultBackgrounds = "AlertDialog_needsDefaultBackgrounds";
         public static final String AlertDialog_progressLayout = "AlertDialog_progressLayout";
+        public static final String AlertDialog_showTitle = "AlertDialog_showTitle";
         public static final String AlertDialog_singleChoiceItemLayout = "AlertDialog_singleChoiceItemLayout";
         public static final String AlertDialog_topBright = "AlertDialog_topBright";
         public static final String AlertDialog_topDark = "AlertDialog_topDark";
@@ -4992,13 +5066,16 @@ public final class Rc {
         public static final String AndroidManifestActivityAlias_targetActivity = "AndroidManifestActivityAlias_targetActivity";
         public static final String AndroidManifestActivity_allowEmbedded = "AndroidManifestActivity_allowEmbedded";
         public static final String AndroidManifestActivity_allowTaskReparenting = "AndroidManifestActivity_allowTaskReparenting";
+        public static final String AndroidManifestActivity_alwaysFocusable = "AndroidManifestActivity_alwaysFocusable";
         public static final String AndroidManifestActivity_alwaysRetainTaskState = "AndroidManifestActivity_alwaysRetainTaskState";
         public static final String AndroidManifestActivity_autoRemoveFromRecents = "AndroidManifestActivity_autoRemoveFromRecents";
         public static final String AndroidManifestActivity_banner = "AndroidManifestActivity_banner";
         public static final String AndroidManifestActivity_clearTaskOnLaunch = "AndroidManifestActivity_clearTaskOnLaunch";
         public static final String AndroidManifestActivity_configChanges = "AndroidManifestActivity_configChanges";
         public static final String AndroidManifestActivity_description = "AndroidManifestActivity_description";
+        public static final String AndroidManifestActivity_directBootAware = "AndroidManifestActivity_directBootAware";
         public static final String AndroidManifestActivity_documentLaunchMode = "AndroidManifestActivity_documentLaunchMode";
+        public static final String AndroidManifestActivity_enableVrMode = "AndroidManifestActivity_enableVrMode";
         public static final String AndroidManifestActivity_enabled = "AndroidManifestActivity_enabled";
         public static final String AndroidManifestActivity_excludeFromRecents = "AndroidManifestActivity_excludeFromRecents";
         public static final String AndroidManifestActivity_exported = "AndroidManifestActivity_exported";
@@ -5018,7 +5095,6 @@ public final class Rc {
         public static final String AndroidManifestActivity_parentActivityName = "AndroidManifestActivity_parentActivityName";
         public static final String AndroidManifestActivity_permission = "AndroidManifestActivity_permission";
         public static final String AndroidManifestActivity_persistableMode = "AndroidManifestActivity_persistableMode";
-        public static final String AndroidManifestActivity_primaryUserOnly = "AndroidManifestActivity_primaryUserOnly";
         public static final String AndroidManifestActivity_process = "AndroidManifestActivity_process";
         public static final String AndroidManifestActivity_relinquishTaskIdentity = "AndroidManifestActivity_relinquishTaskIdentity";
         public static final String AndroidManifestActivity_resizeableActivity = "AndroidManifestActivity_resizeableActivity";
@@ -5029,6 +5105,8 @@ public final class Rc {
         public static final String AndroidManifestActivity_showOnLockScreen = "AndroidManifestActivity_showOnLockScreen";
         public static final String AndroidManifestActivity_singleUser = "AndroidManifestActivity_singleUser";
         public static final String AndroidManifestActivity_stateNotNeeded = "AndroidManifestActivity_stateNotNeeded";
+        public static final String AndroidManifestActivity_supportsPictureInPicture = "AndroidManifestActivity_supportsPictureInPicture";
+        public static final String AndroidManifestActivity_systemUserOnly = "AndroidManifestActivity_systemUserOnly";
         public static final String AndroidManifestActivity_taskAffinity = "AndroidManifestActivity_taskAffinity";
         public static final String AndroidManifestActivity_theme = "AndroidManifestActivity_theme";
         public static final String AndroidManifestActivity_uiOptions = "AndroidManifestActivity_uiOptions";
@@ -5038,10 +5116,13 @@ public final class Rc {
         public static final String AndroidManifestApplication_allowClearUserData = "AndroidManifestApplication_allowClearUserData";
         public static final String AndroidManifestApplication_allowTaskReparenting = "AndroidManifestApplication_allowTaskReparenting";
         public static final String AndroidManifestApplication_backupAgent = "AndroidManifestApplication_backupAgent";
+        public static final String AndroidManifestApplication_backupInForeground = "AndroidManifestApplication_backupInForeground";
         public static final String AndroidManifestApplication_banner = "AndroidManifestApplication_banner";
         public static final String AndroidManifestApplication_cantSaveState = "AndroidManifestApplication_cantSaveState";
         public static final String AndroidManifestApplication_debuggable = "AndroidManifestApplication_debuggable";
+        public static final String AndroidManifestApplication_defaultToDeviceProtectedStorage = "AndroidManifestApplication_defaultToDeviceProtectedStorage";
         public static final String AndroidManifestApplication_description = "AndroidManifestApplication_description";
+        public static final String AndroidManifestApplication_directBootAware = "AndroidManifestApplication_directBootAware";
         public static final String AndroidManifestApplication_enabled = "AndroidManifestApplication_enabled";
         public static final String AndroidManifestApplication_extractNativeLibs = "AndroidManifestApplication_extractNativeLibs";
         public static final String AndroidManifestApplication_fullBackupContent = "AndroidManifestApplication_fullBackupContent";
@@ -5057,12 +5138,13 @@ public final class Rc {
         public static final String AndroidManifestApplication_manageSpaceActivity = "AndroidManifestApplication_manageSpaceActivity";
         public static final String AndroidManifestApplication_multiArch = "AndroidManifestApplication_multiArch";
         public static final String AndroidManifestApplication_name = "AndroidManifestApplication_name";
-        public static final String AndroidManifestApplication_neverEncrypt = "AndroidManifestApplication_neverEncrypt";
+        public static final String AndroidManifestApplication_networkSecurityConfig = "AndroidManifestApplication_networkSecurityConfig";
         public static final String AndroidManifestApplication_permission = "AndroidManifestApplication_permission";
         public static final String AndroidManifestApplication_persistent = "AndroidManifestApplication_persistent";
         public static final String AndroidManifestApplication_process = "AndroidManifestApplication_process";
         public static final String AndroidManifestApplication_requiredAccountType = "AndroidManifestApplication_requiredAccountType";
         public static final String AndroidManifestApplication_requiredForAllUsers = "AndroidManifestApplication_requiredForAllUsers";
+        public static final String AndroidManifestApplication_resizeableActivity = "AndroidManifestApplication_resizeableActivity";
         public static final String AndroidManifestApplication_restoreAnyVersion = "AndroidManifestApplication_restoreAnyVersion";
         @Deprecated
         public static final String AndroidManifestApplication_restoreNeedsApplication = "AndroidManifestApplication_restoreNeedsApplication";
@@ -5114,6 +5196,14 @@ public final class Rc {
         public static final String AndroidManifestIntentFilter_priority = "AndroidManifestIntentFilter_priority";
         public static final String AndroidManifestKeySet = "AndroidManifestKeySet";
         public static final String AndroidManifestKeySet_name = "AndroidManifestKeySet_name";
+        public static final String AndroidManifestLayout = "AndroidManifestLayout";
+        public static final String AndroidManifestLayout_defaultHeight = "AndroidManifestLayout_defaultHeight";
+        public static final String AndroidManifestLayout_defaultWidth = "AndroidManifestLayout_defaultWidth";
+        public static final String AndroidManifestLayout_gravity = "AndroidManifestLayout_gravity";
+        public static final String AndroidManifestLayout_minHeight = "AndroidManifestLayout_minHeight";
+        public static final String AndroidManifestLayout_minWidth = "AndroidManifestLayout_minWidth";
+        public static final String AndroidManifestLayout_minimalHeight = "AndroidManifestLayout_minimalHeight";
+        public static final String AndroidManifestLayout_minimalWidth = "AndroidManifestLayout_minimalWidth";
         public static final String AndroidManifestLibrary = "AndroidManifestLibrary";
         public static final String AndroidManifestLibrary_name = "AndroidManifestLibrary_name";
         public static final String AndroidManifestMetaData = "AndroidManifestMetaData";
@@ -5148,7 +5238,6 @@ public final class Rc {
         public static final String AndroidManifestPermissionTree_label = "AndroidManifestPermissionTree_label";
         public static final String AndroidManifestPermissionTree_logo = "AndroidManifestPermissionTree_logo";
         public static final String AndroidManifestPermissionTree_name = "AndroidManifestPermissionTree_name";
-        public static final String AndroidManifestPermission_allowViaWhitelist = "AndroidManifestPermission_allowViaWhitelist";
         public static final String AndroidManifestPermission_banner = "AndroidManifestPermission_banner";
         public static final String AndroidManifestPermission_description = "AndroidManifestPermission_description";
         public static final String AndroidManifestPermission_icon = "AndroidManifestPermission_icon";
@@ -5164,6 +5253,7 @@ public final class Rc {
         public static final String AndroidManifestProvider_authorities = "AndroidManifestProvider_authorities";
         public static final String AndroidManifestProvider_banner = "AndroidManifestProvider_banner";
         public static final String AndroidManifestProvider_description = "AndroidManifestProvider_description";
+        public static final String AndroidManifestProvider_directBootAware = "AndroidManifestProvider_directBootAware";
         public static final String AndroidManifestProvider_enabled = "AndroidManifestProvider_enabled";
         public static final String AndroidManifestProvider_exported = "AndroidManifestProvider_exported";
         public static final String AndroidManifestProvider_grantUriPermissions = "AndroidManifestProvider_grantUriPermissions";
@@ -5185,6 +5275,7 @@ public final class Rc {
         public static final String AndroidManifestReceiver = "AndroidManifestReceiver";
         public static final String AndroidManifestReceiver_banner = "AndroidManifestReceiver_banner";
         public static final String AndroidManifestReceiver_description = "AndroidManifestReceiver_description";
+        public static final String AndroidManifestReceiver_directBootAware = "AndroidManifestReceiver_directBootAware";
         public static final String AndroidManifestReceiver_enabled = "AndroidManifestReceiver_enabled";
         public static final String AndroidManifestReceiver_exported = "AndroidManifestReceiver_exported";
         public static final String AndroidManifestReceiver_icon = "AndroidManifestReceiver_icon";
@@ -5197,11 +5288,15 @@ public final class Rc {
         public static final String AndroidManifestResourceOverlay = "AndroidManifestResourceOverlay";
         public static final String AndroidManifestResourceOverlay_priority = "AndroidManifestResourceOverlay_priority";
         public static final String AndroidManifestResourceOverlay_targetPackage = "AndroidManifestResourceOverlay_targetPackage";
+        public static final String AndroidManifestRestrictUpdate = "AndroidManifestRestrictUpdate";
+        public static final String AndroidManifestRestrictUpdate_hash = "AndroidManifestRestrictUpdate_hash";
         public static final String AndroidManifestService = "AndroidManifestService";
         public static final String AndroidManifestService_banner = "AndroidManifestService_banner";
         public static final String AndroidManifestService_description = "AndroidManifestService_description";
+        public static final String AndroidManifestService_directBootAware = "AndroidManifestService_directBootAware";
         public static final String AndroidManifestService_enabled = "AndroidManifestService_enabled";
         public static final String AndroidManifestService_exported = "AndroidManifestService_exported";
+        public static final String AndroidManifestService_externalService = "AndroidManifestService_externalService";
         public static final String AndroidManifestService_icon = "AndroidManifestService_icon";
         public static final String AndroidManifestService_isolatedProcess = "AndroidManifestService_isolatedProcess";
         public static final String AndroidManifestService_label = "AndroidManifestService_label";
@@ -5236,6 +5331,7 @@ public final class Rc {
         public static final String AndroidManifestUsesFeature_glEsVersion = "AndroidManifestUsesFeature_glEsVersion";
         public static final String AndroidManifestUsesFeature_name = "AndroidManifestUsesFeature_name";
         public static final String AndroidManifestUsesFeature_required = "AndroidManifestUsesFeature_required";
+        public static final String AndroidManifestUsesFeature_version = "AndroidManifestUsesFeature_version";
         public static final String AndroidManifestUsesLibrary = "AndroidManifestUsesLibrary";
         public static final String AndroidManifestUsesLibrary_name = "AndroidManifestUsesLibrary_name";
         public static final String AndroidManifestUsesLibrary_required = "AndroidManifestUsesLibrary_required";
@@ -5349,6 +5445,7 @@ public final class Rc {
         public static final String AutoCompleteTextView_dropDownSelector = "AutoCompleteTextView_dropDownSelector";
         public static final String AutoCompleteTextView_dropDownWidth = "AutoCompleteTextView_dropDownWidth";
         public static final String AutoCompleteTextView_inputType = "AutoCompleteTextView_inputType";
+        public static final String AutoCompleteTextView_popupTheme = "AutoCompleteTextView_popupTheme";
         public static final String BitmapDrawable = "BitmapDrawable";
         public static final String BitmapDrawable_alpha = "BitmapDrawable_alpha";
         public static final String BitmapDrawable_antialias = "BitmapDrawable_antialias";
@@ -5408,6 +5505,7 @@ public final class Rc {
         public static final String CheckedTextView_checkMarkTintMode = "CheckedTextView_checkMarkTintMode";
         public static final String CheckedTextView_checked = "CheckedTextView_checked";
         public static final String Chronometer = "Chronometer";
+        public static final String Chronometer_countDown = "Chronometer_countDown";
         public static final String Chronometer_format = "Chronometer_format";
         public static final String ClipDrawable = "ClipDrawable";
         public static final String ClipDrawable_clipOrientation = "ClipDrawable_clipOrientation";
@@ -5463,6 +5561,8 @@ public final class Rc {
         public static final String DatePicker_yearListItemTextAppearance = "DatePicker_yearListItemTextAppearance";
         @Deprecated
         public static final String DatePicker_yearListSelectorColor = "DatePicker_yearListSelectorColor";
+        public static final String DateTimeView = "DateTimeView";
+        public static final String DateTimeView_showRelative = "DateTimeView_showRelative";
         public static final String DecelerateInterpolator = "DecelerateInterpolator";
         public static final String DecelerateInterpolator_factor = "DecelerateInterpolator_factor";
         public static final String DeviceAdmin = "DeviceAdmin";
@@ -5500,6 +5600,8 @@ public final class Rc {
         public static final String DrawableStates_state_selected = "DrawableStates_state_selected";
         public static final String DrawableStates_state_single = "DrawableStates_state_single";
         public static final String DrawableStates_state_window_focused = "DrawableStates_state_window_focused";
+        public static final String DrawableWrapper = "DrawableWrapper";
+        public static final String DrawableWrapper_drawable = "DrawableWrapper_drawable";
         public static final String Drawable_autoMirrored = "Drawable_autoMirrored";
         public static final String Drawable_visible = "Drawable_visible";
         public static final String Dream = "Dream";
@@ -5598,6 +5700,22 @@ public final class Rc {
         public static final String GlowPadView_directionDescriptions = "GlowPadView_directionDescriptions";
         @Deprecated
         public static final String GlowPadView_targetDescriptions = "GlowPadView_targetDescriptions";
+        public static final String GradientColor = "GradientColor";
+        public static final String GradientColorItem = "GradientColorItem";
+        public static final String GradientColorItem_color = "GradientColorItem_color";
+        public static final String GradientColorItem_offset = "GradientColorItem_offset";
+        public static final String GradientColor_centerColor = "GradientColor_centerColor";
+        public static final String GradientColor_centerX = "GradientColor_centerX";
+        public static final String GradientColor_centerY = "GradientColor_centerY";
+        public static final String GradientColor_endColor = "GradientColor_endColor";
+        public static final String GradientColor_endX = "GradientColor_endX";
+        public static final String GradientColor_endY = "GradientColor_endY";
+        public static final String GradientColor_gradientRadius = "GradientColor_gradientRadius";
+        public static final String GradientColor_startColor = "GradientColor_startColor";
+        public static final String GradientColor_startX = "GradientColor_startX";
+        public static final String GradientColor_startY = "GradientColor_startY";
+        public static final String GradientColor_tileMode = "GradientColor_tileMode";
+        public static final String GradientColor_type = "GradientColor_type";
         public static final String GradientDrawable = "GradientDrawable";
         public static final String GradientDrawableGradient = "GradientDrawableGradient";
         public static final String GradientDrawableGradient_angle = "GradientDrawableGradient_angle";
@@ -5673,6 +5791,8 @@ public final class Rc {
         public static final String HostApduService_description = "HostApduService_description";
         public static final String HostApduService_requireDeviceUnlock = "HostApduService_requireDeviceUnlock";
         public static final String HostApduService_settingsActivity = "HostApduService_settingsActivity";
+        public static final String HostNfcFService = "HostNfcFService";
+        public static final String HostNfcFService_description = "HostNfcFService_description";
         public static final String Icon = "Icon";
         public static final String IconDefault = "IconDefault";
         public static final String IconDefault_icon = "IconDefault_icon";
@@ -5714,6 +5834,7 @@ public final class Rc {
         public static final String InputMethod_Subtype_isAsciiCapable = "InputMethod_Subtype_isAsciiCapable";
         public static final String InputMethod_Subtype_isAuxiliary = "InputMethod_Subtype_isAuxiliary";
         public static final String InputMethod_Subtype_label = "InputMethod_Subtype_label";
+        public static final String InputMethod_Subtype_languageTag = "InputMethod_Subtype_languageTag";
         public static final String InputMethod_Subtype_overridesImplicitlyEnabledSubtype = "InputMethod_Subtype_overridesImplicitlyEnabledSubtype";
         public static final String InputMethod_Subtype_subtypeId = "InputMethod_Subtype_subtypeId";
         public static final String InputMethod_isDefault = "InputMethod_isDefault";
@@ -5739,7 +5860,10 @@ public final class Rc {
         public static final String KeyboardLayout = "KeyboardLayout";
         public static final String KeyboardLayout_keyboardLayout = "KeyboardLayout_keyboardLayout";
         public static final String KeyboardLayout_label = "KeyboardLayout_label";
+        public static final String KeyboardLayout_locale = "KeyboardLayout_locale";
         public static final String KeyboardLayout_name = "KeyboardLayout_name";
+        public static final String KeyboardLayout_productId = "KeyboardLayout_productId";
+        public static final String KeyboardLayout_vendorId = "KeyboardLayout_vendorId";
         public static final String KeyboardView = "KeyboardView";
         public static final String KeyboardViewPreviewState = "KeyboardViewPreviewState";
         public static final String KeyboardViewPreviewState_state_long_pressable = "KeyboardViewPreviewState_state_long_pressable";
@@ -5916,11 +6040,17 @@ public final class Rc {
         public static final String MenuView_itemIconDisabledAlpha = "MenuView_itemIconDisabledAlpha";
         public static final String MenuView_itemTextAppearance = "MenuView_itemTextAppearance";
         public static final String MenuView_preserveIconSpacing = "MenuView_preserveIconSpacing";
+        public static final String MenuView_subMenuArrow = "MenuView_subMenuArrow";
         public static final String MenuView_verticalDivider = "MenuView_verticalDivider";
         public static final String MenuView_windowAnimationStyle = "MenuView_windowAnimationStyle";
+        public static final String MessagingLinearLayout = "MessagingLinearLayout";
+        public static final String MessagingLinearLayout_maxHeight = "MessagingLinearLayout_maxHeight";
+        public static final String MessagingLinearLayout_spacing = "MessagingLinearLayout_spacing";
         public static final String MultiSelectListPreference = "MultiSelectListPreference";
         public static final String MultiSelectListPreference_entries = "MultiSelectListPreference_entries";
         public static final String MultiSelectListPreference_entryValues = "MultiSelectListPreference_entryValues";
+        public static final String Nfcid2Filter = "Nfcid2Filter";
+        public static final String Nfcid2Filter_name = "Nfcid2Filter_name";
         public static final String NinePatchDrawable = "NinePatchDrawable";
         public static final String NinePatchDrawable_alpha = "NinePatchDrawable_alpha";
         public static final String NinePatchDrawable_autoMirrored = "NinePatchDrawable_autoMirrored";
@@ -5963,10 +6093,30 @@ public final class Rc {
         public static final String PointerIcon_bitmap = "PointerIcon_bitmap";
         public static final String PointerIcon_hotSpotX = "PointerIcon_hotSpotX";
         public static final String PointerIcon_hotSpotY = "PointerIcon_hotSpotY";
+        public static final String Pointer_pointerIconAlias = "Pointer_pointerIconAlias";
+        public static final String Pointer_pointerIconAllScroll = "Pointer_pointerIconAllScroll";
         public static final String Pointer_pointerIconArrow = "Pointer_pointerIconArrow";
+        public static final String Pointer_pointerIconCell = "Pointer_pointerIconCell";
+        public static final String Pointer_pointerIconContextMenu = "Pointer_pointerIconContextMenu";
+        public static final String Pointer_pointerIconCopy = "Pointer_pointerIconCopy";
+        public static final String Pointer_pointerIconCrosshair = "Pointer_pointerIconCrosshair";
+        public static final String Pointer_pointerIconGrab = "Pointer_pointerIconGrab";
+        public static final String Pointer_pointerIconGrabbing = "Pointer_pointerIconGrabbing";
+        public static final String Pointer_pointerIconHand = "Pointer_pointerIconHand";
+        public static final String Pointer_pointerIconHelp = "Pointer_pointerIconHelp";
+        public static final String Pointer_pointerIconHorizontalDoubleArrow = "Pointer_pointerIconHorizontalDoubleArrow";
+        public static final String Pointer_pointerIconNodrop = "Pointer_pointerIconNodrop";
         public static final String Pointer_pointerIconSpotAnchor = "Pointer_pointerIconSpotAnchor";
         public static final String Pointer_pointerIconSpotHover = "Pointer_pointerIconSpotHover";
         public static final String Pointer_pointerIconSpotTouch = "Pointer_pointerIconSpotTouch";
+        public static final String Pointer_pointerIconText = "Pointer_pointerIconText";
+        public static final String Pointer_pointerIconTopLeftDiagonalDoubleArrow = "Pointer_pointerIconTopLeftDiagonalDoubleArrow";
+        public static final String Pointer_pointerIconTopRightDiagonalDoubleArrow = "Pointer_pointerIconTopRightDiagonalDoubleArrow";
+        public static final String Pointer_pointerIconVerticalDoubleArrow = "Pointer_pointerIconVerticalDoubleArrow";
+        public static final String Pointer_pointerIconVerticalText = "Pointer_pointerIconVerticalText";
+        public static final String Pointer_pointerIconWait = "Pointer_pointerIconWait";
+        public static final String Pointer_pointerIconZoomIn = "Pointer_pointerIconZoomIn";
+        public static final String Pointer_pointerIconZoomOut = "Pointer_pointerIconZoomOut";
         public static final String PopupWindow = "PopupWindow";
         public static final String PopupWindowBackgroundState = "PopupWindowBackgroundState";
         public static final String PopupWindowBackgroundState_state_above_anchor = "PopupWindowBackgroundState_state_above_anchor";
@@ -5982,6 +6132,7 @@ public final class Rc {
         public static final String PreferenceActivity_headerRemoveIconIfEmpty = "PreferenceActivity_headerRemoveIconIfEmpty";
         public static final String PreferenceActivity_layout = "PreferenceActivity_layout";
         public static final String PreferenceFragment = "PreferenceFragment";
+        public static final String PreferenceFragment_divider = "PreferenceFragment_divider";
         public static final String PreferenceFragment_layout = "PreferenceFragment_layout";
         public static final String PreferenceFrameLayout = "PreferenceFrameLayout";
         public static final String PreferenceFrameLayout_Layout = "PreferenceFrameLayout_Layout";
@@ -6079,6 +6230,9 @@ public final class Rc {
         public static final String RatingSystemDefinition_title = "RatingSystemDefinition_title";
         public static final String RecognitionService = "RecognitionService";
         public static final String RecognitionService_settingsActivity = "RecognitionService_settingsActivity";
+        public static final String RecycleListView = "RecycleListView";
+        public static final String RecycleListView_paddingBottomNoButtons = "RecycleListView_paddingBottomNoButtons";
+        public static final String RecycleListView_paddingTopNoTitle = "RecycleListView_paddingTopNoTitle";
         public static final String RelativeLayout = "RelativeLayout";
         public static final String RelativeLayout_Layout = "RelativeLayout_Layout";
         public static final String RelativeLayout_Layout_layout_above = "RelativeLayout_Layout_layout_above";
@@ -6110,6 +6264,7 @@ public final class Rc {
         public static final String ResolverDrawerLayout_LayoutParams = "ResolverDrawerLayout_LayoutParams";
         public static final String ResolverDrawerLayout_LayoutParams_layout_alwaysShow = "ResolverDrawerLayout_LayoutParams_layout_alwaysShow";
         public static final String ResolverDrawerLayout_LayoutParams_layout_gravity = "ResolverDrawerLayout_LayoutParams_layout_gravity";
+        public static final String ResolverDrawerLayout_LayoutParams_layout_hasNestedScrollIndicator = "ResolverDrawerLayout_LayoutParams_layout_hasNestedScrollIndicator";
         public static final String ResolverDrawerLayout_LayoutParams_layout_ignoreOffset = "ResolverDrawerLayout_LayoutParams_layout_ignoreOffset";
         public static final String ResolverDrawerLayout_maxCollapsedHeight = "ResolverDrawerLayout_maxCollapsedHeight";
         public static final String ResolverDrawerLayout_maxCollapsedHeightSmall = "ResolverDrawerLayout_maxCollapsedHeightSmall";
@@ -6123,7 +6278,6 @@ public final class Rc {
         public static final String RestrictionEntry_restrictionType = "RestrictionEntry_restrictionType";
         public static final String RestrictionEntry_title = "RestrictionEntry_title";
         public static final String RingtonePreference = "RingtonePreference";
-        public static final String RingtonePreference_dialogStyle = "RingtonePreference_dialogStyle";
         public static final String RingtonePreference_ringtoneType = "RingtonePreference_ringtoneType";
         public static final String RingtonePreference_showDefault = "RingtonePreference_showDefault";
         public static final String RingtonePreference_showSilent = "RingtonePreference_showSilent";
@@ -6153,6 +6307,7 @@ public final class Rc {
         public static final String ScaleAnimation_toYScale = "ScaleAnimation_toYScale";
         public static final String ScaleDrawable = "ScaleDrawable";
         public static final String ScaleDrawable_drawable = "ScaleDrawable_drawable";
+        public static final String ScaleDrawable_level = "ScaleDrawable_level";
         public static final String ScaleDrawable_scaleGravity = "ScaleDrawable_scaleGravity";
         public static final String ScaleDrawable_scaleHeight = "ScaleDrawable_scaleHeight";
         public static final String ScaleDrawable_scaleWidth = "ScaleDrawable_scaleWidth";
@@ -6214,6 +6369,9 @@ public final class Rc {
         public static final String SeekBar_thumbOffset = "SeekBar_thumbOffset";
         public static final String SeekBar_thumbT = "SeekBar_thumbT";
         public static final String SeekBar_thumbTintMode = "SeekBar_thumbTintMode";
+        public static final String SeekBar_tickMark = "SeekBar_tickMark";
+        public static final String SeekBar_tickMarkT = "SeekBar_tickMarkT";
+        public static final String SeekBar_tickMarkTintMode = "SeekBar_tickMarkTintMode";
         public static final String SeekBar_useDisabledAlpha = "SeekBar_useDisabledAlpha";
         public static final String SelectionModeDrawables = "SelectionModeDrawables";
         public static final String SelectionModeDrawables_actionModeCopyDrawable = "SelectionModeDrawables_actionModeCopyDrawable";
@@ -6248,11 +6406,12 @@ public final class Rc {
         public static final String SlidingDrawer_topOffset = "SlidingDrawer_topOffset";
         public static final String SlidingTab = "SlidingTab";
         public static final String SlidingTab_orientation = "SlidingTab_orientation";
-        public static final String SlimSeekBarPreference = "SlimSeekBarPreference";
         public static final String SpellChecker = "SpellChecker";
         public static final String SpellChecker_Subtype = "SpellChecker_Subtype";
         public static final String SpellChecker_Subtype_label = "SpellChecker_Subtype_label";
+        public static final String SpellChecker_Subtype_languageTag = "SpellChecker_Subtype_languageTag";
         public static final String SpellChecker_Subtype_subtypeExtraValue = "SpellChecker_Subtype_subtypeExtraValue";
+        public static final String SpellChecker_Subtype_subtypeId = "SpellChecker_Subtype_subtypeId";
         public static final String SpellChecker_Subtype_subtypeLocale = "SpellChecker_Subtype_subtypeLocale";
         public static final String SpellChecker_label = "SpellChecker_label";
         public static final String SpellChecker_settingsActivity = "SpellChecker_settingsActivity";
@@ -6323,6 +6482,8 @@ public final class Rc {
         public static final String SyncAdapter_settingsActivity = "SyncAdapter_settingsActivity";
         public static final String SyncAdapter_supportsUploading = "SyncAdapter_supportsUploading";
         public static final String SyncAdapter_userVisible = "SyncAdapter_userVisible";
+        public static final String SystemCodeFilter = "SystemCodeFilter";
+        public static final String SystemCodeFilter_name = "SystemCodeFilter_name";
         public static final String TabWidget = "TabWidget";
         public static final String TabWidget_divider = "TabWidget_divider";
         public static final String TabWidget_tabLayout = "TabWidget_tabLayout";
@@ -6366,8 +6527,6 @@ public final class Rc {
         public static final String TextViewAppearance_textAppearance = "TextViewAppearance_textAppearance";
         public static final String TextViewMultiLineBackgroundState = "TextViewMultiLineBackgroundState";
         public static final String TextViewMultiLineBackgroundState_state_multiline = "TextViewMultiLineBackgroundState_state_multiline";
-        public static final String TextView___removeBeforeMRelease_leftIndents = "TextView___removeBeforeMRelease_leftIndents";
-        public static final String TextView___removeBeforeMRelease_rightIndents = "TextView___removeBeforeMRelease_rightIndents";
         public static final String TextView_allowUndo = "TextView_allowUndo";
         public static final String TextView_autoLink = "TextView_autoLink";
         @Deprecated
@@ -6450,6 +6609,8 @@ public final class Rc {
         public static final String TextView_textEditPasteWindowLayout = "TextView_textEditPasteWindowLayout";
         public static final String TextView_textEditSideNoPasteWindowLayout = "TextView_textEditSideNoPasteWindowLayout";
         public static final String TextView_textEditSidePasteWindowLayout = "TextView_textEditSidePasteWindowLayout";
+        public static final String TextView_textEditSuggestionContainerLayout = "TextView_textEditSuggestionContainerLayout";
+        public static final String TextView_textEditSuggestionHighlightStyle = "TextView_textEditSuggestionHighlightStyle";
         public static final String TextView_textEditSuggestionItemLayout = "TextView_textEditSuggestionItemLayout";
         public static final String TextView_textIsSelectable = "TextView_textIsSelectable";
         public static final String TextView_textScaleX = "TextView_textScaleX";
@@ -6538,6 +6699,7 @@ public final class Rc {
         public static final String Theme_colorPrimary = "Theme_colorPrimary";
         public static final String Theme_colorPrimaryDark = "Theme_colorPrimaryDark";
         public static final String Theme_colorSwitchThumbNormal = "Theme_colorSwitchThumbNormal";
+        public static final String Theme_contextPopupMenuStyle = "Theme_contextPopupMenuStyle";
         public static final String Theme_datePickerDialogTheme = "Theme_datePickerDialogTheme";
         public static final String Theme_datePickerStyle = "Theme_datePickerStyle";
         public static final String Theme_detailsElementBackground = "Theme_detailsElementBackground";
@@ -6602,6 +6764,7 @@ public final class Rc {
         public static final String Theme_listChoiceIndicatorSingle = "Theme_listChoiceIndicatorSingle";
         public static final String Theme_listDivider = "Theme_listDivider";
         public static final String Theme_listDividerAlertDialog = "Theme_listDividerAlertDialog";
+        public static final String Theme_listMenuViewStyle = "Theme_listMenuViewStyle";
         public static final String Theme_listPopupWindowStyle = "Theme_listPopupWindowStyle";
         public static final String Theme_listPreferredItemHeight = "Theme_listPreferredItemHeight";
         public static final String Theme_listPreferredItemHeightLarge = "Theme_listPreferredItemHeightLarge";
@@ -6624,7 +6787,6 @@ public final class Rc {
         public static final String Theme_panelMenuListTheme = "Theme_panelMenuListTheme";
         public static final String Theme_panelMenuListWidth = "Theme_panelMenuListWidth";
         public static final String Theme_panelTextAppearance = "Theme_panelTextAppearance";
-        public static final String Theme_pointerStyle = "Theme_pointerStyle";
         public static final String Theme_popupMenuStyle = "Theme_popupMenuStyle";
         public static final String Theme_popupWindowStyle = "Theme_popupWindowStyle";
         public static final String Theme_preferenceActivityStyle = "Theme_preferenceActivityStyle";
@@ -6695,6 +6857,7 @@ public final class Rc {
         public static final String Theme_textAppearanceMedium = "Theme_textAppearanceMedium";
         public static final String Theme_textAppearanceMediumInverse = "Theme_textAppearanceMediumInverse";
         public static final String Theme_textAppearanceMisspelledSuggestion = "Theme_textAppearanceMisspelledSuggestion";
+        public static final String Theme_textAppearancePopupMenuHeader = "Theme_textAppearancePopupMenuHeader";
         public static final String Theme_textAppearanceSearchResultSubtitle = "Theme_textAppearanceSearchResultSubtitle";
         public static final String Theme_textAppearanceSearchResultTitle = "Theme_textAppearanceSearchResultTitle";
         public static final String Theme_textAppearanceSmall = "Theme_textAppearanceSmall";
@@ -6725,6 +6888,8 @@ public final class Rc {
         public static final String Theme_textEditPasteWindowLayout = "Theme_textEditPasteWindowLayout";
         public static final String Theme_textEditSideNoPasteWindowLayout = "Theme_textEditSideNoPasteWindowLayout";
         public static final String Theme_textEditSidePasteWindowLayout = "Theme_textEditSidePasteWindowLayout";
+        public static final String Theme_textEditSuggestionContainerLayout = "Theme_textEditSuggestionContainerLayout";
+        public static final String Theme_textEditSuggestionHighlightStyle = "Theme_textEditSuggestionHighlightStyle";
         public static final String Theme_textEditSuggestionItemLayout = "Theme_textEditSuggestionItemLayout";
         public static final String Theme_textSelectHandle = "Theme_textSelectHandle";
         public static final String Theme_textSelectHandleLeft = "Theme_textSelectHandleLeft";
@@ -6811,9 +6976,11 @@ public final class Rc {
         public static final String Toolbar_collapseContentDescription = "Toolbar_collapseContentDescription";
         public static final String Toolbar_collapseIcon = "Toolbar_collapseIcon";
         public static final String Toolbar_contentInsetEnd = "Toolbar_contentInsetEnd";
+        public static final String Toolbar_contentInsetEndWithActions = "Toolbar_contentInsetEndWithActions";
         public static final String Toolbar_contentInsetLeft = "Toolbar_contentInsetLeft";
         public static final String Toolbar_contentInsetRight = "Toolbar_contentInsetRight";
         public static final String Toolbar_contentInsetStart = "Toolbar_contentInsetStart";
+        public static final String Toolbar_contentInsetStartWithNavigation = "Toolbar_contentInsetStartWithNavigation";
         public static final String Toolbar_gravity = "Toolbar_gravity";
         public static final String Toolbar_logo = "Toolbar_logo";
         public static final String Toolbar_logoDescription = "Toolbar_logoDescription";
@@ -6826,11 +6993,11 @@ public final class Rc {
         public static final String Toolbar_subtitleTextAppearance = "Toolbar_subtitleTextAppearance";
         public static final String Toolbar_subtitleTextColor = "Toolbar_subtitleTextColor";
         public static final String Toolbar_title = "Toolbar_title";
+        public static final String Toolbar_titleMargin = "Toolbar_titleMargin";
         public static final String Toolbar_titleMarginBottom = "Toolbar_titleMarginBottom";
         public static final String Toolbar_titleMarginEnd = "Toolbar_titleMarginEnd";
         public static final String Toolbar_titleMarginStart = "Toolbar_titleMarginStart";
         public static final String Toolbar_titleMarginTop = "Toolbar_titleMarginTop";
-        public static final String Toolbar_titleMargins = "Toolbar_titleMargins";
         public static final String Toolbar_titleTextAppearance = "Toolbar_titleTextAppearance";
         public static final String Toolbar_titleTextColor = "Toolbar_titleTextColor";
         public static final String Transition = "Transition";
@@ -6861,8 +7028,10 @@ public final class Rc {
         public static final String TrustAgent_summary = "TrustAgent_summary";
         public static final String TrustAgent_title = "TrustAgent_title";
         public static final String TvInputService = "TvInputService";
+        public static final String TvInputService_canRecord = "TvInputService_canRecord";
         public static final String TvInputService_settingsActivity = "TvInputService_settingsActivity";
         public static final String TvInputService_setupActivity = "TvInputService_setupActivity";
+        public static final String TvInputService_tunerCount = "TvInputService_tunerCount";
         public static final String TwoLineListItem = "TwoLineListItem";
         public static final String TwoLineListItem_mode = "TwoLineListItem_mode";
         public static final String VectorDrawable = "VectorDrawable";
@@ -6881,6 +7050,7 @@ public final class Rc {
         public static final String VectorDrawablePath = "VectorDrawablePath";
         public static final String VectorDrawablePath_fillAlpha = "VectorDrawablePath_fillAlpha";
         public static final String VectorDrawablePath_fillColor = "VectorDrawablePath_fillColor";
+        public static final String VectorDrawablePath_fillType = "VectorDrawablePath_fillType";
         public static final String VectorDrawablePath_name = "VectorDrawablePath_name";
         public static final String VectorDrawablePath_pathData = "VectorDrawablePath_pathData";
         public static final String VectorDrawablePath_strokeAlpha = "VectorDrawablePath_strokeAlpha";
@@ -6981,6 +7151,7 @@ public final class Rc {
         public static final String View_fitsSystemWindows = "View_fitsSystemWindows";
         public static final String View_focusable = "View_focusable";
         public static final String View_focusableInTouchMode = "View_focusableInTouchMode";
+        public static final String View_forceHasOverlappingRendering = "View_forceHasOverlappingRendering";
         public static final String View_foreground = "View_foreground";
         public static final String View_foregroundGravity = "View_foregroundGravity";
         public static final String View_foregroundInsidePadding = "View_foregroundInsidePadding";
@@ -7013,6 +7184,7 @@ public final class Rc {
         public static final String View_paddingRight = "View_paddingRight";
         public static final String View_paddingStart = "View_paddingStart";
         public static final String View_paddingTop = "View_paddingTop";
+        public static final String View_pointerIcon = "View_pointerIcon";
         public static final String View_requiresFadingEdge = "View_requiresFadingEdge";
         public static final String View_rotation = "View_rotation";
         public static final String View_rotationX = "View_rotationX";
@@ -7061,6 +7233,7 @@ public final class Rc {
         public static final String VoiceInteractionService_settingsActivity = "VoiceInteractionService_settingsActivity";
         public static final String VoiceInteractionService_supportsAssist = "VoiceInteractionService_supportsAssist";
         public static final String VoiceInteractionService_supportsLaunchVoiceAssistFromKeyguard = "VoiceInteractionService_supportsLaunchVoiceAssistFromKeyguard";
+        public static final String VoiceInteractionService_supportsLocalInteraction = "VoiceInteractionService_supportsLocalInteraction";
         public static final String VoiceInteractionSession = "VoiceInteractionSession";
         public static final String VolumePreference = "VolumePreference";
         public static final String VolumePreference_streamType = "VolumePreference_streamType";
@@ -7082,6 +7255,7 @@ public final class Rc {
         public static final String WindowAnimation_activityCloseExitAnimation = "WindowAnimation_activityCloseExitAnimation";
         public static final String WindowAnimation_activityOpenEnterAnimation = "WindowAnimation_activityOpenEnterAnimation";
         public static final String WindowAnimation_activityOpenExitAnimation = "WindowAnimation_activityOpenExitAnimation";
+        public static final String WindowAnimation_activityOpenRemoteViewsEnterAnimation = "WindowAnimation_activityOpenRemoteViewsEnterAnimation";
         public static final String WindowAnimation_launchTaskBehindSourceAnimation = "WindowAnimation_launchTaskBehindSourceAnimation";
         public static final String WindowAnimation_launchTaskBehindTargetAnimation = "WindowAnimation_launchTaskBehindTargetAnimation";
         public static final String WindowAnimation_taskCloseEnterAnimation = "WindowAnimation_taskCloseEnterAnimation";
@@ -7158,9 +7332,6 @@ public final class Rc {
         public static final String Window_windowTransitionBackgroundFadeDuration = "Window_windowTransitionBackgroundFadeDuration";
         public static final String Window_windowTranslucentNavigation = "Window_windowTranslucentNavigation";
         public static final String Window_windowTranslucentStatus = "Window_windowTranslucentStatus";
-
-        public styleable() {
-        }
     }
 
     public static final class transition {
@@ -7172,9 +7343,6 @@ public final class Rc {
         public static final String slide_left = "slide_left";
         public static final String slide_right = "slide_right";
         public static final String slide_top = "slide_top";
-
-        public transition() {
-        }
     }
 
     public static final class xml {
@@ -7182,8 +7350,8 @@ public final class Rc {
         public static final String audio_assets = "audio_assets";
         public static final String autotext = "autotext";
         public static final String bookmarks = "bookmarks";
+        public static final String config_webview_packages = "config_webview_packages";
         public static final String default_zen_mode_config = "default_zen_mode_config";
-        public static final String eri = "eri";
         public static final String global_keys = "global_keys";
         public static final String password_kbd_numeric = "password_kbd_numeric";
         public static final String password_kbd_qwerty = "password_kbd_qwerty";
@@ -7195,8 +7363,5 @@ public final class Rc {
         public static final String sms_short_codes = "sms_short_codes";
         public static final String storage_list = "storage_list";
         public static final String time_zones_by_country = "time_zones_by_country";
-
-        public xml() {
-        }
     }
 }

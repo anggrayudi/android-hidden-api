@@ -13,6 +13,7 @@ import com.anggrayudi.hiddenapi.r.versions.R_17;
 import com.anggrayudi.hiddenapi.r.versions.R_21;
 import com.anggrayudi.hiddenapi.r.versions.R_22;
 import com.anggrayudi.hiddenapi.r.versions.R_23;
+import com.anggrayudi.hiddenapi.r.versions.R_24;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -30,6 +31,7 @@ import java.lang.reflect.Method;
  *         <li>{@link R_21} - for API 21</li>
  *         <li>{@link R_22} - for API 22</li>
  *         <li>{@link R_23} - for API 23</li>
+ *         <li>{@link R_24} - for API 24</li>
  *     </ul>
  */
 @SuppressWarnings({"TryWithIdenticalCatches", "EmptyCatchBlock", "JavaDoc"})

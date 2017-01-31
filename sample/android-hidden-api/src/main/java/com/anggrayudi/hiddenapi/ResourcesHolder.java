@@ -359,14 +359,6 @@ public class ResourcesHolder implements Parcelable {
         }
     }
 
-    private static String removePre(String key){
-        return key.substring(key.indexOf("_") + 1);
-    }
-
-    private static String getPre(String key){
-        return key.substring(0, key.indexOf("_"));
-    }
-
     @SuppressWarnings("unchecked")
     private ResourcesHolder(Parcel in) {
         mValues = (HashMap<String, Object>) in.readValue(HashMap.class.getClassLoader());
