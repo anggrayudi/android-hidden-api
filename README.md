@@ -35,15 +35,11 @@ import com.anggrayudi.hiddenapi.r.Rc;
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-24/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 24 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-25/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 25 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
-
-## Limitation
-
-Currently, Android Hidden API doesn't support for API 25. We are waiting someone to upload `framework.jar` from Android Nougat 7.1 physical device.
 
 ## License
 
