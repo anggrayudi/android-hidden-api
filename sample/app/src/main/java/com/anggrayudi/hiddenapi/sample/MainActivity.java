@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Editable editable;
 
         final ArrayList<Model> items = new ArrayList<>();
 
