@@ -24,12 +24,14 @@ import java.util.ArrayList;
  * Created by Anggrayudi on 11/03/2016.<p>
  * An example class for Hidden API.<p>
  * If you plan to use only Android internal resources rather than internal classes or methods,
- * just add <br><code>compile 'com.anggrayudi:android-hidden-api:0.0.6'</code><br> library
+ * just add <br><code>compile 'com.anggrayudi:android-hidden-api:0.0.7'</code><br> library
  * to your app's module without need to replace <code>android.jar</code>. This version does not use
  * Java reflection anymore, and certainly safe.
  * See the <a href="https://github.com/anggrayudi/android-hidden-api#usage">Usage</a>.
  */
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<Model> items = new ArrayList<>();
 
+        // formatShortElapsedTime method will show an error if you don't use custom android.jar
         items.add(new Model("Formatter.formatShortElapsedTime(this, 100000000)", Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 ? Formatter.formatShortElapsedTime(this, 100000000) : "",
                 "Accessing hidden method.\nThis method only available for API 21+. If you run it on a"+
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == items.size() - 1)
-                    parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW)
+                    getBaseContext().startActivity(new Intent(Intent.ACTION_VIEW)
                             .setData(Uri.parse("https://github.com/anggrayudi/android-hidden-api")));
             }
         });
@@ -90,19 +93,19 @@ public class MainActivity extends AppCompatActivity {
 
         // If you want to check whether EthernetManager exists without checking API level, you can call:
         boolean isClassExists = InternalAccessor.isClassExists("android.net.EthernetManager");
-        Log.d("---", "isClassExists = " + isClassExists);
+        Log.d(TAG, "isClassExists = " + isClassExists);
 
         // Check whether a method exists
         boolean isMethodExists = InternalAccessor.isMethodExists("android.content.Intent", "getExtra");
-        Log.d("---", "isMethodExists = "+ isMethodExists);
+        Log.d(TAG, "isMethodExists = "+ isMethodExists);
 
         try {
             // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class.
-            Log.d("---", "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId(
+            Log.d(TAG, "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId(
                     InternalAccessor.INTERPOLATOR, "accelerate_cubic"));
 
-            Log.d("---", "plurals.duration_hours = "+ InternalAccessor.getResourceId(InternalAccessor.PLURALS, Rc.plurals.duration_hours));
-            Log.d("---", "transition.no_transition = "+ InternalAccessor.getResourceId(InternalAccessor.TRANSITION, "no_transition"));
+            Log.d(TAG, "plurals.duration_hours = "+ InternalAccessor.getResourceId(InternalAccessor.PLURALS, Rc.plurals.duration_hours));
+            Log.d(TAG, "transition.no_transition = "+ InternalAccessor.getResourceId(InternalAccessor.TRANSITION, "no_transition"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

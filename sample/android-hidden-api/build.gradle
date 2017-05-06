@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 group = 'com.anggrayudi'
-version = '0.0.6'
+version = '0.0.7'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 9

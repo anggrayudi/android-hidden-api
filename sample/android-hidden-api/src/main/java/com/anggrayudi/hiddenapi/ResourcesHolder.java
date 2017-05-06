@@ -17,13 +17,13 @@ import java.util.TreeMap;
 /**
  * Created by Anggrayudi on 11/03/2016.<p>
  * Since version 0.0.5 the uses of this class is diverted. You don't need to avoid Java reflection by storing
- * the internal resources you just retrieved and send them via Broadcast, because this version
+ * the internal resources you just retrieved to {@link ResourcesHolder} and send them via Broadcast, because this version
  * does not use Java reflection anymore. Instead, you can use this class to store any objects you
  * might need in other classes (like passing objects from activity to service) and send them via Broadcast.
  * <hr>
  * <h2>Obsolete documentation (v0.0.4 and lower)</h2>
- * A class that holds internal resources which is retrieved by {@link InternalAccessor}.
- * We need to hold the resources we just retrieved, because of <code>InternalAccessor</code> uses reflection,
+ * A class that holds internal resources which are retrieved by {@link InternalAccessor}.
+ * We need to hold the resources we just retrieved, because <code>InternalAccessor</code> uses reflection,
  * and Java reflection may slow down user's machine performance. Using reflection every time you reflect the
  * same value is not a good practice. So, use this class instead.
  * <p>Also, you can use this class to holds non-internal resources, according to your needs.
@@ -108,7 +108,7 @@ public class ResourcesHolder implements Parcelable {
 
     /**
      * An additional method to holds an <code>Object</code>, for non-primitive data types. For example
-     * <code>Drawable, XmlResourceParser, InputStream, </code> etc. To retrieve it back to the original object,
+     * <code>Drawable, XmlResourceParser, </code> etc. To retrieve it back to the original object,
      * cast it to its origin class. You also can store an array here. An example of using this method is:
      * <pre>
      *  List&lt;String&gt; strs = new ArrayList&lt;&gt;();
