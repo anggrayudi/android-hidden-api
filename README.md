@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.6'
+    compile 'com.anggrayudi:android-hidden-api:0.0.7'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
