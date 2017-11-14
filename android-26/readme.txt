@@ -2,7 +2,9 @@ framework.jar file was combined with android.jar from /<SDK location>/platforms/
 
 I'm not sure that it will work as intended. If it does not work, please report to us.
 
-Please note: This Jar is only the Android 8.0.0-r4 SDK and Framework (hidden API) collection, does not include such as Telephony, such as separate separate internal API.
+Please note: android.jar includes Framework hidden-apis, Telephony internal apis, and Common apis. A lot of system apis needs system permissions. 
+
+We also provide the Services jar, which contains the com.android.server. * Classes, which you can import via provided. However, these APIs can only be used in SystemServer, other applications throw NoClassDefFoundError and other exceptions.
 
 ========== BACKUP ==========
 
