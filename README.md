@@ -23,7 +23,7 @@ repositories {
 ````
 
 Here's some example of accessing internal resources:
-    
+​    
 ```java
 import com.anggrayudi.hiddenapi.r.Rc;
 
@@ -35,8 +35,8 @@ import com.anggrayudi.hiddenapi.r.Rc;
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-25/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 25 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-26/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 26 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
@@ -44,7 +44,7 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 ## License
 
     Copyright 2015-2017 Anggrayudi Hardiannicko A.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -58,5 +58,5 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
     limitations under the License.
 
 
-  [1]: https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction
-  [2]: https://github.com/anggrayudi/android-hidden-api/issues/9
+[1]: https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction
+[2]: https://github.com/anggrayudi/android-hidden-api/issues/9
