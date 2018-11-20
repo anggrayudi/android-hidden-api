@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = 'com.anggrayudi'
-version = '28'
+version = '28.0'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
