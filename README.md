@@ -43,7 +43,7 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## License
 
-    Copyright 2015-2017 Anggrayudi Hardiannicko A.
+    Copyright 2015-2018 Anggrayudi Hardiannicko A.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
