@@ -1,8 +1,6 @@
 package com.anggrayudi.hiddenapi.sample;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,9 +48,9 @@ class Adapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.list_layout, parent, false);
 
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.source = (TextView) convertView.findViewById(R.id.source);
-            viewHolder.result = (TextView) convertView.findViewById(R.id.result);
-            viewHolder.desc = (TextView) convertView.findViewById(R.id.desc);
+            viewHolder.source = convertView.findViewById(R.id.source);
+            viewHolder.result = convertView.findViewById(R.id.result);
+            viewHolder.desc = convertView.findViewById(R.id.desc);
             convertView.setTag(viewHolder);
         }
 

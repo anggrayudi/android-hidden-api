@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.anggrayudi.hiddenapi.InternalAccessor;
-import com.anggrayudi.hiddenapi.r.Rc;
+import com.anggrayudi.hiddenapi.Res;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -46,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<Model> items = new ArrayList<>();
 
-        // formatShortElapsedTime method will show an error if you don't use custom android.jar
+        /*
+        formatShortElapsedTime method will show error 'Cannot resolve symbol' if you don't use custom android.jar
+        Since custom android.jar v28, some methods are no longer accessible. I don't know why.
+        Android Studio will say, "formatShortElapsedTime has private access".
+        A workaround is you HAVE TO copy this static method into your own code.
+         */
         items.add(new Model("Formatter.formatShortElapsedTime(this, 100000000)", Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 ? Formatter.formatShortElapsedTime(this, 100000000) : "",
                 "Accessing hidden method.\nThis method only available for API 21+. If you run it on a"+
@@ -58,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
                         "your app picks wrong resource id. If you want to have the internal resources, " +
                         "copy them to your project or use InternalAccessor utility class. Below are the example."));
 
-        items.add(new Model("InternalAccessor.getString(\"accept\")", InternalAccessor.getString(Rc.string.accept),
+        items.add(new Model("InternalAccessor.getString(\"accept\")", InternalAccessor.getString(Res.string.accept),
                 "Accessing hidden String resource.\nBecause above method is not working, so we need to use "+
                         "InternalAccessor.getString() method."));
 
-        items.add(new Model("InternalAccessor.getDimension(\"status_bar_height\")", InternalAccessor.getDimension(Rc.dimen.status_bar_height)+"",
+        items.add(new Model("InternalAccessor.getDimension(\"status_bar_height\")", InternalAccessor.getDimension(Res.dimen.status_bar_height)+"",
                 "Accessing hidden dimension resource."));
 
         items.add(new Model("InternalAccessor.getColor(\"config_defaultNotificationColor\")", InternalAccessor.getColor("config_defaultNotificationColor")+"",
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new Model("Info", "", "For more information, download this app's source code on " +
                 "https://github.com/anggrayudi/android-hidden-api"));
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = findViewById(android.R.id.list);
         listView.setAdapter(new Adapter(items));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
              to search box on http://jcs.mobile-utopia.com/servlet/Source?type=s&q=android.net.EthernetManager%E2%80%8C%E2%80%8B
              And then, look at 'Category' column.
         */
+            // EthernetManager method will show error 'Cannot resolve symbol' if you don't use custom android.jar
             EthernetManager em;
         }
 
@@ -99,16 +105,10 @@ public class MainActivity extends AppCompatActivity {
         boolean isMethodExists = InternalAccessor.isMethodExists("android.content.Intent", "getExtra");
         Log.d(TAG, "isMethodExists = "+ isMethodExists);
 
-        try {
-            // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class.
-            Log.d(TAG, "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId(
-                    InternalAccessor.INTERPOLATOR, "accelerate_cubic"));
-
-            Log.d(TAG, "plurals.duration_hours = "+ InternalAccessor.getResourceId(InternalAccessor.PLURALS, Rc.plurals.duration_hours));
-            Log.d(TAG, "transition.no_transition = "+ InternalAccessor.getResourceId(InternalAccessor.TRANSITION, "no_transition"));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // This will retrieve resource id named accelerate_cubic in com.android.internal.R.interpolator class.
+        Log.d(TAG, "interpolator.accelerate_cubic = "+ InternalAccessor.getResourceId(InternalAccessor.INTERPOLATOR, "accelerate_cubic"));
+        Log.d(TAG, "plurals.duration_hours = "+ InternalAccessor.getResourceId(InternalAccessor.PLURALS, Res.plurals.last_num_days));
+        Log.d(TAG, "transition.no_transition = "+ InternalAccessor.getResourceId(InternalAccessor.TRANSITION, "no_transition"));
 
         /* DEPRECATED EXAMPLE OF InternalAccessor.Builder
         // Using InternalAccessor with other code styling

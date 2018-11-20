@@ -1,15 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    // set to 25, which is the latest Android Hidden API (recommended)
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.anggrayudi.hiddenapi.sample"
-        minSdkVersion 16
-        // set to 25, which is the latest Android Hidden API (recommended)
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -22,12 +20,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
-//    compile 'com.anggrayudi:android-hidden-api:0.0.7'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+//    implementation 'com.anggrayudi:android-hidden-api:0.0.7'
 
-    // If you want to modify this library's source code, compile to android-hidden-api module.
-    compile project(':android-hidden-api')
+    // If you want to modify this library's source code, set implementation to android-hidden-api module.
+    implementation project(':android-hidden-api')
 }
 
 repositories {

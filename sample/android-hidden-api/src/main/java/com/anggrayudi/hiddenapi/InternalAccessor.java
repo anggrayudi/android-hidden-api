@@ -7,14 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
-import com.anggrayudi.hiddenapi.r.versions.R_10;
-import com.anggrayudi.hiddenapi.r.versions.R_16;
-import com.anggrayudi.hiddenapi.r.versions.R_17;
-import com.anggrayudi.hiddenapi.r.versions.R_21;
-import com.anggrayudi.hiddenapi.r.versions.R_22;
-import com.anggrayudi.hiddenapi.r.versions.R_23;
-import com.anggrayudi.hiddenapi.r.versions.R_24;
-
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
@@ -22,17 +14,6 @@ import java.lang.reflect.Method;
  * Created by Anggrayudi on 11/03/2016.<p>
  * A utility class that provides access to all resources in <code>com.android.internal.R</code> class.
  * This class does not use Java reflection anymore, and certainly safe.
- *
- *     You can find which resources are available for current API level. See:
- *     <ul>
- *         <li>{@link R_10} - for API 10</li>
- *         <li>{@link R_16} - for API 16</li>
- *         <li>{@link R_17} - for API 17</li>
- *         <li>{@link R_21} - for API 21</li>
- *         <li>{@link R_22} - for API 22</li>
- *         <li>{@link R_23} - for API 23</li>
- *         <li>{@link R_24} - for API 24</li>
- *     </ul>
  */
 @SuppressWarnings({"TryWithIdenticalCatches", "EmptyCatchBlock"})
 public final class InternalAccessor {
@@ -40,7 +21,6 @@ public final class InternalAccessor {
     private InternalAccessor(){}
 
     /*
-
     // These are primitive classes which are available since API 7
     private static final Class<?> anim          = com.android.internal.R.anim.class;
     private static final Class<?> array         = com.android.internal.R.array.class;
@@ -65,7 +45,6 @@ public final class InternalAccessor {
     private static final Class<?> menu          = com.android.internal.R.menu.class;
     private static final Class<?> mipmap        = com.android.internal.R.mipmap.class;
     private static final Class<?> transition    = com.android.internal.R.transition.class;
-
     */
 
     public static final String ANIM = "anim";
@@ -98,33 +77,7 @@ public final class InternalAccessor {
      * @return internal resource id in integer, for example: <code>com.android.internal.R.xml.audio_assets</code>
      * returns <code>17891329</code> in integer.
      */
-    public static int getResourceId(@NonNull String clas, @NonNull String resName) throws ClassNotFoundException {
-        switch (clas) {
-            case FRACTION:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                    throw new ClassNotFoundException("Class com.android.internal.R.fraction only available for API 11 and higher.");
-                break;
-
-            case INTERPOLATOR:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                    throw new ClassNotFoundException("Class com.android.internal.R.interpolator only available for API 21 and higher.");
-                break;
-
-            case MENU:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                    throw new ClassNotFoundException("Class com.android.internal.R.menu only available for API 11 and higher.");
-                break;
-
-            case MIPMAP:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                    throw new ClassNotFoundException("Class com.android.internal.R.mipmap only available for API 11 and higher.");
-                break;
-
-            case TRANSITION:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                    throw new ClassNotFoundException("Class com.android.internal.R.transition only available for API 21 and higher.");
-                break;
-        }
+    public static int getResourceId(@NonNull String clas, @NonNull String resName) {
         int id = Resources.getSystem().getIdentifier(resName, clas, "android");
         if (id == 0)
             throw new Resources.NotFoundException("Cannot find '"+clas+"' for '"+resName+
@@ -138,9 +91,7 @@ public final class InternalAccessor {
      * @return internal <code>XmlResourceParser</code> animation
      */
     public static XmlResourceParser getAnimation(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getAnimation(getResourceId(ANIM, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getAnimation(getResourceId(ANIM, resName));
     }
 
     /**
@@ -148,9 +99,7 @@ public final class InternalAccessor {
      * @return internal <code>boolean</code>
      */
     public static boolean getBoolean(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getBoolean(getResourceId(BOOL, resName));
-        } catch (ClassNotFoundException e) {return false;}
+        return Resources.getSystem().getBoolean(getResourceId(BOOL, resName));
     }
 
     /**
@@ -159,9 +108,7 @@ public final class InternalAccessor {
      */
     @SuppressWarnings("deprecation")
     public static int getColor(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getColor(getResourceId(COLOR, resName));
-        } catch (ClassNotFoundException e) {return 0;}
+        return Resources.getSystem().getColor(getResourceId(COLOR, resName));
     }
 
     /**
@@ -169,9 +116,7 @@ public final class InternalAccessor {
      * @return internal dimension
      */
     public static float getDimension(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getDimension(getResourceId(DIMEN, resName));
-        } catch (ClassNotFoundException e) {return 0;}
+        return Resources.getSystem().getDimension(getResourceId(DIMEN, resName));
     }
 
     /**
@@ -180,9 +125,7 @@ public final class InternalAccessor {
      */
     @SuppressWarnings("deprecation")
     public static Drawable getDrawable(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getDrawable(getResourceId(DRAWABLE, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getDrawable(getResourceId(DRAWABLE, resName));
     }
 
     /**
@@ -191,9 +134,7 @@ public final class InternalAccessor {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Drawable getDrawable(@NonNull String resName, Resources.Theme theme) {
-        try {
-            return Resources.getSystem().getDrawable(getResourceId(DRAWABLE, resName), theme);
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getDrawable(getResourceId(DRAWABLE, resName), theme);
     }
 
     /**
@@ -202,9 +143,7 @@ public final class InternalAccessor {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static float getFraction(@NonNull String resName, int base, int pbase) {
-        try {
-            return Resources.getSystem().getFraction(getResourceId(FRACTION, resName), base, pbase);
-        } catch (ClassNotFoundException e) {return 0;}
+        return Resources.getSystem().getFraction(getResourceId(FRACTION, resName), base, pbase);
     }
 
     /**
@@ -212,9 +151,7 @@ public final class InternalAccessor {
      * @return internal <code>Integer</code>
      */
     public static int getInteger(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getInteger(getResourceId(INTEGER, resName));
-        } catch (ClassNotFoundException e) {return 0;}
+        return Resources.getSystem().getInteger(getResourceId(INTEGER, resName));
     }
 
     /**
@@ -222,9 +159,7 @@ public final class InternalAccessor {
      * @return internal <code>XmlResourceParser</code> layout
      */
     public static XmlResourceParser getLayout(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getLayout(getResourceId(LAYOUT, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getLayout(getResourceId(LAYOUT, resName));
     }
 
     /**
@@ -233,9 +168,7 @@ public final class InternalAccessor {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static XmlResourceParser getMenu(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getLayout(getResourceId(MENU, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getLayout(getResourceId(MENU, resName));
     }
 
     /**
@@ -244,9 +177,7 @@ public final class InternalAccessor {
      */
     @SuppressWarnings("deprecation")
     public static Drawable getMipmap(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getDrawable(getResourceId(MIPMAP, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getDrawable(getResourceId(MIPMAP, resName));
     }
 
     /**
@@ -255,9 +186,7 @@ public final class InternalAccessor {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Drawable getMipmap(@NonNull String resName, Resources.Theme theme) {
-        try {
-            return Resources.getSystem().getDrawable(getResourceId(MIPMAP, resName), theme);
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getDrawable(getResourceId(MIPMAP, resName), theme);
     }
 
     /**
@@ -265,9 +194,7 @@ public final class InternalAccessor {
      * @return internal <code>InputStream</code> raw
      */
     public static InputStream getRaw(@NonNull String resName) {
-        try {
-            return Resources.getSystem().openRawResource(getResourceId(RAW, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().openRawResource(getResourceId(RAW, resName));
     }
 
     /**
@@ -275,9 +202,7 @@ public final class InternalAccessor {
      * @return internal <code>Integer</code> array
      */
     public static int[] getIntArray(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getIntArray(getResourceId(ARRAY, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getIntArray(getResourceId(ARRAY, resName));
     }
 
     /**
@@ -286,9 +211,7 @@ public final class InternalAccessor {
      * @return internal <code>String</code> array
      */
     public static String[] getStringArray(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getStringArray(getResourceId(ARRAY, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getStringArray(getResourceId(ARRAY, resName));
     }
 
     /**
@@ -297,9 +220,7 @@ public final class InternalAccessor {
      * @return internal <code>String</code>
      */
     public static String getString(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getString(getResourceId(STRING, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getString(getResourceId(STRING, resName));
     }
 
     /**
@@ -307,9 +228,7 @@ public final class InternalAccessor {
      * @return internal <code>XmlResourceParser</code> XML
      */
     public static XmlResourceParser getXml(@NonNull String resName) {
-        try {
-            return Resources.getSystem().getXml(getResourceId(XML, resName));
-        } catch (ClassNotFoundException e) {return null;}
+        return Resources.getSystem().getXml(getResourceId(XML, resName));
     }
 
     /**
