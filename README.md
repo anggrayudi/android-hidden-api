@@ -1,4 +1,4 @@
-# Android Hidden API
+# Android Hidden API [ ![Download](https://api.bintray.com/packages/anggrayudi/maven/android-hidden-api/images/download.svg)](https://bintray.com/anggrayudi/maven/android-hidden-api/_latestVersion)
 **Android Hidden API** is a modified jar file which combines the `android.jar` from the Android SDK with the `framework.jar` from a real device. This jar enables to use Android's internal/hidden APIs in development.
 
 **What is Android internal and hidden APIs?**
@@ -13,7 +13,7 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:0.0.7'
+    compile 'com.anggrayudi:android-hidden-api:28.0'
 }
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
@@ -25,18 +25,18 @@ repositories {
 Here's some example of accessing internal resources:
 ​    
 ```java
-import com.anggrayudi.hiddenapi.r.Rc;
+import com.anggrayudi.hiddenapi.Res;
 
-    String accept = InternalAccessor.getString(Rc.string.accept);
-    float sbar_height = InternalAccessor.getDimension(Rc.dimen.status_bar_height);
+    String accept = InternalAccessor.getString(Res.string.accept);
+    float sbar_height = InternalAccessor.getDimension(Res.dimen.status_bar_height);
     int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 ```
 
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-26/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 26 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-28/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 28 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
