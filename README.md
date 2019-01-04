@@ -22,8 +22,6 @@ If you encounter error `Failed to resolve com.anggrayudi:android-hidden-api:xx`,
 ````gradle
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
-    // Or, you can use jCenter instead
-    jcenter()
 }
 ````
 
