@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = 'com.anggrayudi'
-version = '28.0'
+version = '28.1'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -26,8 +26,7 @@ android {
 }
 
 dependencies {
-    api "com.android.support:support-annotations:$supportVersion"
-    api "com.android.support:support-v4:$supportVersion"
+    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
 }
 
 def modifiedJar = project.rootProject.file('../'+ android.compileSdkVersion +'/android.jar')
@@ -47,6 +46,7 @@ ext {
     PUBLISH_GROUP_ID = group
     PUBLISH_ARTIFACT_ID = 'android-hidden-api'
     PUBLISH_VERSION = version
+    packagingMode = 'aar'
     siteUrl = 'https://github.com/anggrayudi/android-hidden-api'
     gitUrl = 'https://github.com/anggrayudi/android-hidden-api.git'
     libsDesc = 'An utility library that provides access to Android internal resources (com.android.internal.R).'

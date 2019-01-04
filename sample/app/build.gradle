@@ -21,7 +21,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
 //    implementation 'com.anggrayudi:android-hidden-api:0.0.7'
 
     // If you want to modify this library's source code, set implementation to android-hidden-api module.

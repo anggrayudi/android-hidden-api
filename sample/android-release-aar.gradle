@@ -1,65 +1,125 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-def pub_groupId = project.PUBLISH_GROUP_ID
 def pub_artifactId = project.PUBLISH_ARTIFACT_ID
-def pub_versionName = project.PUBLISH_VERSION
 def siteUrl = project.siteUrl
 def gitUrl = project.gitUrl
+def pkgOpts = project.packagingMode
 def libsDesc = project.libsDesc
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.getDestinationDir()
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-
-                name pub_artifactId
-                description libsDesc
-                url siteUrl
-
-//                licenses {
-//                    license {
-//                        name 'The Apache Software License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-                developers {
-                    developer {
-                        id 'anggrayudi'
-                        name 'Anggrayudi H'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
+if (project.getPlugins().hasPlugin('com.android.application') ||
+        project.getPlugins().hasPlugin('com.android.library')) {
+    install {
+        repositories.mavenInstaller {
+            // This generates POM.xml with proper parameters
+            pom {
+                project {
+                    packaging pkgOpts
+                    name pub_artifactId
+                    description libsDesc
                     url siteUrl
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'https://github.com/anggrayudi/android-hidden-api/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'anggrayudi'
+                            name 'Anggrayudi H'
+                            organization "Sonatype"
+                            organizationUrl 'http://www.sonatype.com'
+                        }
+                    }
+                    scm {
+                        connection "scm:git:git://github.com/anggrayudi/android-hidden-api.git"
+                        developerConnection "scm:git:ssh://github.com:anggrayudi/android-hidden-api.git"
+                        url "https://github.com/anggrayudi/android-hidden-api"
+                    }
                 }
             }
         }
+    }
+
+    task androidJavadocs(type: Javadoc) {
+        failOnError false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+} else {
+    install {
+        repositories.mavenInstaller {
+            // This generates POM.xml with proper parameters
+            pom {
+                project {
+                    packaging pkgOpts
+                    name pub_artifactId
+                    description libsDesc
+                    url siteUrl
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'https://github.com/anggrayudi/android-hidden-api/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'anggrayudi'
+                            name 'Anggrayudi H'
+                            organization "Sonatype"
+                            organizationUrl 'http://www.sonatype.com'
+                        }
+                    }
+                    scm {
+                        connection "scm:git:git://github.com/anggrayudi/android-hidden-api.git"
+                        developerConnection "scm:git:ssh://github.com:anggrayudi/android-hidden-api.git"
+                        url "https://github.com/anggrayudi/android-hidden-api"
+                    }
+                }
+            }
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn:classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn:javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+artifacts {
+    if (project.getPlugins().hasPlugin('com.android.application') ||
+            project.getPlugins().hasPlugin('com.android.library')) {
+        archives androidSourcesJar
+        archives androidJavadocsJar
+    } else {
+        archives sourcesJar
+        archives javadocJar
     }
 }
 

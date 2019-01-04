@@ -5,10 +5,11 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Anggrayudi on 11/03/2016.<p>
