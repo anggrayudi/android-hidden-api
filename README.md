@@ -13,8 +13,13 @@ do:
 
 ````gradle
 dependencies {
-    compile 'com.anggrayudi:android-hidden-api:28.0'
+    implementation 'com.anggrayudi:android-hidden-api:28.1'
 }
+````
+
+If you encounter error `Failed to resolve com.anggrayudi:android-hidden-api:xx`, then add the following config:
+
+````gradle
 repositories {
     maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
     // Or, you can use jCenter instead
@@ -43,7 +48,7 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## License
 
-    Copyright 2015-2018 Anggrayudi Hardiannicko A.
+    Copyright 2015-2019 Anggrayudi Hardiannicko A.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
