@@ -17,7 +17,7 @@ dependencies {
 }
 ````
 
-If you encounter error `Failed to resolve com.anggrayudi:android-hidden-api:xx`, then add the following config:
+**Note:** If you encounter error `Failed to resolve com.anggrayudi:android-hidden-api:x.x`, then add the following config:
 
 ````gradle
 repositories {
