@@ -1,13 +1,13 @@
-# Android Hidden API [ ![Download](https://api.bintray.com/packages/anggrayudi/maven/android-hidden-api/images/download.svg)](https://bintray.com/anggrayudi/maven/android-hidden-api/_latestVersion)
-**Android Hidden API** is a modified jar file which combines the `android.jar` from the Android SDK with the `framework.jar` from a real device. This jar enables to use Android's internal/hidden APIs in development.
+# Android Hidden APIs
 
-**What is Android internal and hidden APIs?**
-The internal API is located in the `com.android.internal` package which is available in the `framework.jar` file from a real Android device, while the hidden API is located in the `android.jar` file with *@hide* javadoc attribute. Although the classes & methods are `public` you cannot access it directly. There are pretty methods and resources you can use from this package. I will assume this is one API and I will refer to it as to hidden API. Learn more about hidden API [here][1].
+**Android Hidden APIs** are classes, methods and resources that Google hides from you because of stability reason. These features are hidden because they may be changed on next API version.
 
-**What's the advantage?**
-You don't need to create new classes, constants, methods or resources when you want to use the similar function in your project. For example, if you want to create a new `String` resource that contains the 'accept' word. Then you want to create a new translation to another language, e.g. Arabic, Indonesian, even with all languages in this world. This is too exhausting and a waste of time. Why don't you use `com.android.internal.R.string.accept` which is retrieved via `InternalAccessor.getString("accept")`?
+The internal APIs are located in package `com.android.internal` and available in the `framework.jar`, while the hidden APIs are located in the `android.jar` file with `@hide` javadoc attribute. Now you know the difference. But I will refer to both as hidden APIs.
 
-## Usage
+This repo contains custom `android.jar` which you can use to develop your app. However, if you urgently need to create your own `android.jar`, I also share you the Krabby Patty secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@hardiannicko/create-your-own-android-hidden-apis-fa3cca02d345).
+
+## Resources Helper [ ![Download](https://api.bintray.com/packages/anggrayudi/maven/android-hidden-api/images/download.svg)](https://bintray.com/anggrayudi/maven/android-hidden-api/_latestVersion)
+
 If you plan to use only Android internal resources rather than internal classes or methods,
 do:
 
@@ -38,15 +38,15 @@ import com.anggrayudi.hiddenapi.Res;
 If you also want to include the internal classes or methods, do the following:
 
 1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-28/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 28 (for example).
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-29/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 29 (for example).
 4. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## License
 
-    Copyright 2015-2019 Anggrayudi Hardiannicko A.
+    Copyright 2015-2020 Anggrayudi Hardiannicko A.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
