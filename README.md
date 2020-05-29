@@ -6,6 +6,15 @@ The internal APIs are located in package `com.android.internal` and available in
 
 This repo contains custom `android.jar` which you can use to develop your app. However, if you urgently need to create your own `android.jar`, I also share you the Krabby Patty secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@hardiannicko/create-your-own-android-hidden-apis-fa3cca02d345).
 
+## Use Custom `android.jar`
+
+1. Go to `<SDK location>/platforms/`.
+2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-29/android.jar`.
+3. Change `compileSdkVersion` and `targetSdkVersion` to 29 (for example).
+4. Finally, rebuild your project.
+
+Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
+
 ## Resources Helper [ ![Download](https://api.bintray.com/packages/anggrayudi/maven/android-hidden-api/images/download.svg)](https://bintray.com/anggrayudi/maven/android-hidden-api/_latestVersion)
 
 If you plan to use only Android internal resources rather than internal classes or methods,
@@ -34,15 +43,6 @@ import com.anggrayudi.hiddenapi.Res;
     float sbar_height = InternalAccessor.getDimension(Res.dimen.status_bar_height);
     int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 ```
-
-If you also want to include the internal classes or methods, do the following:
-
-1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-29/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 29 (for example).
-4. Finally, rebuild your project.
-
-Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
 ## License
 
