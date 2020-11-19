@@ -13,7 +13,7 @@ secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@ha
 
 ## Use Custom `android.jar`
 
-1. Download custom `android.jar` [here](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).
+1. Download custom `android.jar` from [Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).
 2. Go to `<SDK location>/platforms/`.
 3. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-30/android.jar`.
 4. Change `compileSdkVersion` and `targetSdkVersion` to 30 (for example).
@@ -39,6 +39,12 @@ String accept = InternalAccessor.getString("accept");
 float sbar_height = InternalAccessor.getDimension("status_bar_height");
 int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 ```
+
+## Contributing
+
+If you have your own custom `android.jar` and want to add it to
+[Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph),
+please create an issue. I will upload it.
 
 ## License
 
