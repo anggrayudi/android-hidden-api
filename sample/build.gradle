@@ -7,6 +7,15 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+            storeFile file("${System.properties['user.home']}${File.separator}.android${File.separator}debug.keystore")
+        }
+    }
+
     defaultConfig {
         applicationId "com.anggrayudi.hiddenapi.sample"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -14,11 +23,18 @@ android {
         versionCode 1
         versionName "$RESOURCES_HELPER_VERSION"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     flavorDimensions "librarySource"
@@ -46,8 +62,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.core:core-ktx:1.3.2"
     implementation 'com.jakewharton.timber:timber:4.7.1'
-
-//    implementation project(':resources-helper')
 
     // If you want to modify this library's source code, set build variant to 'local'.
     localImplementation project(':resources-helper')

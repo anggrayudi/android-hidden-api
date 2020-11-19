@@ -68,6 +68,3 @@ ext {
 }
 
 apply plugin: "com.vanniktech.maven.publish"
-repositories {
-    mavenCentral()
-}
