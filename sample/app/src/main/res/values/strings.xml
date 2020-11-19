@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Hidden API</string>
-
-    <string name="description">These are example from hidden API. To view the usage for
-        hidden class, see the code in MainActivity.</string>
-
-</resources>

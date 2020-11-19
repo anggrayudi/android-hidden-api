@@ -1,1 +1,38 @@
+/build
+/captures
+constants-converter readme.docx
+
+local.properties
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.war
+*.ear
+*.apk
+*.aab
+
+# generated files
+bin
+gen
+build
+captures
+.idea
+.gradle
+*.class
+*.dex
+*.iml
+.cxx
 .DS_Store
+.navigation
+
+#NDK
+obj/
+.externalNativeBuild
+
+# Windows thumbnail db
+Thumbs.db
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*

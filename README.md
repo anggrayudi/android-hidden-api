@@ -1,47 +1,43 @@
 # Android Hidden APIs
 
-**Android Hidden APIs** are classes, methods and resources that Google hides from you because of stability reason. These features are hidden because they may be changed on next API version.
+**Android Hidden APIs** are classes, methods and resources that Google hides from you because of stability reason.
+These features are hidden because they may be changed on next API version.
 
-The internal APIs are located in package `com.android.internal` and available in the `framework.jar`, while the hidden APIs are located in the `android.jar` file with `@hide` javadoc attribute. Now you know the difference. But I will refer to both as hidden APIs.
+The internal APIs are located in package `com.android.internal` and available in the `framework.jar`,
+while the hidden APIs are located in the `android.jar` file with `@hide` javadoc attribute.
+Now you know the difference. But I will refer to both as hidden APIs.
 
-This repo contains custom `android.jar` which you can use to develop your app. However, if you urgently need to create your own `android.jar`, I also share you the Krabby Patty secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@hardiannicko/create-your-own-android-hidden-apis-fa3cca02d345).
+This repo contains custom `android.jar` which you can use to develop your app.
+However, if you urgently need to create your own `android.jar`, I also share you the Krabby Patty
+secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@hardiannicko/create-your-own-android-hidden-apis-fa3cca02d345).
 
 ## Use Custom `android.jar`
 
-1. Go to `<SDK location>/platforms/`.
-2. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-29/android.jar`.
-3. Change `compileSdkVersion` and `targetSdkVersion` to 29 (for example).
-4. Finally, rebuild your project.
+1. Download custom `android.jar` [here](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).
+2. Go to `<SDK location>/platforms/`.
+3. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-30/android.jar`.
+4. Change `compileSdkVersion` and `targetSdkVersion` to 30 (for example).
+5. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 
-## Resources Helper [ ![Download](https://api.bintray.com/packages/anggrayudi/maven/android-hidden-api/images/download.svg)](https://bintray.com/anggrayudi/maven/android-hidden-api/_latestVersion)
+## Resources Helper
+![Maven Central](https://img.shields.io/maven-central/v/com.anggrayudi/android-hidden-api.svg)
 
-If you plan to use only Android internal resources rather than internal classes or methods,
-do:
+If you plan to use only Android internal resources rather than internal classes or methods, do:
 
 ````gradle
 dependencies {
-    implementation 'com.anggrayudi:android-hidden-api:28.1'
-}
-````
-
-**Note:** If you encounter error `Failed to resolve com.anggrayudi:android-hidden-api:x.x`, then add the following config:
-
-````gradle
-repositories {
-    maven { url 'https://dl.bintray.com/anggrayudi/maven/' }
+    implementation 'com.anggrayudi:android-hidden-api:30.0'
 }
 ````
 
 Here's some example of accessing internal resources:
-​    
-```java
-import com.anggrayudi.hiddenapi.Res;
 
-    String accept = InternalAccessor.getString(Res.string.accept);
-    float sbar_height = InternalAccessor.getDimension(Res.dimen.status_bar_height);
-    int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
+```java
+String accept = InternalAccessor.getString("accept");
+float sbar_height = InternalAccessor.getDimension("status_bar_height");
+int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 ```
 
 ## License
