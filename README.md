@@ -16,7 +16,7 @@ secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@ha
 1. Download custom `android.jar` from [Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).
 2. Go to `<SDK location>/platforms/`.
 3. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-30/android.jar`.
-4. Change `compileSdkVersion` and `targetSdkVersion` to 30 (for example).
+4. Change `compileSdkVersion` and `targetSdkVersion` to 35 (for example).
 5. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
@@ -28,9 +28,25 @@ If you plan to use only Android internal resources rather than internal classes 
 
 ````gradle
 dependencies {
-    implementation 'com.anggrayudi:android-hidden-api:30.0'
+    implementation 'com.anggrayudi:android-hidden-api:X.Y'
 }
 ````
+
+Where `X.Y` is the library version: ![Maven Central](https://img.shields.io/maven-central/v/com.anggrayudi/android-hidden-api.svg)
+
+All versions can be found [here](https://oss.sonatype.org/#nexus-search;gav~com.anggrayudi~android-hidden-api~~~~kw,versionexpand).
+To use `SNAPSHOT` version, you need to add this URL to the root Gradle:
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // add this line
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
+}
+```
 
 Here's some example of accessing internal resources:
 
@@ -48,7 +64,7 @@ please create an issue. I will upload it.
 
 ## License
 
-    Copyright 2015-2020 Anggrayudi Hardiannicko A.
+    Copyright 2015-2025 Anggrayudi Hardiannico A.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

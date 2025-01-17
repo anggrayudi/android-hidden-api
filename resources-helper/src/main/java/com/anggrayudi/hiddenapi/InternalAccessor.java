@@ -1,7 +1,6 @@
 package com.anggrayudi.hiddenapi;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
@@ -164,7 +163,6 @@ public final class InternalAccessor {
      * @return internal <code>Drawable</code>
      */
     @SuppressLint("UseCompatLoadingForDrawables")
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Drawable getDrawable(@NonNull String resName, Resources.Theme theme) {
         return Resources.getSystem().getDrawable(getResourceId(DRAWABLE, resName), theme);
     }
@@ -174,7 +172,6 @@ public final class InternalAccessor {
      *
      * @return internal fractional unit
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static float getFraction(@NonNull String resName, int base, int pbase) {
         return Resources.getSystem().getFraction(getResourceId(FRACTION, resName), base, pbase);
     }
@@ -202,7 +199,6 @@ public final class InternalAccessor {
      *
      * @return internal <code>XmlResourceParser</code> menu
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static XmlResourceParser getMenu(@NonNull String resName) {
         return Resources.getSystem().getLayout(getResourceId(MENU, resName));
     }
@@ -223,7 +219,6 @@ public final class InternalAccessor {
      * @return internal <code>Drawable</code> mipmap
      */
     @SuppressLint("UseCompatLoadingForDrawables")
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Drawable getMipmap(@NonNull String resName, Resources.Theme theme) {
         return Resources.getSystem().getDrawable(getResourceId(MIPMAP, resName), theme);
     }
@@ -318,10 +313,9 @@ public final class InternalAccessor {
             Class<?> cls = Class.forName(className);
             cls.getMethod(methodName, parameterTypes);
             return true;
-        } catch (ClassNotFoundException e) {
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -425,7 +419,6 @@ public final class InternalAccessor {
         /**
          * Replacement for {@link InternalAccessor#getFraction(String, int, int)}
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public float getFraction(@NonNull String resName, int base, int pbase) {
             float fract = InternalAccessor.getFraction(resName, base, pbase);
             if (saveToResourcesHolder)
@@ -456,7 +449,6 @@ public final class InternalAccessor {
         /**
          * Replacement for {@link InternalAccessor#getMenu(String)}
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public XmlResourceParser getMenu(@NonNull String resName) {
             XmlResourceParser menu = InternalAccessor.getMenu(resName);
             if (saveToResourcesHolder)
@@ -467,7 +459,6 @@ public final class InternalAccessor {
         /**
          * Replacement for {@link InternalAccessor#getMipmap(String)}
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public Drawable getMipmap(@NonNull String resName) {
             Drawable mipmap = InternalAccessor.getMipmap(resName);
             if (saveToResourcesHolder)
