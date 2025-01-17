@@ -1,38 +1,92 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '2.0.21'
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:8.8.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.0"
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.22.0'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.8.20'
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
+
+    //Support @JvmDefault
+    tasks.withType(KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs = ['-Xjvm-default=all', '-opt-in=kotlin.RequiresOptIn']
+            jvmTarget = '1.8'
+        }
+    }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+subprojects {
+    if (name != 'sample') {
+        apply plugin: "com.vanniktech.maven.publish"
+
+        repositories {
+            maven {
+                url = version.toString().endsWith("SNAPSHOT")
+                        ? 'https://oss.sonatype.org/content/repositories/snapshots/'
+                        : 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            }
+        }
+    }
+
+    afterEvaluate {
+        android {
+            compileSdkVersion 35
+
+            defaultConfig {
+                minSdkVersion 21
+                targetSdkVersion 35
+                versionCode 1
+                versionName "$VERSION_NAME"
+                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                vectorDrawables.useSupportLibrary = true
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+
+            buildFeatures {
+                buildConfig true
+            }
+        }
+        configurations.configureEach {
+            resolutionStrategy {
+                // Force Kotlin to use current version
+                force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+                force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+                force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+                force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+                force "org.jetbrains.kotlin:kotlin-android-extensions-runtime:$kotlin_version"
+            }
+        }
+        // global dependencies for all modules
+        dependencies {
+            implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+            testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+        }
+    }
 }
 
-ext {
-    minSdkVersion = 14
-    targetSdkVersion = 30
-    compileSdkVersion = 30
-    buildToolsVersion = "30.0.2"
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
 }
