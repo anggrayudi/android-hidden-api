@@ -1,0 +1,49 @@
+name: Android CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches:
+      - 'master'
+      - 'release/**'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Generate keystore
+        run: ./.github/scripts/gen_keystore.sh
+
+      - name: Build with Gradle
+        if: ${{ github.repository_owner == 'anggrayudi' }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSS_SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSS_SONATYPE_NEXUS_PASSWORD }}
+        run: ./gradlew build test check
+
+      - name: Build with Gradle (default)
+        if: ${{ github.repository_owner != 'anggrayudi' }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: 'abc'
+          ORG_GRADLE_PROJECT_mavenCentralPassword: 'xyz'
+        run: ./gradlew build test check
+
+      - name: Upload snapshot archives
+        if: ${{ github.repository_owner == 'anggrayudi' }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSS_SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSS_SONATYPE_NEXUS_PASSWORD }}
+        run: ./.github/scripts/deploy_snapshot.sh
