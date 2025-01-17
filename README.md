@@ -28,9 +28,25 @@ If you plan to use only Android internal resources rather than internal classes 
 
 ````gradle
 dependencies {
-    implementation 'com.anggrayudi:android-hidden-api:35.0'
+    implementation 'com.anggrayudi:android-hidden-api:X.Y'
 }
 ````
+
+Where `X.Y` is the library version: ![Maven Central](https://img.shields.io/maven-central/v/com.anggrayudi/android-hidden-api.svg)
+
+All versions can be found [here](https://oss.sonatype.org/#nexus-search;gav~com.anggrayudi~android-hidden-api~~~~kw,versionexpand).
+To use `SNAPSHOT` version, you need to add this URL to the root Gradle:
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // add this line
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
+}
+```
 
 Here's some example of accessing internal resources:
 
