@@ -78,7 +78,7 @@ tasks.register('clean', Delete) {
 //   ./gradlew restoreHiddenJar -Papi=37
 //
 // Value props: -Papi -Pserial -Pavd -Poutput -PsdkDir -PdexTools
-// Flag props:  -PonlyFramework -Pinstall -Pkeep
+// Flag props:  -PonlyFramework -Pinstall -Pkeep -PkeepBodies
 // Cross-platform: on Windows it runs the native PowerShell port (cli/hiddenjar.ps1),
 // on macOS/Linux the bash script (cli/hiddenjar). No Git Bash needed on Windows.
 // ---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ ext.hiddenJarInvoke = { String sub, List extra ->
 ext.hiddenJarArgs = { ->
     def valueFlags = [api: '--api', serial: '--serial', avd: '--avd',
                       output: '--output', sdkDir: '--sdk-dir', dexTools: '--dex-tools']
-    def boolFlags = [onlyFramework: '--only-framework', install: '--install', keep: '--keep']
+    def boolFlags = [onlyFramework: '--only-framework', install: '--install', keep: '--keep', keepBodies: '--keep-bodies']
     def args = []
     valueFlags.each { prop, flag ->
         if (project.hasProperty(prop)) args += [flag, project.property(prop).toString()]

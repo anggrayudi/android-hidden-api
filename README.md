@@ -26,7 +26,9 @@ Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
 Don't want to wait for a prebuilt jar? This repo ships **`hiddenjar`**, a CLI that builds a custom
 `android.jar` straight from a **running Android emulator or device** — no rooting, no manual DEX
 juggling. It pulls the framework jars over `adb`, converts DEX to `.class`, merges them into the SDK
-`android.jar`, and **verifies the result actually compiles a hidden API** before finishing.
+`android.jar`, strips the merged classes to signature-only stubs (so Gradle's `lint`/unit-test
+mockable-jar step accepts the jar — see issue #46), and **verifies the result actually compiles a
+hidden API** before finishing.
 
 Unlike the classic recipe, it merges the **whole `$BOOTCLASSPATH`** (including mainline/APEX modules
 such as Wi‑Fi, Bluetooth, connectivity, media), so hidden APIs that no longer live in `framework.jar`
@@ -73,7 +75,7 @@ powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 restore --api 37
 ```
 
 Common flags (both scripts): `--serial <id>`, `--avd <name>`, `--api <n>`, `--sdk-dir <path>`,
-`--output <file>`, `--install`, `--only-framework`, `--dex-tools <dir>`. Run the script with `help`
+`--output <file>`, `--install`, `--only-framework`, `--keep-bodies`, `--dex-tools <dir>`. Run the script with `help`
 for the full list.
 
 ### Option B — the Gradle wrapper (macOS/Linux/Windows)

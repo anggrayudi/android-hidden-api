@@ -173,8 +173,14 @@ Then set `compileSdk`/`targetSdk` to that level and rebuild. To roll back, resto
   at *runtime* for non-system apps; expect `NoSuchMethodError` / `ClassNotFoundException` unless your
   app is a platform/system app or the API is on the greylist. The custom jar changes nothing at runtime.
 - **Unofficial and version-fragile.** Hidden signatures change without notice. Rebuild per API level.
-- **Bulkier jar.** `dex2jar` emits real bytecode (bodies), so the merged jar is larger (~65 MB vs.
-  ~43 MB). `javac` only reads signatures, so this is harmless; strip to signature-only if you care.
+- **Signature-only by default (so Gradle's mockable-jar step works).** `dex2jar` emits real method
+  bodies, but those bodies carry `try/catch` blocks, and Gradle's `MockableJarGenerator` (used by
+  `lint` and unit tests) crashes on them — `Cannot read field "outgoingEdges" because
+  "handlerRangeBlock" is null` (issue #46). The CLI therefore strips every method to a
+  `throw new RuntimeException("Stub!")` stub — exactly the shape the SDK's own `android.jar` ships —
+  so the transform accepts it. `javac` only reads signatures, so hidden/internal APIs still compile,
+  and the jar is smaller (~50 MB vs. ~65 MB). Pass `--keep-bodies` to keep the real bodies (useful
+  for browsing decompiled sources), but then the mockable-jar transform will fail on that jar.
 - **Stripped-jar images.** If you're stuck on an older image where the jars are shells, the classes
   live in the boot image (`boot-framework.vdex`/`.oat`). Extracting them (e.g. `vdexExtractor` →
   `baksmali`) is possible but fiddly and is **not** the recommended path — use an API ≥ 34 image.

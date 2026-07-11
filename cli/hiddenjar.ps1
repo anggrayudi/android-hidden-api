@@ -25,13 +25,17 @@ $DexToolsUrl     = "https://github.com/ThexXTURBOXx/dex2jar/releases/download/$D
 $CacheDir        = Join-Path $HOME '.cache/hiddenjar'
 $MinJarBytes     = 1024
 
+# Directory of this script — used to locate the bundled Stubifier.java.
+$ScriptDir    = $PSScriptRoot
+$StubifierSrc = Join-Path $ScriptDir 'Stubifier.java'
+
 # Works on both Windows PowerShell 5.1 (no $IsWindows) and PowerShell 7+.
 $OnWindows = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
 
 # Options
 $OptSerial = $null; $OptAvd = $null; $OptApi = $null; $OptSdkDir = $null
 $OptOnlyFramework = $false; $OptOutput = $null; $OptInstall = $false
-$OptDexTools = $null; $OptWorkDir = $null; $OptKeep = $false
+$OptDexTools = $null; $OptWorkDir = $null; $OptKeep = $false; $OptKeepBodies = $false
 $D2J = $null; $Adb = $null
 
 # ----------------------------------------------------------------------------
@@ -248,6 +252,13 @@ function Invoke-Build {
     $metaInf = Join-Path $merged 'META-INF'
     if (Test-Path $metaInf) { Remove-Item -Recurse -Force $metaInf }
 
+    # Strip real method bodies to stubs (default) so Gradle's MockableJarTransform accepts the jar.
+    if ($OptKeepBodies) {
+        Write-Warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar"
+    } else {
+        Invoke-Stubify $merged $work $javac
+    }
+
     $output = $OptOutput
     if (-not $output) { $output = Join-Path (Get-Location).Path "android-$api-custom.jar" }
     $output = [IO.Path]::GetFullPath($output)
@@ -267,6 +278,31 @@ function Invoke-Build {
     if ($workIsTemp -and -not $OptKeep) { Remove-Item -Recurse -Force $work }
     elseif ($OptKeep -or $OptWorkDir) { Write-Note "Work dir kept at: $work" }
     Write-Log "Done."
+}
+
+# Strip every .class under a directory to a signature-only stub, in place (see cli/Stubifier.java).
+#
+# hiddenjar overlays real dex2jar-decompiled framework bodies onto android.jar. Those bodies carry
+# try/catch blocks, and Gradle's MockableJarGenerator (lint + unit tests) crashes on them
+# (NPE "Cannot read field outgoingEdges ... handlerRangeBlock is null", issue #46). Reducing the
+# classes to stubs — the shape the SDK's own android.jar ships — makes the transform pass; javac
+# only reads signatures, so compilation of hidden/internal APIs is unaffected.
+function Invoke-Stubify {
+    param($dir, $work, $javac)
+    $lib  = Join-Path (Split-Path $script:D2J) 'lib'
+    $jars = @(Get-ChildItem -Path $lib -Recurse -Filter '*.jar' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
+    if ($jars.Count -eq 0) { Die "dex-tools lib (ASM) not found under $lib; cannot strip method bodies (pass --keep-bodies to skip)" }
+    if (-not (Test-Path $StubifierSrc)) { Die "Stubifier.java not found at $StubifierSrc — keep the cli/ directory intact, or pass --keep-bodies" }
+    $java = Resolve-Tool 'java'; if (-not $java) { Die "java not found (install a JDK)" }
+    $sep = [IO.Path]::PathSeparator
+    $cp  = ($jars -join $sep)
+    $stubout = Join-Path $work 'stubifier-out'
+    New-Item -ItemType Directory -Path $stubout -Force | Out-Null
+    Write-Log "Stripping method bodies to signature-only stubs (fixes Gradle MockableJarTransform) ..."
+    & $javac -cp $cp -d $stubout $StubifierSrc
+    if ($LASTEXITCODE -ne 0) { Die "failed to compile Stubifier.java" }
+    & $java -cp "$stubout$sep$cp" Stubifier $dir
+    if ($LASTEXITCODE -ne 0) { Die "stubify pass failed" }
 }
 
 function Test-Compile {
@@ -367,6 +403,9 @@ BUILD OPTIONS (same flags as the bash script):
   --dex-tools DIR      path to an unpacked dex-tools distribution (default: auto-download + cache)
   --work-dir DIR       scratch dir (default: temp; kept on failure)
   --keep               keep the work dir even on success
+  --keep-bodies        keep real dex2jar method bodies instead of stripping them to signature-only
+                       stubs. Bodies let you browse decompiled sources, but Gradle lint / unit tests
+                       (MockableJarTransform) then FAIL on the jar. Default: strip to stubs.
 "@ | Write-Host
 }
 
@@ -391,6 +430,7 @@ while ($i -lt $argv.Count) {
         '--all-bootclasspath'{ $OptOnlyFramework = $false; $i += 1; continue }
         '--install'          { $OptInstall = $true; $i += 1; continue }
         '--keep'             { $OptKeep = $true; $i += 1; continue }
+        '--keep-bodies'      { $OptKeepBodies = $true; $i += 1; continue }
         '-h'                 { $Command = 'help'; $i += 1; continue }
         '--help'             { $Command = 'help'; $i += 1; continue }
         default {

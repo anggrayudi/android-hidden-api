@@ -18,6 +18,10 @@ DEX_TOOLS_URL="https://github.com/ThexXTURBOXx/dex2jar/releases/download/${DEX_T
 CACHE_DIR="${HOME}/.cache/hiddenjar"
 MIN_JAR_BYTES=1024   # jars smaller than this are almost certainly stripped shells
 
+# Directory of this script — used to locate the bundled Stubifier.java.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STUBIFIER_SRC="${SCRIPT_DIR}/Stubifier.java"
+
 # Options (set by parse_args)
 OPT_SERIAL=""
 OPT_AVD=""
@@ -29,6 +33,7 @@ OPT_INSTALL="false"
 OPT_DEX_TOOLS=""
 OPT_WORK_DIR=""
 OPT_KEEP="false"
+OPT_KEEP_BODIES="false"
 
 ADB=""
 D2J=""
@@ -81,6 +86,9 @@ BUILD OPTIONS:
   --dex-tools DIR      path to an unpacked dex-tools distribution (default: auto-download + cache)
   --work-dir DIR       scratch dir (default: mktemp; kept on failure)
   --keep               keep the work dir even on success
+  --keep-bodies        keep real dex2jar method bodies instead of stripping them to signature-only
+                       stubs. Bodies let you browse decompiled sources, but Gradle lint / unit tests
+                       (MockableJarTransform) then FAIL on the jar. Default: strip to stubs.
 
 EXAMPLES:
   hiddenjar doctor
@@ -186,6 +194,27 @@ pick_serial() {
   else die "no adb device online — start an emulator or pass --avd NAME"; fi
 }
 
+# Strip every .class under a directory to a signature-only stub, in place.
+#
+# hiddenjar overlays real dex2jar-decompiled framework bodies onto android.jar. Those bodies carry
+# try/catch blocks, and Gradle's MockableJarGenerator (lint + unit tests) crashes on them
+# (NPE "Cannot read field outgoingEdges ... handlerRangeBlock is null", issue #46). Reducing the
+# classes to stubs — exactly the shape the SDK's own android.jar ships — makes the transform pass.
+# javac only reads signatures, so compilation of hidden/internal APIs is unaffected.
+stubify_dir() {
+  local dir="$1"
+  local lib cp stubout
+  lib="$(dirname "$D2J")/lib"
+  cp="$(find "$lib" -name '*.jar' 2>/dev/null | tr '\n' ':')"
+  [ -n "$cp" ] || die "dex-tools lib (ASM) not found under $lib; cannot strip method bodies (pass --keep-bodies to skip)"
+  [ -f "$STUBIFIER_SRC" ] || die "Stubifier.java not found at $STUBIFIER_SRC — keep the cli/ directory intact, or pass --keep-bodies"
+  stubout="${WORK_DIR}/stubifier-out"
+  mkdir -p "$stubout"
+  log "Stripping method bodies to signature-only stubs (fixes Gradle MockableJarTransform) ..."
+  javac -cp "$cp" -d "$stubout" "$STUBIFIER_SRC" || die "failed to compile Stubifier.java"
+  java -cp "${stubout}:${cp}" Stubifier "$dir" || die "stubify pass failed"
+}
+
 # ----------------------------------------------------------------------------
 # build
 # ----------------------------------------------------------------------------
@@ -272,6 +301,13 @@ EOF
     ( cd "$merged" && unzip -q -o "$cj" ) || warn "overlay had conflicts: $(basename "$cj")"
   done
   rm -rf "${merged}/META-INF"
+
+  # Strip real method bodies to stubs (default) so Gradle's MockableJarTransform accepts the jar.
+  if [ "$OPT_KEEP_BODIES" = "true" ]; then
+    warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar"
+  else
+    stubify_dir "$merged"
+  fi
 
   # Output path
   local output="${OPT_OUTPUT:-$(pwd)/android-${api}-custom.jar}"
@@ -385,6 +421,7 @@ parse_args() {
       --dex-tools) OPT_DEX_TOOLS="$2"; shift 2;;
       --work-dir) OPT_WORK_DIR="$2"; shift 2;;
       --keep) OPT_KEEP="true"; shift;;
+      --keep-bodies) OPT_KEEP_BODIES="true"; shift;;
       -h|--help) usage; exit 0;;
       *) die "unknown option: $1";;
     esac
