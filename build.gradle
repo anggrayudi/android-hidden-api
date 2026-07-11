@@ -1,88 +1,61 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-buildscript {
-    ext.kotlin_version = '2.0.21'
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.8.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.22.0'
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.8.20'
-    }
+plugins {
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.application) apply false
+    // Not applied anywhere (built-in Kotlin is used instead) - declaring it here
+    // is what pins the Kotlin compiler version that AGP's built-in Kotlin uses.
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.maven.publish) apply false
+    alias(libs.plugins.dokka) apply false
 }
 
 allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    }
-
-    //Support @JvmDefault
-    tasks.withType(KotlinCompile).configureEach {
-        kotlinOptions {
-            freeCompilerArgs = ['-Xjvm-default=all', '-opt-in=kotlin.RequiresOptIn']
-            jvmTarget = '1.8'
-        }
+        maven { url = "https://central.sonatype.com/repository/maven-snapshots/" }
     }
 }
 
 subprojects {
-    if (name != 'sample') {
-        apply plugin: "com.vanniktech.maven.publish"
+    // Configured immediately (not deferred to afterEvaluate) so AGP 9's variant/component
+    // computation - which the maven-publish plugin depends on - sees the final config in time.
+    ['com.android.library', 'com.android.application'].each { pluginId ->
+        plugins.withId(pluginId) {
+            android {
+                compileSdkVersion 37
 
-        repositories {
-            maven {
-                url = version.toString().endsWith("SNAPSHOT")
-                        ? 'https://oss.sonatype.org/content/repositories/snapshots/'
-                        : 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-            }
-        }
-    }
+                defaultConfig {
+                    minSdkVersion 23
+                    targetSdkVersion 37
+                    versionCode 1
+                    versionName "$VERSION_NAME"
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                    vectorDrawables.useSupportLibrary = true
+                }
 
-    afterEvaluate {
-        android {
-            compileSdkVersion 35
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
+                }
 
-            defaultConfig {
-                minSdkVersion 21
-                targetSdkVersion 35
-                versionCode 1
-                versionName "$VERSION_NAME"
-                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-                vectorDrawables.useSupportLibrary = true
+                buildFeatures {
+                    buildConfig = true
+                }
+
+                // Built-in Kotlin (AGP 9+) replaces the old 'kotlinOptions' DSL.
+                kotlin {
+                    compilerOptions {
+                        // Support @JvmDefault (old '-Xjvm-default=all' is now '-jvm-default=no-compatibility')
+                        freeCompilerArgs = ['-jvm-default=no-compatibility', '-opt-in=kotlin.RequiresOptIn']
+                    }
+                }
             }
 
-            compileOptions {
-                sourceCompatibility JavaVersion.VERSION_1_8
-                targetCompatibility JavaVersion.VERSION_1_8
+            dependencies {
+                implementation libs.kotlin.stdlib.jdk8
             }
-
-            buildFeatures {
-                buildConfig true
-            }
-        }
-        configurations.configureEach {
-            resolutionStrategy {
-                // Force Kotlin to use current version
-                force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-                force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-                force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-                force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
-                force "org.jetbrains.kotlin:kotlin-android-extensions-runtime:$kotlin_version"
-            }
-        }
-        // global dependencies for all modules
-        dependencies {
-            implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-            testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
         }
     }
 }

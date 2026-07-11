@@ -1,30 +1,30 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
+}
 
 group = 'com.anggrayudi'
-archivesBaseName = 'android-hidden-api'
 version = "$VERSION_NAME"
 
 android {
-    namespace 'com.anggrayudi.hiddenapi'
+    namespace = 'com.anggrayudi.hiddenapi'
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    // Testing
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    testImplementation libs.junit
+    testImplementation libs.kotlin.stdlib.jdk8
 
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.localbroadcastmanager
 }

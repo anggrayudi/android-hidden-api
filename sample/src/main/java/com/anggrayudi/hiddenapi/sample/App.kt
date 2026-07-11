@@ -1,6 +1,6 @@
 package com.anggrayudi.hiddenapi.sample
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import timber.log.Timber
 
 /**
@@ -8,7 +8,7 @@ import timber.log.Timber
  *
  * @author Anggrayudi Hardiannico A.
  */
-class App : MultiDexApplication() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
