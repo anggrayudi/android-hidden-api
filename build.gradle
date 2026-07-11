@@ -79,9 +79,20 @@ tasks.register('clean', Delete) {
 //
 // Value props: -Papi -Pserial -Pavd -Poutput -PsdkDir -PdexTools
 // Flag props:  -PonlyFramework -Pinstall -Pkeep
-// (On Windows, run under Git Bash/WSL — the wrapper invokes the bash script.)
+// Cross-platform: on Windows it runs the native PowerShell port (cli/hiddenjar.ps1),
+// on macOS/Linux the bash script (cli/hiddenjar). No Git Bash needed on Windows.
 // ---------------------------------------------------------------------------
-ext.hiddenJarScript = "${rootDir}/cli/hiddenjar"
+ext.hiddenJarBashScript = "${rootDir}/cli/hiddenjar"
+ext.hiddenJarPsScript   = "${rootDir}/cli/hiddenjar.ps1"
+
+// Windows has no bash → invoke the native PowerShell port; bash everywhere else.
+ext.hiddenJarInvoke = { String sub, List extra ->
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    if (isWindows) {
+        return ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', hiddenJarPsScript, sub] + extra
+    }
+    return ['bash', hiddenJarBashScript, sub] + extra
+}
 
 ext.hiddenJarArgs = { ->
     def valueFlags = [api: '--api', serial: '--serial', avd: '--avd',
@@ -100,13 +111,13 @@ ext.hiddenJarArgs = { ->
 tasks.register('buildHiddenJar', Exec) {
     group = 'hiddenjar'
     description = 'Build a custom android.jar with hidden APIs from an emulator/device (use -Papi=N).'
-    commandLine = ['bash', hiddenJarScript, 'build'] + hiddenJarArgs()
+    commandLine = hiddenJarInvoke('build', hiddenJarArgs())
 }
 
 tasks.register('hiddenJarDoctor', Exec) {
     group = 'hiddenjar'
     description = 'Check hiddenjar prerequisites (adb, JDK, dex-tools).'
-    commandLine = ['bash', hiddenJarScript, 'doctor']
+    commandLine = hiddenJarInvoke('doctor', [])
 }
 
 tasks.register('restoreHiddenJar', Exec) {
@@ -115,5 +126,5 @@ tasks.register('restoreHiddenJar', Exec) {
     def args = []
     if (project.hasProperty('api')) args += ['--api', project.property('api').toString()]
     if (project.hasProperty('sdkDir')) args += ['--sdk-dir', project.property('sdkDir').toString()]
-    commandLine = ['bash', hiddenJarScript, 'restore'] + args
+    commandLine = hiddenJarInvoke('restore', args)
 }

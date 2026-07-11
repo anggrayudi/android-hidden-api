@@ -34,12 +34,15 @@ are included too.
 
 ### Prerequisites
 
-- A JDK (`javac` + `jar`), `adb`, `unzip` (all standard with Android Studio).
+- A JDK (`javac` + `jar`) and `adb` — both standard with Android Studio. The macOS/Linux bash script
+  also needs `unzip`; the **Windows PowerShell script needs no `unzip`** (it uses the JDK `jar` tool).
 - A **running emulator at API ≥ 34** (recommended) or a device. Older emulator images may ship a
   stripped `framework.jar`; the CLI detects that and tells you to use a newer image.
 - `dex-tools` is downloaded and cached automatically on first run.
 
-### Option A — the `hiddenjar` script
+### Option A — the `hiddenjar` script (macOS/Linux & Windows)
+
+**macOS / Linux** — the bash script:
 
 ```bash
 # Check your environment (adb, JDK, dex-tools, connected devices)
@@ -58,11 +61,22 @@ are included too.
 ./cli/hiddenjar restore --api 37
 ```
 
-Common flags: `--serial <id>`, `--avd <name>`, `--api <n>`, `--sdk-dir <path>`,
-`--output <file>`, `--install`, `--only-framework`, `--dex-tools <dir>`. Run `./cli/hiddenjar help`
+**Windows** — the native PowerShell script (`cli\hiddenjar.ps1`, **no Git Bash / WSL required**):
+
+```powershell
+# Same commands & flags; runs on built-in Windows PowerShell or PowerShell 7+
+powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 doctor
+powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 build --api 37
+powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 build --only-framework
+powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 build --avd Pixel_10_API_37 --install
+powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 restore --api 37
+```
+
+Common flags (both scripts): `--serial <id>`, `--avd <name>`, `--api <n>`, `--sdk-dir <path>`,
+`--output <file>`, `--install`, `--only-framework`, `--dex-tools <dir>`. Run the script with `help`
 for the full list.
 
-### Option B — the Gradle wrapper
+### Option B — the Gradle wrapper (macOS/Linux/Windows)
 
 ```bash
 ./gradlew hiddenJarDoctor
@@ -73,7 +87,12 @@ for the full list.
 ```
 
 Value props: `-Papi -Pserial -Pavd -Poutput -PsdkDir -PdexTools`.
-Flag props: `-PonlyFramework -Pinstall -Pkeep`. (On Windows, run under Git Bash/WSL.)
+Flag props: `-PonlyFramework -Pinstall -Pkeep`.
+
+> **Windows:** everything works natively — no Git Bash or WSL. The Gradle wrapper (Option B) auto-runs
+> the PowerShell script on Windows and the bash script elsewhere, so `gradlew buildHiddenJar -Papi=37`
+> works from `cmd`/PowerShell. You only need a JDK and `adb`; set `ANDROID_HOME` if your SDK isn't at
+> the default `%LOCALAPPDATA%\Android\Sdk`.
 
 > **Note:** A custom jar only unblocks **compilation**. At runtime, Android 9+ (API 28+) still
 > enforces the non-SDK (hidden API) blocklist for non-system apps.

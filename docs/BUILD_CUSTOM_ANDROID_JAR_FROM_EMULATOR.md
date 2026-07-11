@@ -202,4 +202,6 @@ or when you want a reproducible internal build with no third-party binaries.
 - [Reginer/aosp-android-jar](https://github.com/Reginer/aosp-android-jar), [JetpackDuba/android-jar-with-hidden-api](https://github.com/JetpackDuba/android-jar-with-hidden-api) — prebuilt alternatives.
 
 > This repository ships a CLI, **`hiddenjar`**, that automates every step above (including the jar
-> validation and the mainline/APEX coverage). See `cli/hiddenjar` (run `./cli/hiddenjar help`).
+> validation and the mainline/APEX coverage). Use `cli/hiddenjar` on macOS/Linux or the native
+> `cli/hiddenjar.ps1` on Windows (no Git Bash needed); run either with `help`, or use the Gradle
+> wrapper `./gradlew buildHiddenJar -Papi=<level>`.
