@@ -13,13 +13,73 @@ secret recipe here: [Create Your Own Android Hidden APIs](https://medium.com/@ha
 
 ## Use Custom `android.jar`
 
-1. Download custom `android.jar` from [Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).
+1. ~~Download custom `android.jar` from [Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph).~~ **We no longer upload jars to Google Drive** — every developer can now generate one for any API level with the [`hiddenjar` CLI](#build-your-own-custom-androidjar-cli). Build it, then continue from step 2.
 2. Go to `<SDK location>/platforms/`.
 3. Copy, paste and replace the downloaded hidden API file into this directory, e.g. `android-30/android.jar`.
 4. Change `compileSdkVersion` and `targetSdkVersion` to 35 (for example).
 5. Finally, rebuild your project.
 
 Note: Higher `compileSdkVersion` and `targetSdkVersion` will be better.
+
+## Build Your Own Custom `android.jar` (CLI)
+
+Don't want to wait for a prebuilt jar? This repo ships **`hiddenjar`**, a CLI that builds a custom
+`android.jar` straight from a **running Android emulator or device** — no rooting, no manual DEX
+juggling. It pulls the framework jars over `adb`, converts DEX to `.class`, merges them into the SDK
+`android.jar`, and **verifies the result actually compiles a hidden API** before finishing.
+
+Unlike the classic recipe, it merges the **whole `$BOOTCLASSPATH`** (including mainline/APEX modules
+such as Wi‑Fi, Bluetooth, connectivity, media), so hidden APIs that no longer live in `framework.jar`
+are included too.
+
+### Prerequisites
+
+- A JDK (`javac` + `jar`), `adb`, `unzip` (all standard with Android Studio).
+- A **running emulator at API ≥ 34** (recommended) or a device. Older emulator images may ship a
+  stripped `framework.jar`; the CLI detects that and tells you to use a newer image.
+- `dex-tools` is downloaded and cached automatically on first run.
+
+### Option A — the `hiddenjar` script
+
+```bash
+# Check your environment (adb, JDK, dex-tools, connected devices)
+./cli/hiddenjar doctor
+
+# Build against a running emulator/device (auto-detected); full mainline coverage
+./cli/hiddenjar build --api 37
+
+# Faster, framework.jar only (fewer hidden APIs)
+./cli/hiddenjar build --only-framework
+
+# Boot an AVD first, build, and install into the SDK (backs up android.jar.orig)
+./cli/hiddenjar build --avd Pixel_10_API_37 --install
+
+# Roll back to the stock SDK jar
+./cli/hiddenjar restore --api 37
+```
+
+Common flags: `--serial <id>`, `--avd <name>`, `--api <n>`, `--sdk-dir <path>`,
+`--output <file>`, `--install`, `--only-framework`, `--dex-tools <dir>`. Run `./cli/hiddenjar help`
+for the full list.
+
+### Option B — the Gradle wrapper
+
+```bash
+./gradlew hiddenJarDoctor
+./gradlew buildHiddenJar -Papi=37                 # full build
+./gradlew buildHiddenJar -Papi=37 -Pinstall       # build + install into the SDK
+./gradlew buildHiddenJar -PonlyFramework          # framework.jar only
+./gradlew restoreHiddenJar -Papi=37               # roll back
+```
+
+Value props: `-Papi -Pserial -Pavd -Poutput -PsdkDir -PdexTools`.
+Flag props: `-PonlyFramework -Pinstall -Pkeep`. (On Windows, run under Git Bash/WSL.)
+
+> **Note:** A custom jar only unblocks **compilation**. At runtime, Android 9+ (API 28+) still
+> enforces the non-SDK (hidden API) blocklist for non-system apps.
+
+For the full method, findings, and design rationale, see
+[`docs/BUILD_CUSTOM_ANDROID_JAR_FROM_EMULATOR.md`](docs/BUILD_CUSTOM_ANDROID_JAR_FROM_EMULATOR.md).
 
 ## Resources Helper
 ![Maven Central](https://img.shields.io/maven-central/v/com.anggrayudi/android-hidden-api.svg)
@@ -58,13 +118,15 @@ int notif_color = InternalAccessor.getColor("config_defaultNotificationColor");
 
 ## Contributing
 
-If you have your own custom `android.jar` and want to add it to
-[Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph),
-please create an issue. I will upload it.
+~~If you have your own custom `android.jar` and want to add it to [Google Drive](https://drive.google.com/drive/folders/17oMwQ0xBcSGn159mgbqxcXXEcneUmnph), please create an issue. I will upload it.~~
+
+**Uploading jars is no longer needed** — every developer can build their own with the
+[`hiddenjar` CLI](#build-your-own-custom-androidjar-cli). Contributions to the CLI itself
+(new flags, fixes, wider API-level coverage) are very welcome via pull request.
 
 ## License
 
-    Copyright 2015-2025 Anggrayudi Hardiannico A.
+    Copyright 2015-2026 Anggrayudi Hardiannico A.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -63,3 +63,57 @@ subprojects {
 tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
 }
+
+// ---------------------------------------------------------------------------
+// hiddenjar — Gradle wrapper around cli/hiddenjar
+//
+// Build a custom android.jar (with hidden/internal APIs) from a running
+// emulator or device. See docs/BUILD_CUSTOM_ANDROID_JAR_FROM_EMULATOR.md.
+//
+//   ./gradlew buildHiddenJar -Papi=37
+//   ./gradlew buildHiddenJar -Papi=37 -Pinstall
+//   ./gradlew buildHiddenJar -PonlyFramework -Pserial=emulator-5554 -Poutput=/tmp/android-37.jar
+//   ./gradlew buildHiddenJar -Pavd=Pixel_10_API_37 -Pinstall
+//   ./gradlew hiddenJarDoctor
+//   ./gradlew restoreHiddenJar -Papi=37
+//
+// Value props: -Papi -Pserial -Pavd -Poutput -PsdkDir -PdexTools
+// Flag props:  -PonlyFramework -Pinstall -Pkeep
+// (On Windows, run under Git Bash/WSL — the wrapper invokes the bash script.)
+// ---------------------------------------------------------------------------
+ext.hiddenJarScript = "${rootDir}/cli/hiddenjar"
+
+ext.hiddenJarArgs = { ->
+    def valueFlags = [api: '--api', serial: '--serial', avd: '--avd',
+                      output: '--output', sdkDir: '--sdk-dir', dexTools: '--dex-tools']
+    def boolFlags = [onlyFramework: '--only-framework', install: '--install', keep: '--keep']
+    def args = []
+    valueFlags.each { prop, flag ->
+        if (project.hasProperty(prop)) args += [flag, project.property(prop).toString()]
+    }
+    boolFlags.each { prop, flag ->
+        if (project.hasProperty(prop)) args += [flag]
+    }
+    return args
+}
+
+tasks.register('buildHiddenJar', Exec) {
+    group = 'hiddenjar'
+    description = 'Build a custom android.jar with hidden APIs from an emulator/device (use -Papi=N).'
+    commandLine = ['bash', hiddenJarScript, 'build'] + hiddenJarArgs()
+}
+
+tasks.register('hiddenJarDoctor', Exec) {
+    group = 'hiddenjar'
+    description = 'Check hiddenjar prerequisites (adb, JDK, dex-tools).'
+    commandLine = ['bash', hiddenJarScript, 'doctor']
+}
+
+tasks.register('restoreHiddenJar', Exec) {
+    group = 'hiddenjar'
+    description = 'Restore the original SDK android.jar from its backup (use -Papi=N).'
+    def args = []
+    if (project.hasProperty('api')) args += ['--api', project.property('api').toString()]
+    if (project.hasProperty('sdkDir')) args += ['--sdk-dir', project.property('sdkDir').toString()]
+    commandLine = ['bash', hiddenJarScript, 'restore'] + args
+}

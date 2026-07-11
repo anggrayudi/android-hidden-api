@@ -1,0 +1,405 @@
+#!/usr/bin/env bash
+#
+# hiddenjar — build a custom android.jar (with hidden/internal APIs) from an
+# Android emulator or device, then optionally install it into the SDK.
+#
+# See docs/BUILD_CUSTOM_ANDROID_JAR_FROM_EMULATOR.md
+#
+# Compatible with macOS bash 3.2 (no associative arrays / mapfile).
+
+set -euo pipefail
+
+# ----------------------------------------------------------------------------
+# Constants & globals
+# ----------------------------------------------------------------------------
+VERSION="1.0.0"
+DEX_TOOLS_VERSION="2.4.37"
+DEX_TOOLS_URL="https://github.com/ThexXTURBOXx/dex2jar/releases/download/${DEX_TOOLS_VERSION}/dex-tools-${DEX_TOOLS_VERSION}.zip"
+CACHE_DIR="${HOME}/.cache/hiddenjar"
+MIN_JAR_BYTES=1024   # jars smaller than this are almost certainly stripped shells
+
+# Options (set by parse_args)
+OPT_SERIAL=""
+OPT_AVD=""
+OPT_API=""
+OPT_SDK_DIR=""
+OPT_ONLY_FRAMEWORK="false"
+OPT_OUTPUT=""
+OPT_INSTALL="false"
+OPT_DEX_TOOLS=""
+OPT_WORK_DIR=""
+OPT_KEEP="false"
+
+ADB=""
+D2J=""
+WORK_DIR=""
+WORK_DIR_IS_TEMP="false"
+
+# ----------------------------------------------------------------------------
+# Logging
+# ----------------------------------------------------------------------------
+_c_reset=""; _c_red=""; _c_yel=""; _c_grn=""; _c_dim=""
+if [ -t 2 ]; then
+  _c_reset="\033[0m"; _c_red="\033[31m"; _c_yel="\033[33m"; _c_grn="\033[32m"; _c_dim="\033[2m"
+fi
+log()  { printf "%b[hiddenjar]%b %s\n" "$_c_grn" "$_c_reset" "$*" >&2; }
+info() { printf "%b[hiddenjar]%b %s\n" "$_c_dim" "$_c_reset" "$*" >&2; }
+warn() { printf "%b[hiddenjar] WARN:%b %s\n" "$_c_yel" "$_c_reset" "$*" >&2; }
+die()  { printf "%b[hiddenjar] ERROR:%b %s\n" "$_c_red" "$_c_reset" "$*" >&2; exit 1; }
+
+cleanup() {
+  if [ "$WORK_DIR_IS_TEMP" = "true" ] && [ "$OPT_KEEP" != "true" ] && [ -n "$WORK_DIR" ] && [ -d "$WORK_DIR" ]; then
+    rm -rf "$WORK_DIR"
+  elif [ -n "$WORK_DIR" ] && [ -d "$WORK_DIR" ]; then
+    info "Work dir kept at: $WORK_DIR"
+  fi
+}
+trap cleanup EXIT
+
+# ----------------------------------------------------------------------------
+# Helpers
+# ----------------------------------------------------------------------------
+usage() {
+  cat >&2 <<EOF
+hiddenjar v${VERSION} — build a custom android.jar with hidden APIs from an emulator/device
+
+USAGE:
+  hiddenjar build   [options]
+  hiddenjar restore [--api N] [--sdk-dir DIR]
+  hiddenjar doctor
+  hiddenjar help
+
+BUILD OPTIONS:
+  --serial ID          adb device serial (default: auto — a running emulator, else first device)
+  --avd NAME           if no device is running, boot this AVD headless first
+  --api N              API level override (default: read from device)
+  --sdk-dir DIR        Android SDK root (default: \$ANDROID_HOME / \$ANDROID_SDK_ROOT / ~/Library/Android/sdk)
+  --only-framework     merge only /system/framework/framework.jar (fast, incomplete)
+  --all-bootclasspath  merge every \$BOOTCLASSPATH jar that has DEX (default; full coverage)
+  --output FILE        output path (default: ./android-<api>-custom.jar)
+  --install            install into <sdk>/platforms/android-<api>*/android.jar (auto-backup .orig)
+  --dex-tools DIR      path to an unpacked dex-tools distribution (default: auto-download + cache)
+  --work-dir DIR       scratch dir (default: mktemp; kept on failure)
+  --keep               keep the work dir even on success
+
+EXAMPLES:
+  hiddenjar doctor
+  hiddenjar build --only-framework
+  hiddenjar build --avd Pixel_10_API_37 --install
+  hiddenjar restore --api 37
+EOF
+}
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+resolve_sdk_dir() {
+  if [ -n "$OPT_SDK_DIR" ]; then echo "$OPT_SDK_DIR"; return; fi
+  if [ -n "${ANDROID_HOME:-}" ]; then echo "$ANDROID_HOME"; return; fi
+  if [ -n "${ANDROID_SDK_ROOT:-}" ]; then echo "$ANDROID_SDK_ROOT"; return; fi
+  echo "${HOME}/Library/Android/sdk"
+}
+
+resolve_adb() {
+  local sdk; sdk="$(resolve_sdk_dir)"
+  if [ -x "${sdk}/platform-tools/adb" ]; then ADB="${sdk}/platform-tools/adb"; return; fi
+  if have adb; then ADB="$(command -v adb)"; return; fi
+  die "adb not found (looked in ${sdk}/platform-tools and PATH)"
+}
+
+# Resolve the platform dir for an API level: tries android-N, android-N.0, then
+# any android-N* whose source.properties reports AndroidVersion.ApiLevel=N.
+resolve_platform_dir() {
+  local sdk="$1" api="$2" d
+  for d in "${sdk}/platforms/android-${api}" "${sdk}/platforms/android-${api}.0"; do
+    if [ -f "${d}/android.jar" ]; then echo "$d"; return 0; fi
+  done
+  for d in "${sdk}/platforms/android-${api}"*; do
+    [ -f "${d}/android.jar" ] || continue
+    if [ -f "${d}/source.properties" ] && grep -q "AndroidVersion.ApiLevel=${api}\$" "${d}/source.properties"; then
+      echo "$d"; return 0
+    fi
+  done
+  return 1
+}
+
+ensure_dex_tools() {
+  # Explicit path wins.
+  if [ -n "$OPT_DEX_TOOLS" ]; then
+    D2J="$(find "$OPT_DEX_TOOLS" -name d2j-dex2jar.sh -type f 2>/dev/null | head -1 || true)"
+    [ -n "$D2J" ] || die "--dex-tools '$OPT_DEX_TOOLS' has no d2j-dex2jar.sh"
+    chmod +x "$(dirname "$D2J")"/*.sh 2>/dev/null || true
+    return
+  fi
+  # Cached?
+  D2J="$(find "$CACHE_DIR" -name d2j-dex2jar.sh -type f 2>/dev/null | head -1 || true)"
+  if [ -n "$D2J" ]; then chmod +x "$(dirname "$D2J")"/*.sh 2>/dev/null || true; return; fi
+  # Download.
+  have curl || die "dex-tools not cached and curl is unavailable; pass --dex-tools DIR"
+  have unzip || die "unzip is required"
+  mkdir -p "$CACHE_DIR"
+  log "Downloading dex-tools ${DEX_TOOLS_VERSION} ..."
+  curl -fsSL -o "${CACHE_DIR}/dex-tools.zip" "$DEX_TOOLS_URL" || die "failed to download dex-tools"
+  unzip -q -o "${CACHE_DIR}/dex-tools.zip" -d "$CACHE_DIR"
+  D2J="$(find "$CACHE_DIR" -name d2j-dex2jar.sh -type f 2>/dev/null | head -1 || true)"
+  [ -n "$D2J" ] || die "dex-tools download did not contain d2j-dex2jar.sh"
+  chmod +x "$(dirname "$D2J")"/*.sh 2>/dev/null || true
+}
+
+# ----------------------------------------------------------------------------
+# Device selection
+# ----------------------------------------------------------------------------
+list_devices() { "$ADB" devices | awk 'NR>1 && $2=="device" {print $1}'; }
+
+boot_avd_if_needed() {
+  [ -n "$OPT_AVD" ] || return 0
+  local sdk emu
+  sdk="$(resolve_sdk_dir)"
+  emu="${sdk}/emulator/emulator"
+  [ -x "$emu" ] || die "emulator binary not found at $emu"
+  log "Booting AVD '$OPT_AVD' headless ..."
+  "$emu" -avd "$OPT_AVD" -no-window -no-audio -no-boot-anim -no-snapshot >/dev/null 2>&1 &
+  # Wait for a device to appear and finish booting.
+  local tries=0
+  while [ "$(list_devices | wc -l | tr -d ' ')" = "0" ] && [ $tries -lt 60 ]; do
+    sleep 2; tries=$((tries+1))
+  done
+  OPT_SERIAL="$(list_devices | grep '^emulator-' | head -1 || true)"
+  [ -n "$OPT_SERIAL" ] || OPT_SERIAL="$(list_devices | head -1 || true)"
+  [ -n "$OPT_SERIAL" ] || die "AVD did not come online"
+  "$ADB" -s "$OPT_SERIAL" wait-for-device
+  log "Waiting for boot to complete ..."
+  tries=0
+  while [ "$("$ADB" -s "$OPT_SERIAL" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r ')" != "1" ] && [ $tries -lt 90 ]; do
+    sleep 2; tries=$((tries+1))
+  done
+}
+
+pick_serial() {
+  if [ -n "$OPT_SERIAL" ]; then return; fi
+  boot_avd_if_needed
+  if [ -n "$OPT_SERIAL" ]; then return; fi
+  local emu first
+  emu="$(list_devices | grep '^emulator-' | head -1 || true)"
+  first="$(list_devices | head -1 || true)"
+  if [ -n "$emu" ]; then OPT_SERIAL="$emu"
+  elif [ -n "$first" ]; then OPT_SERIAL="$first"
+  else die "no adb device online — start an emulator or pass --avd NAME"; fi
+}
+
+# ----------------------------------------------------------------------------
+# build
+# ----------------------------------------------------------------------------
+cmd_build() {
+  resolve_adb
+  ensure_dex_tools
+  have javac || die "javac not found (install a JDK)"
+  have jar   || die "jar not found (install a JDK)"
+  have unzip || die "unzip is required"
+
+  pick_serial
+  log "Target device: $OPT_SERIAL"
+
+  local api
+  api="${OPT_API:-$("$ADB" -s "$OPT_SERIAL" shell getprop ro.build.version.sdk 2>/dev/null | tr -d '\r ')}"
+  [ -n "$api" ] || die "could not read API level from device"
+  log "API level: $api"
+
+  local sdk platform_dir base_jar
+  sdk="$(resolve_sdk_dir)"
+  if ! platform_dir="$(resolve_platform_dir "$sdk" "$api")"; then
+    warn "No SDK platform for API $api. Installed platforms:"
+    ls "${sdk}/platforms" >&2 2>/dev/null || true
+    die "install it via sdkmanager \"platforms;android-${api}\" or pass --sdk-dir"
+  fi
+  base_jar="${platform_dir}/android.jar"
+  log "SDK base android.jar: $base_jar"
+
+  # Work dir
+  if [ -n "$OPT_WORK_DIR" ]; then
+    WORK_DIR="$OPT_WORK_DIR"; mkdir -p "$WORK_DIR"
+  else
+    WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/hiddenjar.XXXXXX")"; WORK_DIR_IS_TEMP="true"
+  fi
+  local pulled="${WORK_DIR}/pulled" classes="${WORK_DIR}/classes" merged="${WORK_DIR}/merged"
+  mkdir -p "$pulled" "$classes" "$merged"
+
+  # Determine the jar list to pull.
+  local jar_list=""
+  if [ "$OPT_ONLY_FRAMEWORK" = "true" ]; then
+    jar_list="/system/framework/framework.jar"
+  else
+    jar_list="$("$ADB" -s "$OPT_SERIAL" shell 'echo $BOOTCLASSPATH' 2>/dev/null | tr -d '\r' | tr ':' '\n' | sed '/^$/d')"
+  fi
+  local total_jars; total_jars="$(printf "%s\n" "$jar_list" | sed '/^$/d' | wc -l | tr -d ' ')"
+  log "Boot classpath entries to consider: $total_jars"
+
+  # Pull + validate + convert.
+  local converted=0 skipped=0 failed=0 idx=0
+  local dev_path local_name local_jar dexcount out_jar
+  while IFS= read -r dev_path; do
+    [ -n "$dev_path" ] || continue
+    idx=$((idx+1))
+    local_name="$(printf "%s" "$dev_path" | sed 's#^/##; s#/#_#g')"
+    local_jar="${pulled}/${local_name}"
+    if ! "$ADB" -s "$OPT_SERIAL" pull "$dev_path" "$local_jar" >/dev/null 2>&1; then
+      warn "[$idx/$total_jars] pull failed: $dev_path"; failed=$((failed+1)); continue
+    fi
+    # Validate: reasonable size AND contains classes*.dex
+    local size; size="$(wc -c < "$local_jar" | tr -d ' ')"
+    dexcount="$(unzip -l "$local_jar" 2>/dev/null | grep -cE 'classes[0-9]*\.dex' || true)"
+    if [ "$size" -lt "$MIN_JAR_BYTES" ] || [ "$dexcount" = "0" ]; then
+      info "[$idx/$total_jars] skip (stripped/no DEX, ${size}B): $dev_path"; skipped=$((skipped+1)); continue
+    fi
+    out_jar="${classes}/${local_name%.jar}-classes.jar"
+    if "$D2J" --force -o "$out_jar" "$local_jar" >/dev/null 2>&1 && [ -f "$out_jar" ]; then
+      info "[$idx/$total_jars] converted ($dexcount dex): $dev_path"; converted=$((converted+1))
+    else
+      warn "[$idx/$total_jars] dex2jar failed: $dev_path"; failed=$((failed+1))
+    fi
+  done <<EOF
+$jar_list
+EOF
+
+  log "Jars converted: $converted, skipped: $skipped, failed: $failed"
+  [ "$converted" -gt 0 ] || die "no framework jars had usable DEX — use an API >= 34 image or a device"
+
+  # Merge: SDK android.jar first (base), framework classes overlaid on top.
+  log "Merging into custom android.jar ..."
+  ( cd "$merged" && unzip -q -o "$base_jar" )
+  local cj
+  for cj in "${classes}"/*-classes.jar; do
+    [ -f "$cj" ] || continue
+    ( cd "$merged" && unzip -q -o "$cj" ) || warn "overlay had conflicts: $(basename "$cj")"
+  done
+  rm -rf "${merged}/META-INF"
+
+  # Output path
+  local output="${OPT_OUTPUT:-$(pwd)/android-${api}-custom.jar}"
+  ( cd "$merged" && jar cf "$output" . ) || die "jar packaging failed"
+  local outsize; outsize="$(wc -c < "$output" | tr -d ' ')"
+  local internal; internal="$(unzip -l "$output" 2>/dev/null | grep -c 'com/android/internal/' || true)"
+  local allclasses; allclasses="$(unzip -l "$output" 2>/dev/null | grep -c '\.class$' || true)"
+  log "Built: $output (${outsize} bytes, ${allclasses} classes, ${internal} com.android.internal)"
+
+  # Verify: compile a hidden-API probe against the merged jar (the real success gate).
+  verify_compile "$output" || die "verification failed: hidden-API probe did not compile"
+
+  # Install
+  if [ "$OPT_INSTALL" = "true" ]; then
+    install_jar "$output" "$platform_dir"
+  fi
+
+  log "Done."
+}
+
+verify_compile() {
+  local jar="$1"
+  local probe="${WORK_DIR}/probe"
+  mkdir -p "$probe"
+  cat > "${probe}/HiddenApiProbe.java" <<'JAVA'
+import android.app.ActivityThread;
+import android.os.IBinder;
+import android.os.ServiceManager;
+
+// Uses long-standing @hide symbols to prove the custom jar exposes hidden APIs.
+public class HiddenApiProbe {
+    IBinder windowService() {
+        return ServiceManager.getService("window");
+    }
+    ActivityThread currentThread() {
+        return ActivityThread.currentActivityThread();
+    }
+}
+JAVA
+  if javac -nowarn -cp "$jar" -d "${probe}/out" "${probe}/HiddenApiProbe.java" 2>"${probe}/javac.log"; then
+    log "Verification OK: hidden-API probe compiled (ServiceManager.getService, ActivityThread.currentActivityThread)"
+    return 0
+  fi
+  warn "javac output:"; cat "${probe}/javac.log" >&2 || true
+  return 1
+}
+
+install_jar() {
+  local built="$1" platform_dir="$2"
+  local target="${platform_dir}/android.jar"
+  local backup="${platform_dir}/android.jar.orig"
+  if [ ! -f "$backup" ]; then
+    cp "$target" "$backup"
+    log "Backed up original SDK jar -> $backup"
+  else
+    info "Backup already exists (kept): $backup"
+  fi
+  cp "$built" "$target"
+  log "Installed custom jar -> $target"
+  log "Restore anytime with: hiddenjar restore --api <level>"
+}
+
+# ----------------------------------------------------------------------------
+# restore
+# ----------------------------------------------------------------------------
+cmd_restore() {
+  local sdk platform_dir api="$OPT_API"
+  sdk="$(resolve_sdk_dir)"
+  [ -n "$api" ] || die "restore requires --api N"
+  platform_dir="$(resolve_platform_dir "$sdk" "$api")" || die "no SDK platform for API $api"
+  local target="${platform_dir}/android.jar" backup="${platform_dir}/android.jar.orig"
+  [ -f "$backup" ] || die "no backup found at $backup"
+  cp "$backup" "$target"
+  log "Restored original SDK android.jar for API $api"
+}
+
+# ----------------------------------------------------------------------------
+# doctor
+# ----------------------------------------------------------------------------
+cmd_doctor() {
+  local ok=0
+  resolve_adb && printf "  adb:      %s\n" "$ADB" >&2 || ok=1
+  if have javac; then printf "  javac:    %s\n" "$(command -v javac)" >&2; else printf "  javac:    MISSING\n" >&2; ok=1; fi
+  if have jar;   then printf "  jar:      %s\n" "$(command -v jar)" >&2;   else printf "  jar:      MISSING\n" >&2; ok=1; fi
+  if have unzip; then printf "  unzip:    %s\n" "$(command -v unzip)" >&2; else printf "  unzip:    MISSING\n" >&2; ok=1; fi
+  if have zip;   then printf "  zip:      %s\n" "$(command -v zip)" >&2;   else printf "  zip:      (optional, not found)\n" >&2; fi
+  if ensure_dex_tools 2>/dev/null; then printf "  dex2jar:  %s\n" "$D2J" >&2; else printf "  dex2jar:  MISSING (will auto-download on build)\n" >&2; fi
+  printf "  sdk-dir:  %s\n" "$(resolve_sdk_dir)" >&2
+  if [ -n "$ADB" ]; then
+    printf "  devices:\n" >&2
+    "$ADB" devices | awk 'NR>1 && NF' | sed 's/^/    /' >&2 || true
+  fi
+  [ "$ok" = "0" ] && log "doctor: all required tools present" || warn "doctor: some tools missing (see above)"
+  return "$ok"
+}
+
+# ----------------------------------------------------------------------------
+# Argument parsing
+# ----------------------------------------------------------------------------
+parse_args() {
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --serial) OPT_SERIAL="$2"; shift 2;;
+      --avd) OPT_AVD="$2"; shift 2;;
+      --api) OPT_API="$2"; shift 2;;
+      --sdk-dir) OPT_SDK_DIR="$2"; shift 2;;
+      --only-framework) OPT_ONLY_FRAMEWORK="true"; shift;;
+      --all-bootclasspath) OPT_ONLY_FRAMEWORK="false"; shift;;
+      --output) OPT_OUTPUT="$2"; shift 2;;
+      --install) OPT_INSTALL="true"; shift;;
+      --dex-tools) OPT_DEX_TOOLS="$2"; shift 2;;
+      --work-dir) OPT_WORK_DIR="$2"; shift 2;;
+      --keep) OPT_KEEP="true"; shift;;
+      -h|--help) usage; exit 0;;
+      *) die "unknown option: $1";;
+    esac
+  done
+}
+
+main() {
+  local sub="${1:-help}"; shift || true
+  case "$sub" in
+    build)   parse_args "$@"; cmd_build;;
+    restore) parse_args "$@"; cmd_restore;;
+    doctor)  parse_args "$@"; cmd_doctor;;
+    help|-h|--help) usage;;
+    *) usage; die "unknown command: $sub";;
+  esac
+}
+
+main "$@"
