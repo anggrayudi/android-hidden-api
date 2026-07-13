@@ -29,8 +29,12 @@ machine (macOS, `arm64` emulator, JDK 17, `dex-tools 2.4.37`), not recalled from
 
 - **Yes, an emulator is enough** — *if* you pick a system image whose `framework.jar` still ships its
   DEX. Modern images (API 34/35/37) do; some older images ship a stripped 300-byte stub.
-- **`framework.jar` alone is not enough** on modern Android. Merge **every jar on `$BOOTCLASSPATH`**
-  (including APEX `javalib` jars) or you'll be missing Wi‑Fi, Bluetooth, connectivity, media, etc.
+- **`framework.jar` alone is not enough** on modern Android. Pull **every jar on `$BOOTCLASSPATH`**
+  (including APEX `javalib` jars) — Wi‑Fi, Bluetooth, connectivity, media, etc. moved out of
+  `framework.jar`. But **merge only the hidden-API namespaces** (`android.*`, `com.android.internal.*`,
+  `dalvik.*`), not the whole jar. The boot classpath also carries the ART runtime (`java/*`, `sun/*`,
+  `jdk/*`, `libcore/*`) and repackaged libraries (okhttp, bouncycastle, apache-xml, …); overlaying
+  those shadows the JDK and your app's dependencies and makes Kotlin/Gradle reject the jar (issue #100).
 - **Compile-time success ≠ runtime access.** Since Android 9 (API 28) the *hidden API blocklist*
   restricts non-SDK access at runtime for non-system apps. The custom jar only unblocks compilation.
 
@@ -118,17 +122,32 @@ Measured result on API 37: **36,590 classes**, of which **6,295** are under `com
 
 ### Step 3 — Merge into the SDK `android.jar`
 
-Order matters. Unzip the SDK `android.jar` **first** (it provides `java.*`, `javax.*`, `org.*`, and
-stubs for classes not present in the framework jars), then overlay the framework classes on top (they
-carry the real, `@hide`-bearing signatures).
+Start from the SDK `android.jar` (it provides `java.*`, `javax.*`, `org.*` and the curated public
+stubs), then overlay **only** the hidden-API namespaces from the converted framework jars —
+`android/`, `com/android/internal/`, `dalvik/`. Do **not** overlay the whole jar: the runtime packages
+(`java/`, `sun/`, `jdk/`, `libcore/`, `com/android/okhttp/`, `com/android/org/`, `org/apache/xml*`, …)
+shadow the JDK and your app's dependencies, and Kotlin/Gradle then reject the result with
+*"Cannot access '…' which is a supertype of '…' … missing or conflicting dependencies"* (issue #100).
 
 ```bash
 mkdir merged && cd merged
-unzip -q "<SDK>/platforms/android-37.0/android.jar"   # base
-unzip -q -o ../framework-classes.jar                  # overlay real impls
-# ...repeat the overlay for every APEX/framework jar you converted...
+unzip -q "<SDK>/platforms/android-37.0/android.jar"                                    # base (keep all)
+unzip -q -o ../framework-classes.jar 'android/*' 'com/android/internal/*' 'dalvik/*'   # overlay hidden APIs only
+# ...repeat the filtered overlay for every APEX/framework jar you converted...
+rm -rf META-INF
 jar cf ../android-custom-37.jar -C . .
 ```
+
+Two refinements the `hiddenjar` CLI adds on top of this manual merge (see `cli/BuildJar.java`):
+
+- **Prune dangling supertypes.** A few kept `android.*` classes extend impl that lives in a namespace
+  you dropped (e.g. `com.android.ims`, `com.android.adservices`); left in, they reproduce the same
+  "cannot access supertype" error if referenced. The CLI removes any class whose supertype chain no
+  longer resolves, so the jar's graph is closed like the stock `android.jar`.
+- **Assemble in memory.** Extracting to a directory on a case-insensitive filesystem (macOS, Windows)
+  silently drops classes that differ only in case — e.g. the public `android.media.AudioAttributes`
+  vs. the distinct `android.media.Audioattributes` that `framework.jar` also ships. The CLI builds the
+  jar straight from zip to zip (case-sensitive), so both survive on every OS.
 
 ### Step 4 — Verify it actually compiles hidden APIs
 
@@ -155,6 +174,10 @@ javac -cp android-custom-37.jar TestHidden.java
 # → compiles cleanly; all three hidden symbols resolve
 ```
 
+The CLI goes further than this one probe: it also fails the build if the jar ships any of the
+JDK-shadowing namespaces, if it has fewer classes than the base SDK jar, or if any public class is
+left with an unresolved supertype — the check that catches issue #100 *before* it installs.
+
 ### Step 5 — Install into the SDK
 
 ```bash
@@ -179,8 +202,12 @@ Then set `compileSdk`/`targetSdk` to that level and rebuild. To roll back, resto
   "handlerRangeBlock" is null` (issue #46). The CLI therefore strips every method to a
   `throw new RuntimeException("Stub!")` stub — exactly the shape the SDK's own `android.jar` ships —
   so the transform accepts it. `javac` only reads signatures, so hidden/internal APIs still compile,
-  and the jar is smaller (~50 MB vs. ~65 MB). Pass `--keep-bodies` to keep the real bodies (useful
-  for browsing decompiled sources), but then the mockable-jar transform will fail on that jar.
+  and the jar is smaller than keeping the real bodies. Pass `--keep-bodies` to keep the real bodies
+  (useful for browsing decompiled sources), but then the mockable-jar transform will fail on that jar.
+- **Filtered and pruned by default.** The CLI overlays only `android.*`, `com.android.internal.*` and
+  `dalvik.*` (never the JDK-shadowing ART runtime), then drops any class left with an unresolved
+  supertype so the jar is self-consistent like the stock `android.jar`. Pass `--keep-dangling` to skip
+  the prune step.
 - **Stripped-jar images.** If you're stuck on an older image where the jars are shells, the classes
   live in the boot image (`boot-framework.vdex`/`.oat`). Extracting them (e.g. `vdexExtractor` →
   `baksmali`) is possible but fiddly and is **not** the recommended path — use an API ≥ 34 image.

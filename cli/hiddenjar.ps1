@@ -29,6 +29,7 @@ $MinJarBytes     = 1024
 $ScriptDir    = $PSScriptRoot
 $StubifierSrc = Join-Path $ScriptDir 'Stubifier.java'
 $ClosureSrc   = Join-Path $ScriptDir 'ClosureVerify.java'
+$BuildJarSrc  = Join-Path $ScriptDir 'BuildJar.java'
 
 # Works on both Windows PowerShell 5.1 (no $IsWindows) and PowerShell 7+.
 $OnWindows = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
@@ -36,7 +37,7 @@ $OnWindows = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
 # Options
 $OptSerial = $null; $OptAvd = $null; $OptApi = $null; $OptSdkDir = $null
 $OptOnlyFramework = $false; $OptOutput = $null; $OptInstall = $false
-$OptDexTools = $null; $OptWorkDir = $null; $OptKeep = $false; $OptKeepBodies = $false
+$OptDexTools = $null; $OptWorkDir = $null; $OptKeep = $false; $OptKeepBodies = $false; $OptKeepDangling = $false
 $D2J = $null; $Adb = $null
 
 # ----------------------------------------------------------------------------
@@ -212,8 +213,7 @@ function Invoke-Build {
     }
     $pulled  = Join-Path $work 'pulled'
     $classes = Join-Path $work 'classes'
-    $merged  = Join-Path $work 'merged'
-    New-Item -ItemType Directory -Path $pulled, $classes, $merged -Force | Out-Null
+    New-Item -ItemType Directory -Path $pulled, $classes -Force | Out-Null
 
     # Jars to pull
     if ($OptOnlyFramework) {
@@ -243,59 +243,23 @@ function Invoke-Build {
     Write-Log "Jars converted: $converted, skipped: $skipped, failed: $failed"
     if ($converted -eq 0) { Die "no framework jars had usable DEX — use an API >= 34 image or a device" }
 
-    # Merge: SDK android.jar first (base = the curated public API surface), then overlay the
-    # device's real framework bytecode so @hide members and com.android.internal appear.
-    #
-    # Filter the overlay by NAMESPACE, not by source jar. The boot classpath also carries the full
-    # ART runtime (java/*, sun/*, jdk/*, javax/*, libcore/*) and repackaged libraries
-    # (com.android.okhttp, com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...). None of
-    # those belong on the compile classpath; overlaying them shadows the JDK and the app's own
-    # dependencies, so Kotlin/Gradle then reject the jar ("Cannot access <X> which is a supertype
-    # ... missing or conflicting dependencies", issue #100). Keep only what the SDK is meant to
-    # expose: android.* (public + @hide, incl. APEX modules like framework-wifi), com.android.internal.*
-    # and dalvik.* (e.g. @hide dalvik.system.VMRuntime). The base jar already provides the curated
-    # java.*/javax.*/org.*/dalvik.* public stubs, so we never let the overlay clobber those.
-    #
-    # The JDK 'jar' tool can't extract by wildcard the way unzip does, so extract each overlay jar
-    # to a scratch dir and copy only the allowlisted namespace subtrees into $merged.
-    Write-Log "Merging into custom android.jar (overlay filtered to hidden-API namespaces) ..."
-    Push-Location $merged
-    try { & $jarTool xf $baseJar } finally { Pop-Location }
-    $overlayNs = @('android', 'com/android/internal', 'dalvik')  # forward slashes: portable across Win/*nix
-    Get-ChildItem -Path $classes -Filter '*-classes.jar' | ForEach-Object {
-        $ovl = Join-Path $work ('ovl-' + [IO.Path]::GetFileNameWithoutExtension($_.Name))
-        if (Test-Path $ovl) { Remove-Item -Recurse -Force $ovl }
-        New-Item -ItemType Directory -Path $ovl -Force | Out-Null
-        Push-Location $ovl
-        try { & $jarTool xf $_.FullName } finally { Pop-Location }
-        foreach ($ns in $overlayNs) {
-            $srcRoot = Join-Path $ovl $ns
-            if (-not (Test-Path $srcRoot)) { continue }
-            Get-ChildItem -Path $srcRoot -Recurse -File | ForEach-Object {
-                $rel = $_.FullName.Substring($ovl.Length).TrimStart('\', '/')
-                $dst = Join-Path $merged $rel
-                $dstDir = Split-Path $dst -Parent
-                if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
-                Copy-Item -LiteralPath $_.FullName -Destination $dst -Force
-            }
-        }
-        Remove-Item -Recurse -Force $ovl
-    }
-    $metaInf = Join-Path $merged 'META-INF'
-    if (Test-Path $metaInf) { Remove-Item -Recurse -Force $metaInf }
-
-    # Strip real method bodies to stubs (default) so Gradle's MockableJarTransform accepts the jar.
-    if ($OptKeepBodies) {
-        Write-Warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar"
-    } else {
-        Invoke-Stubify $merged $work $javac
-    }
-
+    # Assemble the custom android.jar in memory (base + overlay jars) — see cli/BuildJar.java. The
+    # overlay is filtered by NAMESPACE, not by source jar: the boot classpath also carries the full
+    # ART runtime (java/*, sun/*, jdk/*, libcore/*) and repackaged libraries (com.android.okhttp,
+    # com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...) which shadow the JDK and the app's
+    # dependencies and make Kotlin/Gradle reject the jar (issue #100). Keep only android.* (public +
+    # @hide, incl. APEX modules like framework-wifi), com.android.internal.* and dalvik.* on top of the
+    # base SDK jar, then prune dangling classes and stubify. Doing it in memory (never extracting to a
+    # directory) also means case-colliding classes such as android.media.AudioAttributes vs
+    # android.media.Audioattributes both survive on macOS/Windows.
     $output = $OptOutput
     if (-not $output) { $output = Join-Path (Get-Location).Path "android-$api-custom.jar" }
     $output = [IO.Path]::GetFullPath($output)
-    & $jarTool cf $output -C $merged .
-    if ($LASTEXITCODE -ne 0) { Die "jar packaging failed" }
+    if ($OptKeepBodies)   { Write-Warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar" }
+    if ($OptKeepDangling) { Write-Note "--keep-dangling: keeping classes whose supertypes were filtered out" }
+    Write-Log "Assembling custom android.jar (in-memory: base + overlays, filtered) ..."
+    $overlays = @(Get-ChildItem -Path $classes -Filter '*-classes.jar' | ForEach-Object { $_.FullName })
+    Invoke-Assemble $baseJar $output $work $overlays
 
     $outsize    = (Get-Item $output).Length
     $entries    = & $jarTool tf $output
@@ -312,29 +276,41 @@ function Invoke-Build {
     Write-Log "Done."
 }
 
-# Strip every .class under a directory to a signature-only stub, in place (see cli/Stubifier.java).
-#
-# hiddenjar overlays real dex2jar-decompiled framework bodies onto android.jar. Those bodies carry
-# try/catch blocks, and Gradle's MockableJarGenerator (lint + unit tests) crashes on them
-# (NPE "Cannot read field outgoingEdges ... handlerRangeBlock is null", issue #46). Reducing the
-# classes to stubs — the shape the SDK's own android.jar ships — makes the transform pass; javac
-# only reads signatures, so compilation of hidden/internal APIs is unaffected.
-function Invoke-Stubify {
-    param($dir, $work, $javac)
+# Compiles the bundled Java tools once (ASM comes from the dex-tools lib) and caches the java exe +
+# classpath + output dir in script scope. BuildJar assembles the jar; ClosureVerify is gate 4;
+# Stubifier is the byte-level stubber BuildJar calls. Returns $false if they cannot be built.
+function Initialize-JavaTools {
+    param($work)
+    if ($script:ToolsOut -and (Test-Path (Join-Path $script:ToolsOut 'BuildJar.class'))) { return $true }
     $lib  = Join-Path (Split-Path $script:D2J) 'lib'
     $jars = @(Get-ChildItem -Path $lib -Recurse -Filter '*.jar' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
-    if ($jars.Count -eq 0) { Die "dex-tools lib (ASM) not found under $lib; cannot strip method bodies (pass --keep-bodies to skip)" }
-    if (-not (Test-Path $StubifierSrc)) { Die "Stubifier.java not found at $StubifierSrc — keep the cli/ directory intact, or pass --keep-bodies" }
-    $java = Resolve-Tool 'java'; if (-not $java) { Die "java not found (install a JDK)" }
+    if ($jars.Count -eq 0) { return $false }
+    if (-not (Test-Path $BuildJarSrc) -or -not (Test-Path $StubifierSrc) -or -not (Test-Path $ClosureSrc)) { return $false }
+    $javac = Resolve-Tool 'javac'; $java = Resolve-Tool 'java'
+    if (-not $javac -or -not $java) { return $false }
+    $out = Join-Path $work 'cli-out'
+    New-Item -ItemType Directory -Path $out -Force | Out-Null
+    & $javac -cp ($jars -join [IO.Path]::PathSeparator) -d $out $StubifierSrc $ClosureSrc $BuildJarSrc 2>$null
+    if ($LASTEXITCODE -ne 0) { return $false }
+    $script:ToolsOut  = $out
+    $script:ToolsCp   = ($jars -join [IO.Path]::PathSeparator)
+    $script:ToolsJava = $java
+    return $true
+}
+
+# Assembles the custom android.jar in memory (base + overlay jars) via BuildJar — namespace filter,
+# prune and stubify, with no filesystem round-trip so case-colliding classes are never lost. BuildJar
+# exits non-zero on a real regression (a missing public supertype); we Die then.
+function Invoke-Assemble {
+    param($baseJar, $output, $work, $overlays)
+    if (-not (Initialize-JavaTools $work)) { Die "Java tools (ASM/Stubifier/ClosureVerify/BuildJar) unavailable — keep cli/*.java intact" }
     $sep = [IO.Path]::PathSeparator
-    $cp  = ($jars -join $sep)
-    $stubout = Join-Path $work 'stubifier-out'
-    New-Item -ItemType Directory -Path $stubout -Force | Out-Null
-    Write-Log "Stripping method bodies to signature-only stubs (fixes Gradle MockableJarTransform) ..."
-    & $javac -cp $cp -d $stubout $StubifierSrc
-    if ($LASTEXITCODE -ne 0) { Die "failed to compile Stubifier.java" }
-    & $java -cp "$stubout$sep$cp" Stubifier $dir
-    if ($LASTEXITCODE -ne 0) { Die "stubify pass failed" }
+    $bjArgs = @('--base', $baseJar, '--out', $output)
+    if ($OptKeepBodies)   { $bjArgs += '--keep-bodies' }
+    if ($OptKeepDangling) { $bjArgs += '--keep-dangling' }
+    $bjArgs += $overlays
+    & $script:ToolsJava -cp "$($script:ToolsOut)$sep$($script:ToolsCp)" BuildJar @bjArgs
+    if ($LASTEXITCODE -ne 0) { Die "assembly failed (see above)" }
 }
 
 # The success gate — four independent checks, each catching a failure mode the others miss (see the
@@ -420,24 +396,14 @@ public abstract class HiddenApiProbe extends ViewGroup {   // walks View -> Draw
     return $ok
 }
 
-# Compiles + runs the bundled ClosureVerify against the jar. Returns $false only on a HARD failure
-# (a missing public supertype); a missing tool/ASM is reported and treated as a skip (returns $true)
-# so the gate never blocks a build just because the checker itself could not run.
+# Runs ClosureVerify against the packaged jar (gate 4). Returns $false only on a HARD failure (a
+# missing public supertype); a missing tool/ASM is reported and treated as a skip (returns $true) so
+# the gate never blocks a build just because the checker itself could not run.
 function Test-Closure {
     param($jar, $work, $javac)
-    $lib  = Join-Path (Split-Path $script:D2J) 'lib'
-    $jars = @(Get-ChildItem -Path $lib -Recurse -Filter '*.jar' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
-    if ($jars.Count -eq 0 -or -not (Test-Path $ClosureSrc)) {
-        Write-Warn "closure check skipped (ASM lib or ClosureVerify.java not found)"; return $true
-    }
-    $java = Resolve-Tool 'java'; if (-not $java) { Write-Warn "closure check skipped (java not found)"; return $true }
+    if (-not (Initialize-JavaTools $work)) { Write-Warn "closure check skipped (ASM lib or cli/*.java not found)"; return $true }
     $sep = [IO.Path]::PathSeparator
-    $cp  = ($jars -join $sep)
-    $out = Join-Path $work 'closure-out'
-    New-Item -ItemType Directory -Path $out -Force | Out-Null
-    & $javac -cp $cp -d $out $ClosureSrc 2>$null
-    if ($LASTEXITCODE -ne 0) { Write-Warn "closure check skipped (could not compile ClosureVerify.java)"; return $true }
-    & $java -cp "$out$sep$cp" ClosureVerify $jar
+    & $script:ToolsJava -cp "$($script:ToolsOut)$sep$($script:ToolsCp)" ClosureVerify $jar
     return ($LASTEXITCODE -eq 0)
 }
 
@@ -517,6 +483,8 @@ BUILD OPTIONS (same flags as the bash script):
   --keep-bodies        keep real dex2jar method bodies instead of stripping them to signature-only
                        stubs. Bodies let you browse decompiled sources, but Gradle lint / unit tests
                        (MockableJarTransform) then FAIL on the jar. Default: strip to stubs.
+  --keep-dangling      keep classes whose supertypes were filtered out of the overlay. Default:
+                       prune them so the jar's supertype graph is closed like the stock android.jar.
 "@ | Write-Host
 }
 
@@ -542,6 +510,7 @@ while ($i -lt $argv.Count) {
         '--install'          { $OptInstall = $true; $i += 1; continue }
         '--keep'             { $OptKeep = $true; $i += 1; continue }
         '--keep-bodies'      { $OptKeepBodies = $true; $i += 1; continue }
+        '--keep-dangling'    { $OptKeepDangling = $true; $i += 1; continue }
         '-h'                 { $Command = 'help'; $i += 1; continue }
         '--help'             { $Command = 'help'; $i += 1; continue }
         default {

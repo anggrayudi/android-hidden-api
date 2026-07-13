@@ -1,119 +1,198 @@
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Structural gate for a custom android.jar: every class's direct superclass and interfaces must
- * resolve either inside the jar itself or in the running JDK.
- *
- * <p>Why: this is exactly the shape of the failure in issue #100 — Android Studio / the Kotlin
- * compiler reject a jar with "Cannot access '&lt;X&gt;' which is a supertype of '&lt;Y&gt;'. Check
- * your module classpath for missing or conflicting dependencies." The stock SDK android.jar has a
- * fully closed supertype graph (zero dangling references); a merge that drops or corrupts a class
- * some other class extends breaks that invariant, and the plain "does a probe compile?" check never
- * notices because it only touches a handful of symbols.
- *
- * <p>Severity is namespace-aware, so the gate is strict where it must be and quiet where a gap is
- * intentional:
+ * Verifies that a custom android.jar has a closed supertype graph: every class's direct superclass
+ * and interfaces must resolve inside the jar or the running JDK. This is exactly the shape of issue
+ * #100 ("Cannot access '&lt;X&gt;' which is a supertype of '&lt;Y&gt;' ... missing or conflicting
+ * dependencies"). Severity is namespace-aware:
  * <ul>
- *   <li><b>HARD FAIL</b> when a missing supertype is in the public SDK surface the jar promises to
- *       provide in full — {@code android/}, {@code dalvik/}, {@code java/}, {@code javax/}. A hole
- *       here is the issue-#100 symptom (e.g. {@code android/view/View} losing its
- *       {@code android/graphics/drawable/Drawable$Callback} interface).</li>
- *   <li><b>WARN</b> when a missing supertype is internal/impl the SDK never ships on the compile
- *       classpath ({@code com/android/ims}, {@code com/android/adservices}, protobuf runtime,
- *       {@code libcore/}, dex-desugaring synthetics, ...). hiddenjar deliberately overlays only the
- *       hidden-API namespaces, so a fringe internal class reaching into dropped impl is expected.</li>
+ *   <li><b>HARD</b> (exit 1) when a missing supertype is in the public SDK surface the jar promises
+ *       in full — {@code android/}, {@code dalvik/}, {@code java/}, {@code javax/}.</li>
+ *   <li><b>soft</b> (reported, exit 0) when it is internal/impl the SDK never ships on the compile
+ *       classpath ({@code com/android/ims}, {@code com/android/adservices}, protobuf, {@code libcore/},
+ *       ...). {@link BuildJar} prunes these by default so a shipped jar has zero of either.</li>
  * </ul>
  *
- * <p>Exit code: 1 if there is any hard failure, else 0.
+ * <p>The prune algorithm used by {@link BuildJar} lives here too ({@link #hardMissing} +
+ * {@link #soakDangling}) so verification and pruning share one definition of "resolvable".
  */
 public final class ClosureVerify {
 
     // Missing supertypes in these namespaces are hard failures — the jar promises them in full.
     private static final String[] FAIL_PREFIXES = { "android/", "dalvik/", "java/", "javax/" };
 
-    public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            System.err.println("usage: ClosureVerify <jar>");
-            System.exit(2);
-        }
+    public static void main(String[] args) throws IOException {
+        if (args.length < 1) { System.err.println("usage: ClosureVerify <jar|dir>"); System.exit(2); return; }
         Map<String, ClassNode> all = new HashMap<>();
-        try (ZipFile z = new ZipFile(args[0])) {
+        Path root = Paths.get(args[0]);
+        if (Files.isDirectory(root)) loadDir(root, all);
+        else loadJar(root, all);
+        System.exit(verify(all) > 0 ? 1 : 0);
+    }
+
+    // ------------------------------------------------------------------ loading
+    private static void loadJar(Path jar, Map<String, ClassNode> all) throws IOException {
+        try (ZipFile z = new ZipFile(jar.toFile())) {
             Enumeration<? extends ZipEntry> e = z.entries();
             while (e.hasMoreElements()) {
                 ZipEntry en = e.nextElement();
                 if (!en.getName().endsWith(".class")) continue;
-                ClassNode cn = new ClassNode();
-                new ClassReader(z.getInputStream(en)).accept(cn,
-                        ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-                all.put(cn.name, cn);
-            }
-        }
-
-        ClassLoader jdk = ClassLoader.getSystemClassLoader();
-        List<String> hardFails = new ArrayList<>();
-        TreeMap<String, Integer> softByNs = new TreeMap<>();
-
-        for (ClassNode cn : all.values()) {
-            List<String> refs = new ArrayList<>();
-            if (cn.superName != null) refs.add(cn.superName);
-            if (cn.interfaces != null) refs.addAll(cn.interfaces);
-            for (String r : refs) {
-                if (all.containsKey(r)) continue;                 // provided by the jar
-                if (loadableFromJdk(r, jdk)) continue;            // provided by the JDK
-                if (isHardFail(r)) {
-                    if (hardFails.size() < 50) hardFails.add(cn.name + "  ->  " + r);
-                } else {
-                    softByNs.merge(namespace(r), 1, Integer::sum);
+                try (InputStream in = z.getInputStream(en)) {
+                    ClassNode cn = read(in);
+                    all.put(cn.name, cn);
                 }
             }
         }
-
-        int soft = 0;
-        for (int v : softByNs.values()) soft += v;
-        System.err.println("[closure] scanned " + all.size() + " classes: "
-                + hardFails.size() + " hard, " + soft + " soft (intentionally-dropped internals)");
-        if (soft > 0) {
-            StringBuilder sb = new StringBuilder("[closure] soft (ok): ");
-            for (Map.Entry<String, Integer> m : softByNs.entrySet()) {
-                sb.append(m.getKey()).append('=').append(m.getValue()).append(' ');
-            }
-            System.err.println(sb.toString().trim());
-        }
-        if (!hardFails.isEmpty()) {
-            System.err.println("[closure] HARD FAIL — public supertypes missing from the jar:");
-            for (String s : hardFails) System.err.println("[closure]   " + s);
-            System.exit(1);
-        }
-        System.err.println("[closure] OK — public supertype graph is closed");
     }
 
-    private static boolean isHardFail(String internalName) {
+    private static void loadDir(Path dir, Map<String, ClassNode> all) throws IOException {
+        List<Path> paths = new ArrayList<>();
+        try (Stream<Path> s = Files.walk(dir)) {
+            s.filter(p -> p.toString().endsWith(".class")).forEach(paths::add);
+        }
+        for (Path p : paths) {
+            try (InputStream in = Files.newInputStream(p)) {
+                ClassNode cn = read(in);
+                all.put(cn.name, cn);
+            }
+        }
+    }
+
+    /** Parses a class's header only (no code/frames/debug) — all we need is super + interfaces. */
+    public static ClassNode read(InputStream in) throws IOException {
+        ClassNode cn = new ClassNode();
+        new ClassReader(in).accept(cn, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+        return cn;
+    }
+
+    // ------------------------------------------------------------------ verify (gate 4)
+    private static int verify(Map<String, ClassNode> all) {
+        ClassLoader jdk = ClassLoader.getSystemClassLoader();
+        Map<String, Boolean> jdkCache = new HashMap<>();
+        List<String> hard = new ArrayList<>();
+        TreeMap<String, Integer> soft = new TreeMap<>();
+        for (ClassNode cn : all.values()) {
+            for (String r : supers(cn)) {
+                if (all.containsKey(r) || jdkLoadable(r, jdk, jdkCache)) continue;
+                if (isHardNs(r)) { if (hard.size() < 50) hard.add(cn.name + "  ->  " + r); }
+                else soft.merge(namespace(r), 1, Integer::sum);
+            }
+        }
+        int softN = 0;
+        for (int v : soft.values()) softN += v;
+        System.err.println("[closure] scanned " + all.size() + " classes: "
+                + hard.size() + " hard, " + softN + " soft (intentionally-dropped internals)");
+        if (softN > 0) System.err.println("[closure] soft (ok): " + join(soft));
+        if (!hard.isEmpty()) {
+            System.err.println("[closure] HARD FAIL — public supertypes missing from the jar:");
+            for (String s : hard) System.err.println("[closure]   " + s);
+            return hard.size();
+        }
+        System.err.println("[closure] OK — public supertype graph is closed");
+        return 0;
+    }
+
+    // ------------------------------------------------------------------ shared prune algorithm
+    /**
+     * Guard phase: public-surface supertypes ({@code android/dalvik/java/javax}) that are missing.
+     * A non-empty result means a genuine regression — the caller must abort rather than prune, or
+     * pruning would silently delete real public API and mask the issue-#100 bug.
+     */
+    public static List<String> hardMissing(Map<String, ClassNode> all) {
+        ClassLoader jdk = ClassLoader.getSystemClassLoader();
+        Map<String, Boolean> jdkCache = new HashMap<>();
+        List<String> hard = new ArrayList<>();
+        for (ClassNode cn : all.values()) {
+            for (String r : supers(cn)) {
+                if (all.containsKey(r) || jdkLoadable(r, jdk, jdkCache)) continue;
+                if (isHardNs(r) && hard.size() < 50) hard.add(cn.name + "  ->  " + r);
+            }
+        }
+        return hard;
+    }
+
+    /**
+     * Well-foundedness fixpoint: the set of internal class names to remove because their supertype
+     * chain is not resolvable. Only superclass/interface edges are followed (never method/field
+     * references) — those are the only edges the compiler must resolve to load a type. Call only
+     * after {@link #hardMissing} is empty, so every removal is rooted in an intentionally-dropped
+     * namespace, never in a real public-surface hole.
+     */
+    public static Set<String> soakDangling(Map<String, ClassNode> all) {
+        ClassLoader jdk = ClassLoader.getSystemClassLoader();
+        Map<String, Boolean> jdkCache = new HashMap<>();
+        Set<String> present = new HashSet<>(all.keySet());
+        Set<String> removed = new HashSet<>();
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            List<String> drop = new ArrayList<>();
+            for (String name : present) {
+                for (String r : supers(all.get(name))) {
+                    if (present.contains(r) || jdkLoadable(r, jdk, jdkCache)) continue;
+                    drop.add(name);
+                    break;
+                }
+            }
+            if (!drop.isEmpty()) {
+                present.removeAll(drop);
+                removed.addAll(drop);
+                changed = true;
+            }
+        }
+        return removed;
+    }
+
+    // ------------------------------------------------------------------ helpers
+    private static List<String> supers(ClassNode cn) {
+        List<String> r = new ArrayList<>();
+        if (cn.superName != null) r.add(cn.superName);
+        if (cn.interfaces != null) r.addAll(cn.interfaces);
+        return r;
+    }
+
+    private static boolean isHardNs(String internalName) {
         for (String p : FAIL_PREFIXES) if (internalName.startsWith(p)) return true;
         return false;
     }
 
-    private static boolean loadableFromJdk(String internalName, ClassLoader jdk) {
-        try {
-            Class.forName(internalName.replace('/', '.'), false, jdk);
-            return true;
-        } catch (Throwable t) {
-            return false;
-        }
+    private static boolean jdkLoadable(String internalName, ClassLoader jdk, Map<String, Boolean> cache) {
+        Boolean b = cache.get(internalName);
+        if (b != null) return b;
+        boolean ok;
+        try { Class.forName(internalName.replace('/', '.'), false, jdk); ok = true; }
+        catch (Throwable t) { ok = false; }
+        cache.put(internalName, ok);
+        return ok;
     }
 
     private static String namespace(String internalName) {
         String[] p = internalName.split("/");
         return p.length >= 2 ? p[0] + "/" + p[1] : p[0];
+    }
+
+    public static String join(TreeMap<String, Integer> m) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Integer> e : m.entrySet()) sb.append(e.getKey()).append('=').append(e.getValue()).append(' ');
+        return sb.toString().trim();
     }
 
     private ClosureVerify() {}

@@ -75,8 +75,8 @@ powershell -ExecutionPolicy Bypass -File cli\hiddenjar.ps1 restore --api 37
 ```
 
 Common flags (both scripts): `--serial <id>`, `--avd <name>`, `--api <n>`, `--sdk-dir <path>`,
-`--output <file>`, `--install`, `--only-framework`, `--keep-bodies`, `--dex-tools <dir>`. Run the script with `help`
-for the full list.
+`--output <file>`, `--install`, `--only-framework`, `--keep-bodies`, `--keep-dangling`, `--dex-tools <dir>`.
+Run the script with `help` for the full list.
 
 ### Option B — the Gradle wrapper (macOS/Linux/Windows)
 

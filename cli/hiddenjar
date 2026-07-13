@@ -22,6 +22,7 @@ MIN_JAR_BYTES=1024   # jars smaller than this are almost certainly stripped shel
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STUBIFIER_SRC="${SCRIPT_DIR}/Stubifier.java"
 CLOSURE_SRC="${SCRIPT_DIR}/ClosureVerify.java"
+BUILDJAR_SRC="${SCRIPT_DIR}/BuildJar.java"
 
 # Options (set by parse_args)
 OPT_SERIAL=""
@@ -35,6 +36,7 @@ OPT_DEX_TOOLS=""
 OPT_WORK_DIR=""
 OPT_KEEP="false"
 OPT_KEEP_BODIES="false"
+OPT_KEEP_DANGLING="false"
 
 ADB=""
 D2J=""
@@ -91,6 +93,10 @@ BUILD OPTIONS:
   --keep-bodies        keep real dex2jar method bodies instead of stripping them to signature-only
                        stubs. Bodies let you browse decompiled sources, but Gradle lint / unit tests
                        (MockableJarTransform) then FAIL on the jar. Default: strip to stubs.
+  --keep-dangling      keep classes whose supertypes were filtered out of the overlay. Default:
+                       prune them so the jar's supertype graph is closed like the stock android.jar
+                       (an app never uses these fringe internal classes, and they can only ever
+                       reproduce the issue-#100 "Cannot access ... supertype" error if referenced).
 
 EXAMPLES:
   hiddenjar doctor
@@ -196,25 +202,37 @@ pick_serial() {
   else die "no adb device online — start an emulator or pass --avd NAME"; fi
 }
 
-# Strip every .class under a directory to a signature-only stub, in place.
-#
-# hiddenjar overlays real dex2jar-decompiled framework bodies onto android.jar. Those bodies carry
-# try/catch blocks, and Gradle's MockableJarGenerator (lint + unit tests) crashes on them
-# (NPE "Cannot read field outgoingEdges ... handlerRangeBlock is null", issue #46). Reducing the
-# classes to stubs — exactly the shape the SDK's own android.jar ships — makes the transform pass.
-# javac only reads signatures, so compilation of hidden/internal APIs is unaffected.
-stubify_dir() {
-  local dir="$1"
-  local lib cp stubout
+# Compiles the bundled Java tools once (ASM comes from the dex-tools lib) and caches the classpath in
+# JAVA_TOOLS_CP / JAVA_TOOLS_OUT. BuildJar assembles the jar; ClosureVerify is the gate-4 checker;
+# Stubifier is the byte-level stubber BuildJar calls. Returns non-zero if they cannot be built.
+JAVA_TOOLS_CP=""
+JAVA_TOOLS_OUT=""
+ensure_java_tools() {
+  [ -n "$JAVA_TOOLS_OUT" ] && [ -f "${JAVA_TOOLS_OUT}/BuildJar.class" ] && return 0
+  local lib cp
   lib="$(dirname "$D2J")/lib"
   cp="$(find "$lib" -name '*.jar' 2>/dev/null | tr '\n' ':')"
-  [ -n "$cp" ] || die "dex-tools lib (ASM) not found under $lib; cannot strip method bodies (pass --keep-bodies to skip)"
-  [ -f "$STUBIFIER_SRC" ] || die "Stubifier.java not found at $STUBIFIER_SRC — keep the cli/ directory intact, or pass --keep-bodies"
-  stubout="${WORK_DIR}/stubifier-out"
-  mkdir -p "$stubout"
-  log "Stripping method bodies to signature-only stubs (fixes Gradle MockableJarTransform) ..."
-  javac -cp "$cp" -d "$stubout" "$STUBIFIER_SRC" || die "failed to compile Stubifier.java"
-  java -cp "${stubout}:${cp}" Stubifier "$dir" || die "stubify pass failed"
+  [ -n "$cp" ] || return 1
+  [ -f "$BUILDJAR_SRC" ] && [ -f "$STUBIFIER_SRC" ] && [ -f "$CLOSURE_SRC" ] || return 1
+  JAVA_TOOLS_OUT="${WORK_DIR}/cli-out"; mkdir -p "$JAVA_TOOLS_OUT"
+  javac -cp "$cp" -d "$JAVA_TOOLS_OUT" "$STUBIFIER_SRC" "$CLOSURE_SRC" "$BUILDJAR_SRC" 2>/dev/null \
+    || { JAVA_TOOLS_OUT=""; return 1; }
+  JAVA_TOOLS_CP="$cp"
+  return 0
+}
+
+# Assembles the custom android.jar in memory (base + overlay jars), applying the namespace filter,
+# prune and stubify. No filesystem round-trip, so case-colliding classes are never lost (macOS/
+# Windows). BuildJar exits non-zero on a real regression (a missing public supertype) — we die then.
+assemble_jar() {
+  local base="$1" out="$2"; shift 2
+  ensure_java_tools || die "Java tools (ASM/Stubifier/ClosureVerify/BuildJar) unavailable — keep cli/*.java intact"
+  local -a flags=()
+  [ "$OPT_KEEP_BODIES" = "true" ]   && flags+=( --keep-bodies )
+  [ "$OPT_KEEP_DANGLING" = "true" ] && flags+=( --keep-dangling )
+  # ${flags[@]+...} keeps macOS bash 3.2 + `set -u` from erroring on an empty array expansion.
+  java -cp "${JAVA_TOOLS_OUT}:${JAVA_TOOLS_CP}" BuildJar --base "$base" --out "$out" ${flags[@]+"${flags[@]}"} "$@" \
+    || die "assembly failed (see above)"
 }
 
 # ----------------------------------------------------------------------------
@@ -251,8 +269,8 @@ cmd_build() {
   else
     WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/hiddenjar.XXXXXX")"; WORK_DIR_IS_TEMP="true"
   fi
-  local pulled="${WORK_DIR}/pulled" classes="${WORK_DIR}/classes" merged="${WORK_DIR}/merged"
-  mkdir -p "$pulled" "$classes" "$merged"
+  local pulled="${WORK_DIR}/pulled" classes="${WORK_DIR}/classes"
+  mkdir -p "$pulled" "$classes"
 
   # Determine the jar list to pull.
   local jar_list=""
@@ -294,43 +312,23 @@ EOF
   log "Jars converted: $converted, skipped: $skipped, failed: $failed"
   [ "$converted" -gt 0 ] || die "no framework jars had usable DEX — use an API >= 34 image or a device"
 
-  # Merge: SDK android.jar first (base = the curated public API surface), then overlay the
-  # device's real framework bytecode on top so @hide members and com.android.internal appear.
-  #
-  # Filter the overlay by NAMESPACE, not by source jar. The boot classpath also carries the full
-  # ART runtime (java/*, sun/*, jdk/*, javax/*, libcore/*) and repackaged libraries
-  # (com.android.okhttp, com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...). None of
-  # those belong on the compile classpath; overlaying them shadows the JDK and the app's own
-  # dependencies, so Kotlin/Gradle then reject the jar ("Cannot access <X> which is a supertype
-  # ... missing or conflicting dependencies", issue #100). We keep only what the SDK is meant to
-  # expose: android.* (public + @hide — much of it now ships from APEX modules like framework-wifi,
-  # not just framework.jar), plus com.android.internal.* and dalvik.* (e.g. @hide
-  # dalvik.system.VMRuntime). Everything else stays out; the base jar already provides the curated
-  # java.*/javax.*/org.*/dalvik.* public stubs.
-  log "Merging into custom android.jar (overlay filtered to hidden-API namespaces) ..."
-  ( cd "$merged" && unzip -q -o "$base_jar" )
-  local -a overlay_ns=( 'android/*' 'com/android/internal/*' 'dalvik/*' )
-  local cj rc
-  for cj in "${classes}"/*-classes.jar; do
-    [ -f "$cj" ] || continue
-    rc=0
-    ( cd "$merged" && unzip -q -o "$cj" "${overlay_ns[@]}" ) || rc=$?
-    # unzip rc 11 = this jar held none of the allowlisted namespaces (e.g. a pure-runtime jar);
-    # that is expected and intentional. Any other non-zero code is a real extraction error.
-    [ "$rc" -eq 0 ] || [ "$rc" -eq 11 ] || warn "overlay failed (unzip rc=$rc): $(basename "$cj")"
-  done
-  rm -rf "${merged}/META-INF"
-
-  # Strip real method bodies to stubs (default) so Gradle's MockableJarTransform accepts the jar.
-  if [ "$OPT_KEEP_BODIES" = "true" ]; then
-    warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar"
-  else
-    stubify_dir "$merged"
-  fi
-
-  # Output path
+  # Assemble the custom android.jar in memory (base + overlay jars) — see cli/BuildJar.java. The
+  # overlay is filtered by NAMESPACE, not by source jar: the boot classpath also carries the full ART
+  # runtime (java/*, sun/*, jdk/*, libcore/*) and repackaged libraries (com.android.okhttp,
+  # com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...) which shadow the JDK and the app's
+  # dependencies and make Kotlin/Gradle reject the jar (issue #100). We keep only android.* (public +
+  # @hide — much of it ships from APEX modules like framework-wifi), com.android.internal.* and
+  # dalvik.* on top of the base SDK jar, then prune dangling classes and stubify. Doing it in memory
+  # (never extracting to a directory) also means case-colliding classes such as
+  # android.media.AudioAttributes vs android.media.Audioattributes both survive on macOS/Windows.
   local output="${OPT_OUTPUT:-$(pwd)/android-${api}-custom.jar}"
-  ( cd "$merged" && jar cf "$output" . ) || die "jar packaging failed"
+  [ "$OPT_KEEP_BODIES" = "true" ] && warn "--keep-bodies: keeping real method bodies; Gradle lint/unit tests (MockableJarTransform) will FAIL on this jar"
+  [ "$OPT_KEEP_DANGLING" = "true" ] && info "--keep-dangling: keeping classes whose supertypes were filtered out"
+  log "Assembling custom android.jar (in-memory: base + overlays, filtered) ..."
+  local -a overlays=()
+  local cj
+  for cj in "${classes}"/*-classes.jar; do [ -f "$cj" ] && overlays+=( "$cj" ); done
+  assemble_jar "$base_jar" "$output" ${overlays[@]+"${overlays[@]}"}
   local outsize; outsize="$(wc -c < "$output" | tr -d ' ')"
   local internal; internal="$(unzip -l "$output" 2>/dev/null | grep -c 'com/android/internal/' || true)"
   local allclasses; allclasses="$(unzip -l "$output" 2>/dev/null | grep -c '\.class$' || true)"
@@ -434,21 +432,13 @@ JAVA
   return "$ok"
 }
 
-# Compiles + runs the bundled ClosureVerify against the jar. Returns non-zero only on a HARD failure
-# (a missing public supertype); a missing tool/ASM is reported and treated as a skip (returns 0) so
-# the gate never blocks a build just because the checker itself could not run.
+# Runs ClosureVerify against the packaged jar. Returns non-zero only on a HARD failure (a missing
+# public supertype); a missing tool/ASM is reported and treated as a skip (returns 0) so the gate
+# never blocks a build just because the checker itself could not run.
 closure_verify() {
-  local jar="$1" lib cp out
-  lib="$(dirname "$D2J")/lib"
-  cp="$(find "$lib" -name '*.jar' 2>/dev/null | tr '\n' ':')"
-  if [ -z "$cp" ] || [ ! -f "$CLOSURE_SRC" ]; then
-    warn "closure check skipped (ASM lib or ClosureVerify.java not found)"; return 0
-  fi
-  out="${WORK_DIR}/closure-out"; mkdir -p "$out"
-  if ! javac -cp "$cp" -d "$out" "$CLOSURE_SRC" 2>/dev/null; then
-    warn "closure check skipped (could not compile ClosureVerify.java)"; return 0
-  fi
-  java -cp "${out}:${cp}" ClosureVerify "$jar"
+  local jar="$1"
+  ensure_java_tools || { warn "closure check skipped (ASM lib or cli/*.java not found)"; return 0; }
+  java -cp "${JAVA_TOOLS_OUT}:${JAVA_TOOLS_CP}" ClosureVerify "$jar"
 }
 
 install_jar() {
@@ -518,6 +508,7 @@ parse_args() {
       --work-dir) OPT_WORK_DIR="$2"; shift 2;;
       --keep) OPT_KEEP="true"; shift;;
       --keep-bodies) OPT_KEEP_BODIES="true"; shift;;
+      --keep-dangling) OPT_KEEP_DANGLING="true"; shift;;
       -h|--help) usage; exit 0;;
       *) die "unknown option: $1";;
     esac

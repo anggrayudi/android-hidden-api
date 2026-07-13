@@ -65,7 +65,8 @@ public final class Stubifier {
         System.err.println("[stubify] classes stubbed: " + stubbed + ", failed: " + failed);
     }
 
-    private static byte[] stubify(byte[] in) {
+    /** Rewrites one class into a signature-only stub. Reused by {@link BuildJar}. */
+    public static byte[] stubify(byte[] in) {
         ClassReader cr = new ClassReader(in);
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);
