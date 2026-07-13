@@ -28,6 +28,7 @@ $MinJarBytes     = 1024
 # Directory of this script — used to locate the bundled Stubifier.java.
 $ScriptDir    = $PSScriptRoot
 $StubifierSrc = Join-Path $ScriptDir 'Stubifier.java'
+$ClosureSrc   = Join-Path $ScriptDir 'ClosureVerify.java'
 
 # Works on both Windows PowerShell 5.1 (no $IsWindows) and PowerShell 7+.
 $OnWindows = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
@@ -242,13 +243,44 @@ function Invoke-Build {
     Write-Log "Jars converted: $converted, skipped: $skipped, failed: $failed"
     if ($converted -eq 0) { Die "no framework jars had usable DEX — use an API >= 34 image or a device" }
 
-    # Merge: SDK android.jar first (base), framework classes overlaid on top.
-    Write-Log "Merging into custom android.jar ..."
+    # Merge: SDK android.jar first (base = the curated public API surface), then overlay the
+    # device's real framework bytecode so @hide members and com.android.internal appear.
+    #
+    # Filter the overlay by NAMESPACE, not by source jar. The boot classpath also carries the full
+    # ART runtime (java/*, sun/*, jdk/*, javax/*, libcore/*) and repackaged libraries
+    # (com.android.okhttp, com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...). None of
+    # those belong on the compile classpath; overlaying them shadows the JDK and the app's own
+    # dependencies, so Kotlin/Gradle then reject the jar ("Cannot access <X> which is a supertype
+    # ... missing or conflicting dependencies", issue #100). Keep only what the SDK is meant to
+    # expose: android.* (public + @hide, incl. APEX modules like framework-wifi), com.android.internal.*
+    # and dalvik.* (e.g. @hide dalvik.system.VMRuntime). The base jar already provides the curated
+    # java.*/javax.*/org.*/dalvik.* public stubs, so we never let the overlay clobber those.
+    #
+    # The JDK 'jar' tool can't extract by wildcard the way unzip does, so extract each overlay jar
+    # to a scratch dir and copy only the allowlisted namespace subtrees into $merged.
+    Write-Log "Merging into custom android.jar (overlay filtered to hidden-API namespaces) ..."
     Push-Location $merged
-    try {
-        & $jarTool xf $baseJar
-        Get-ChildItem -Path $classes -Filter '*-classes.jar' | ForEach-Object { & $jarTool xf $_.FullName }
-    } finally { Pop-Location }
+    try { & $jarTool xf $baseJar } finally { Pop-Location }
+    $overlayNs = @('android', 'com/android/internal', 'dalvik')  # forward slashes: portable across Win/*nix
+    Get-ChildItem -Path $classes -Filter '*-classes.jar' | ForEach-Object {
+        $ovl = Join-Path $work ('ovl-' + [IO.Path]::GetFileNameWithoutExtension($_.Name))
+        if (Test-Path $ovl) { Remove-Item -Recurse -Force $ovl }
+        New-Item -ItemType Directory -Path $ovl -Force | Out-Null
+        Push-Location $ovl
+        try { & $jarTool xf $_.FullName } finally { Pop-Location }
+        foreach ($ns in $overlayNs) {
+            $srcRoot = Join-Path $ovl $ns
+            if (-not (Test-Path $srcRoot)) { continue }
+            Get-ChildItem -Path $srcRoot -Recurse -File | ForEach-Object {
+                $rel = $_.FullName.Substring($ovl.Length).TrimStart('\', '/')
+                $dst = Join-Path $merged $rel
+                $dstDir = Split-Path $dst -Parent
+                if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
+                Copy-Item -LiteralPath $_.FullName -Destination $dst -Force
+            }
+        }
+        Remove-Item -Recurse -Force $ovl
+    }
     $metaInf = Join-Path $merged 'META-INF'
     if (Test-Path $metaInf) { Remove-Item -Recurse -Force $metaInf }
 
@@ -271,7 +303,7 @@ function Invoke-Build {
     $internal   = @($entries | Select-String -Pattern 'com/android/internal/').Count
     Write-Log "Built: $output ($outsize bytes, $allclasses classes, $internal com.android.internal)"
 
-    if (-not (Test-Compile $output $work $javac)) { Die "verification failed: hidden-API probe did not compile" }
+    if (-not (Test-Compile $output $baseJar $work $javac $jarTool)) { Die "verification failed (see checks above)" }
 
     if ($OptInstall) { Install-Jar $output $platformDir $jarTool }
 
@@ -305,30 +337,108 @@ function Invoke-Stubify {
     if ($LASTEXITCODE -ne 0) { Die "stubify pass failed" }
 }
 
+# The success gate — four independent checks, each catching a failure mode the others miss (see the
+# bash script's verify_compile for the rationale; issue #100 slipped past the old single-probe gate).
 function Test-Compile {
-    param($jar, $work, $javac)
+    param($jar, $baseJar, $work, $javac, $jarTool)
     $probe = Join-Path $work 'probe'
     New-Item -ItemType Directory -Path $probe -Force | Out-Null
+    $ok = $true
+
+    # (1) Compile probe: normal public API + supertype chains (View -> Drawable.Callback, Activity, ...)
+    #     AND @hide symbols across android.*, dalvik.* and com.android.internal.*.
     $src = Join-Path $probe 'HiddenApiProbe.java'
     @'
+import android.app.Activity;
 import android.app.ActivityThread;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ServiceManager;
+import android.view.View;
+import android.view.ViewGroup;
+import dalvik.system.VMRuntime;
 
-// Uses long-standing @hide symbols to prove the custom jar exposes hidden APIs.
-public class HiddenApiProbe {
-    IBinder windowService() { return ServiceManager.getService("window"); }
-    ActivityThread currentThread() { return ActivityThread.currentActivityThread(); }
+public abstract class HiddenApiProbe extends ViewGroup {   // walks View -> Drawable.Callback, KeyEvent.Callback, ...
+    public HiddenApiProbe(Context c) { super(c); }
+    Drawable.Callback asDrawableCallback() { return this; } // View implements Drawable.Callback (issue #100 supertype)
+    Activity activity;
+    Bundle bundle;
+    View view;
+    IBinder windowService() { return ServiceManager.getService("window"); } // @hide android.os
+    ActivityThread currentThread() { return ActivityThread.currentActivityThread(); } // @hide android.app
+    Object vmRuntime() { return VMRuntime.getRuntime(); } // @hide dalvik.system (absent from stock)
+    Class<?> internal() { return com.android.internal.R.class; } // com.android.internal
 }
 '@ | Set-Content -Path $src -Encoding ASCII
     $log = Join-Path $probe 'javac.log'
     & $javac -nowarn -cp $jar -d (Join-Path $probe 'out') $src 2> $log
     if ($LASTEXITCODE -eq 0) {
-        Write-Log "Verification OK: hidden-API probe compiled (ServiceManager.getService, ActivityThread.currentActivityThread)"
-        return $true
+        Write-Note "verify(1/4) compile probe OK — View/ViewGroup/Drawable.Callback/Activity + @hide resolve"
+    } else {
+        Write-Warn "verify(1/4) compile probe FAILED — the jar cannot resolve core public + hidden APIs:"
+        Get-Content $log -ErrorAction SilentlyContinue | Write-Host
+        $ok = $false
     }
-    Write-Warn "javac output:"; Get-Content $log -ErrorAction SilentlyContinue | Write-Host
-    return $false
+
+    $entries = & $jarTool tf $jar
+
+    # (2) Conflict guard: the jar must NOT ship the ART runtime / repackaged libs that shadow the JDK
+    #     and the app's own dependencies (the issue-#100 cause; also guards the overlay filter).
+    $polluted = @($entries |
+        Where-Object { $_ -match '^(sun|jdk|libcore|com/google|com/android/okhttp|com/android/org|gov/nist|org/apache/(xml|xpath|xalan))/' } |
+        ForEach-Object { ($_ -split '/')[0..1] -join '/' } | Sort-Object -Unique)
+    if ($polluted.Count -gt 0) {
+        Write-Warn ("verify(2/4) conflict guard FAILED — jar ships JDK/dependency-shadowing namespaces: " + ($polluted -join ' '))
+        $ok = $false
+    } else {
+        Write-Note "verify(2/4) conflict guard OK — no JDK/dependency-shadowing namespaces"
+    }
+
+    # (3) Public-API floor: the merge overlays onto the SDK jar, so the result must never have FEWER
+    #     classes than the base SDK jar.
+    $outN  = @($entries | Select-String -Pattern '\.class$').Count
+    $baseN = @((& $jarTool tf $baseJar) | Select-String -Pattern '\.class$').Count
+    if ($outN -lt $baseN) {
+        Write-Warn "verify(3/4) public-API floor FAILED — jar has $outN classes but base SDK jar has $baseN"
+        $ok = $false
+    } else {
+        Write-Note "verify(3/4) public-API floor OK — $outN classes (>= $baseN in base SDK jar)"
+    }
+
+    # (4) Supertype closure: no android.*/dalvik.*/java.* class may be left with a dangling supertype
+    #     (the exact issue-#100 symptom, e.g. View losing Drawable.Callback).
+    if (Test-Closure $jar $work $javac) {
+        Write-Note "verify(4/4) supertype closure OK"
+    } else {
+        Write-Warn "verify(4/4) supertype closure FAILED — a public supertype is missing (issue #100 symptom)"
+        $ok = $false
+    }
+
+    if ($ok) { Write-Log "Verification OK: all 4 checks passed" } else { Write-Warn "Verification FAILED (see checks above)" }
+    return $ok
+}
+
+# Compiles + runs the bundled ClosureVerify against the jar. Returns $false only on a HARD failure
+# (a missing public supertype); a missing tool/ASM is reported and treated as a skip (returns $true)
+# so the gate never blocks a build just because the checker itself could not run.
+function Test-Closure {
+    param($jar, $work, $javac)
+    $lib  = Join-Path (Split-Path $script:D2J) 'lib'
+    $jars = @(Get-ChildItem -Path $lib -Recurse -Filter '*.jar' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
+    if ($jars.Count -eq 0 -or -not (Test-Path $ClosureSrc)) {
+        Write-Warn "closure check skipped (ASM lib or ClosureVerify.java not found)"; return $true
+    }
+    $java = Resolve-Tool 'java'; if (-not $java) { Write-Warn "closure check skipped (java not found)"; return $true }
+    $sep = [IO.Path]::PathSeparator
+    $cp  = ($jars -join $sep)
+    $out = Join-Path $work 'closure-out'
+    New-Item -ItemType Directory -Path $out -Force | Out-Null
+    & $javac -cp $cp -d $out $ClosureSrc 2>$null
+    if ($LASTEXITCODE -ne 0) { Write-Warn "closure check skipped (could not compile ClosureVerify.java)"; return $true }
+    & $java -cp "$out$sep$cp" ClosureVerify $jar
+    return ($LASTEXITCODE -eq 0)
 }
 
 function Install-Jar {
@@ -397,7 +507,8 @@ BUILD OPTIONS (same flags as the bash script):
   --api N              API level override (default: read from device)
   --sdk-dir DIR        Android SDK root (default: %LOCALAPPDATA%\Android\Sdk / ANDROID_HOME)
   --only-framework     merge only /system/framework/framework.jar (fast, incomplete)
-  --all-bootclasspath  merge every \$BOOTCLASSPATH jar that has DEX (default; full coverage)
+  --all-bootclasspath  merge hidden-API namespaces (android.*, com.android.internal.*, dalvik.*)
+                       from every \$BOOTCLASSPATH jar that has DEX (default; full coverage)
   --output FILE        output path (default: .\android-<api>-custom.jar)
   --install            install into <sdk>\platforms\android-<api>*\android.jar (auto-backup .orig)
   --dex-tools DIR      path to an unpacked dex-tools distribution (default: auto-download + cache)

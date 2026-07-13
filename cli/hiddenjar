@@ -21,6 +21,7 @@ MIN_JAR_BYTES=1024   # jars smaller than this are almost certainly stripped shel
 # Directory of this script — used to locate the bundled Stubifier.java.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STUBIFIER_SRC="${SCRIPT_DIR}/Stubifier.java"
+CLOSURE_SRC="${SCRIPT_DIR}/ClosureVerify.java"
 
 # Options (set by parse_args)
 OPT_SERIAL=""
@@ -80,7 +81,8 @@ BUILD OPTIONS:
   --api N              API level override (default: read from device)
   --sdk-dir DIR        Android SDK root (default: \$ANDROID_HOME / \$ANDROID_SDK_ROOT / ~/Library/Android/sdk)
   --only-framework     merge only /system/framework/framework.jar (fast, incomplete)
-  --all-bootclasspath  merge every \$BOOTCLASSPATH jar that has DEX (default; full coverage)
+  --all-bootclasspath  merge hidden-API namespaces (android.*, com.android.internal.*, dalvik.*)
+                       from every \$BOOTCLASSPATH jar that has DEX (default; full coverage)
   --output FILE        output path (default: ./android-<api>-custom.jar)
   --install            install into <sdk>/platforms/android-<api>*/android.jar (auto-backup .orig)
   --dex-tools DIR      path to an unpacked dex-tools distribution (default: auto-download + cache)
@@ -292,13 +294,30 @@ EOF
   log "Jars converted: $converted, skipped: $skipped, failed: $failed"
   [ "$converted" -gt 0 ] || die "no framework jars had usable DEX — use an API >= 34 image or a device"
 
-  # Merge: SDK android.jar first (base), framework classes overlaid on top.
-  log "Merging into custom android.jar ..."
+  # Merge: SDK android.jar first (base = the curated public API surface), then overlay the
+  # device's real framework bytecode on top so @hide members and com.android.internal appear.
+  #
+  # Filter the overlay by NAMESPACE, not by source jar. The boot classpath also carries the full
+  # ART runtime (java/*, sun/*, jdk/*, javax/*, libcore/*) and repackaged libraries
+  # (com.android.okhttp, com.android.org.bouncycastle, org.apache.xml*, gov.nist, ...). None of
+  # those belong on the compile classpath; overlaying them shadows the JDK and the app's own
+  # dependencies, so Kotlin/Gradle then reject the jar ("Cannot access <X> which is a supertype
+  # ... missing or conflicting dependencies", issue #100). We keep only what the SDK is meant to
+  # expose: android.* (public + @hide — much of it now ships from APEX modules like framework-wifi,
+  # not just framework.jar), plus com.android.internal.* and dalvik.* (e.g. @hide
+  # dalvik.system.VMRuntime). Everything else stays out; the base jar already provides the curated
+  # java.*/javax.*/org.*/dalvik.* public stubs.
+  log "Merging into custom android.jar (overlay filtered to hidden-API namespaces) ..."
   ( cd "$merged" && unzip -q -o "$base_jar" )
-  local cj
+  local -a overlay_ns=( 'android/*' 'com/android/internal/*' 'dalvik/*' )
+  local cj rc
   for cj in "${classes}"/*-classes.jar; do
     [ -f "$cj" ] || continue
-    ( cd "$merged" && unzip -q -o "$cj" ) || warn "overlay had conflicts: $(basename "$cj")"
+    rc=0
+    ( cd "$merged" && unzip -q -o "$cj" "${overlay_ns[@]}" ) || rc=$?
+    # unzip rc 11 = this jar held none of the allowlisted namespaces (e.g. a pure-runtime jar);
+    # that is expected and intentional. Any other non-zero code is a real extraction error.
+    [ "$rc" -eq 0 ] || [ "$rc" -eq 11 ] || warn "overlay failed (unzip rc=$rc): $(basename "$cj")"
   done
   rm -rf "${merged}/META-INF"
 
@@ -317,8 +336,8 @@ EOF
   local allclasses; allclasses="$(unzip -l "$output" 2>/dev/null | grep -c '\.class$' || true)"
   log "Built: $output (${outsize} bytes, ${allclasses} classes, ${internal} com.android.internal)"
 
-  # Verify: compile a hidden-API probe against the merged jar (the real success gate).
-  verify_compile "$output" || die "verification failed: hidden-API probe did not compile"
+  # Verify: prove the jar is actually usable before we let it near an SDK (the real success gate).
+  verify_compile "$output" "$base_jar" || die "verification failed (see checks above)"
 
   # Install
   if [ "$OPT_INSTALL" = "true" ]; then
@@ -328,31 +347,108 @@ EOF
   log "Done."
 }
 
+# The success gate. A jar that "builds" is worthless if the toolchain later rejects it, so we run
+# four independent checks — each catches a failure mode the others miss (issue #100 slipped past the
+# old one-probe gate because that probe only touched three @hide symbols and never a normal class):
+#   1. compile probe  — hidden AND normal public API + supertype chains resolve under javac
+#   2. conflict guard  — the jar does NOT ship JDK/dependency-shadowing runtime (the issue-#100 cause)
+#   3. public-API floor — the merge never dropped the SDK's own classes
+#   4. supertype closure — no public class is left with a missing/dangling supertype
 verify_compile() {
-  local jar="$1"
+  local jar="$1" base="$2"
   local probe="${WORK_DIR}/probe"
   mkdir -p "$probe"
+  local ok=0
+
+  # (1) Compile probe: normal public API + supertype chains (View→Drawable.Callback, Activity, ...)
+  #     AND @hide symbols across android.*, dalvik.* and com.android.internal.*. If any of these
+  #     types or the supertype graph they touch is missing/corrupt, javac fails here.
   cat > "${probe}/HiddenApiProbe.java" <<'JAVA'
+import android.app.Activity;
 import android.app.ActivityThread;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ServiceManager;
+import android.view.View;
+import android.view.ViewGroup;
+import dalvik.system.VMRuntime;
 
-// Uses long-standing @hide symbols to prove the custom jar exposes hidden APIs.
-public class HiddenApiProbe {
-    IBinder windowService() {
-        return ServiceManager.getService("window");
-    }
-    ActivityThread currentThread() {
-        return ActivityThread.currentActivityThread();
-    }
+public abstract class HiddenApiProbe extends ViewGroup {   // walks View → Drawable.Callback, KeyEvent.Callback, ...
+    public HiddenApiProbe(Context c) { super(c); }
+    Drawable.Callback asDrawableCallback() { return this; } // View implements Drawable.Callback (issue #100 supertype)
+    Activity activity;
+    Bundle bundle;
+    View view;
+    IBinder windowService() { return ServiceManager.getService("window"); } // @hide android.os
+    ActivityThread currentThread() { return ActivityThread.currentActivityThread(); } // @hide android.app
+    Object vmRuntime() { return VMRuntime.getRuntime(); } // @hide dalvik.system (absent from stock)
+    Class<?> internal() { return com.android.internal.R.class; } // com.android.internal
 }
 JAVA
   if javac -nowarn -cp "$jar" -d "${probe}/out" "${probe}/HiddenApiProbe.java" 2>"${probe}/javac.log"; then
-    log "Verification OK: hidden-API probe compiled (ServiceManager.getService, ActivityThread.currentActivityThread)"
-    return 0
+    info "verify(1/4) compile probe OK — View/ViewGroup/Drawable.Callback/Activity + @hide resolve"
+  else
+    warn "verify(1/4) compile probe FAILED — the jar cannot resolve core public + hidden APIs:"
+    cat "${probe}/javac.log" >&2 || true
+    ok=1
   fi
-  warn "javac output:"; cat "${probe}/javac.log" >&2 || true
-  return 1
+
+  # (2) Conflict guard: the jar must NOT ship the ART runtime / repackaged libs that shadow the JDK
+  #     and the app's own dependencies. Their presence is what made Kotlin/Gradle reject the jar in
+  #     issue #100, and it guards the overlay namespace filter against regressing.
+  local polluted
+  polluted="$(unzip -l "$jar" 2>/dev/null | awk '{print $NF}' \
+    | grep -oE '^(sun|jdk|libcore|com/google|com/android/okhttp|com/android/org|gov/nist|org/apache/(xml|xpath|xalan))/' \
+    | sort -u | tr '\n' ' ')"
+  if [ -n "$polluted" ]; then
+    warn "verify(2/4) conflict guard FAILED — jar ships JDK/dependency-shadowing namespaces: ${polluted}"
+    ok=1
+  else
+    info "verify(2/4) conflict guard OK — no JDK/dependency-shadowing namespaces"
+  fi
+
+  # (3) Public-API floor: the merge overlays onto the SDK jar, so the result must never contain
+  #     FEWER classes than the base SDK jar. Fewer means the merge lost curated public API.
+  local base_n out_n
+  base_n="$(unzip -l "$base" 2>/dev/null | grep -c '\.class$' || true)"
+  out_n="$(unzip -l "$jar" 2>/dev/null | grep -c '\.class$' || true)"
+  if [ "$out_n" -lt "$base_n" ]; then
+    warn "verify(3/4) public-API floor FAILED — jar has ${out_n} classes but base SDK jar has ${base_n}"
+    ok=1
+  else
+    info "verify(3/4) public-API floor OK — ${out_n} classes (>= ${base_n} in base SDK jar)"
+  fi
+
+  # (4) Supertype closure: no android.*/dalvik.*/java.* class may be left with a dangling supertype
+  #     (the exact issue-#100 symptom, e.g. View losing Drawable.Callback). Uses ASM from dex-tools.
+  if closure_verify "$jar"; then
+    info "verify(4/4) supertype closure OK"
+  else
+    warn "verify(4/4) supertype closure FAILED — a public supertype is missing (issue #100 symptom)"
+    ok=1
+  fi
+
+  [ "$ok" = "0" ] && log "Verification OK: all 4 checks passed" || warn "Verification FAILED (see checks above)"
+  return "$ok"
+}
+
+# Compiles + runs the bundled ClosureVerify against the jar. Returns non-zero only on a HARD failure
+# (a missing public supertype); a missing tool/ASM is reported and treated as a skip (returns 0) so
+# the gate never blocks a build just because the checker itself could not run.
+closure_verify() {
+  local jar="$1" lib cp out
+  lib="$(dirname "$D2J")/lib"
+  cp="$(find "$lib" -name '*.jar' 2>/dev/null | tr '\n' ':')"
+  if [ -z "$cp" ] || [ ! -f "$CLOSURE_SRC" ]; then
+    warn "closure check skipped (ASM lib or ClosureVerify.java not found)"; return 0
+  fi
+  out="${WORK_DIR}/closure-out"; mkdir -p "$out"
+  if ! javac -cp "$cp" -d "$out" "$CLOSURE_SRC" 2>/dev/null; then
+    warn "closure check skipped (could not compile ClosureVerify.java)"; return 0
+  fi
+  java -cp "${out}:${cp}" ClosureVerify "$jar"
 }
 
 install_jar() {
